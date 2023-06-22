@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Image from "next/image";
 import { useState } from "react";
 import { Close } from "@mui/icons-material";
+import loginImage from "../assets/login.png";
 
 const LogInPanel = ({ setSelectedTab }: any) => {
   return (
@@ -91,7 +92,7 @@ const LogInSignupModal = ({ isVisible, setVisibilty }: any) => {
           </button>
           <div className="flex">
             <Image
-              src={"https://picsum.photos/480/640"}
+              src={loginImage}
               alt={"relaxzeal"}
               width={480}
               height={640}

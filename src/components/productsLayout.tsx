@@ -86,7 +86,14 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
       </div>
       <div className="my-14 grid grid-cols-2 place-items-center gap-8 lg:grid-cols-3">
         {products.map((product: any, index: any) => (
-          <div key={index} onClick={() => router.push("/product-details")}>
+          <div
+            key={index}
+            onClick={() =>
+              router.push(
+                `/product-details?name=${product.slug}&variant=${product.productVariantName}`
+              )
+            }
+          >
             <ProductCard product={product} />
           </div>
         ))}

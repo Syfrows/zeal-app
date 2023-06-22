@@ -18,6 +18,7 @@ export const SEARCH = gql(`#graphql
   query search($input: SearchInput!) {
     search(input: $input) {
       items {
+        slug
         productVariantName
         priceWithTax{
           ...on SinglePrice{

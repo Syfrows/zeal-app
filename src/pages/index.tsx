@@ -15,7 +15,7 @@ export default function Home() {
     variables: { input: { take: 6 } },
   });
   const products = data ? data?.search.items : [];
-  const [filterId, setFilterId] = useState("");
+  const [_filterId, setFilterId] = useState("");
   return (
     <main>
       <Layout>

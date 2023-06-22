@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import category from "../assets/category.png";
 import { useRouter } from "next/router";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useQuery } from "@apollo/client";
