@@ -6,27 +6,29 @@ import Layout from "@/components/layout";
 import ProductsLayout from "@/components/productsLayout";
 import AboutUs from "@/components/aboutUs";
 import NewArrival from "@/components/newArrival";
-import category from "../assets/category.png";
-
-const product = {
-  image: category,
-  name: "Men cotton jacket",
-  rating: 4.4,
-  price: 170,
-  salePrice: 150,
-};
-const products = new Array(6).fill(product);
+import { useQuery } from "@apollo/client";
+import { SEARCH } from "@/graphql/landingPage";
+import { useState } from "react";
 
 export default function Home() {
+  const { data, refetch } = useQuery(SEARCH, {
+    variables: { input: { take: 6 } },
+  });
+  const products = data ? data?.search.items : [];
+  const [filterId, setFilterId] = useState("");
   return (
     <main>
       <Layout>
         <Carousel />
         <div className="px-4 md:px-16 xl:px-32">
           <Categories />
-          <ProductsLayout products={products} />
+          <ProductsLayout
+            products={products.slice(0, 6)}
+            refetch={refetch}
+            setFilterId={setFilterId}
+          />
           <PlatformFeatures />
-          <NewArrival />
+          <NewArrival product={products.slice(0, 5)} />
           <Testimonials />
         </div>
         <div

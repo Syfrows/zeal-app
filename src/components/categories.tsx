@@ -2,21 +2,16 @@ import React, { useState } from "react";
 import Image from "next/image";
 import category from "../assets/category.png";
 import { useRouter } from "next/router";
+import { COLLECTIONS } from "@/graphql/landingPage";
+import { useQuery } from "@apollo/client";
 
 const Categories = () => {
   const [showAll, setShowAll] = useState(false);
   const router = useRouter();
-
-  const categories = [
-    { id: 1, name: "Category 1", image: category },
-    { id: 2, name: "Category 2", image: category },
-    { id: 3, name: "Category 3", image: category },
-    { id: 4, name: "Category 4", image: category },
-    { id: 5, name: "Category 5", image: category },
-    { id: 6, name: "Category 6", image: category },
-    { id: 7, name: "Category 7", image: category },
-    { id: 8, name: "Category 8", image: category },
-  ];
+  const { loading, error, data } = useQuery(COLLECTIONS, {
+    // variables: { options: { filter: { parentId: { eq: "1" } } } },
+  });
+  const categories = data?.collections.items;
 
   return (
     <div className="py-8">
@@ -31,24 +26,27 @@ const Categories = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {categories
-          .slice(0, showAll ? categories.length : 4)
-          .map((category) => (
-            <div
-              key={category.id}
-              className="m-4"
-              onClick={() => router.push("/products")}
-            >
-              <Image
-                src={category.image}
-                alt={category.name}
-                className="h-48 w-full rounded-l object-contain"
-              />
-              <p className="mt-2 text-center text-lg font-medium">
-                {category.name}
-              </p>
-            </div>
-          ))}
+        {categories &&
+          categories
+            .slice(0, showAll ? categories.length : 4)
+            .map((category) => (
+              <div
+                key={category.id}
+                className="m-4"
+                onClick={() => router.push(`/products?filter=${category.id}`)}
+              >
+                <Image
+                  src={category.featuredAsset?.source || ""}
+                  alt={category.name}
+                  className="h-48 w-full rounded-l object-contain"
+                  width={271}
+                  height={255}
+                />
+                <p className="mt-2 text-center text-lg font-medium">
+                  {category.name}
+                </p>
+              </div>
+            ))}
       </div>
     </div>
   );

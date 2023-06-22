@@ -3,17 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-const product = new Array(5)
-  .fill({ id: 0, name: "product", image: "https://picsum.photos/200/300" })
-  .map((e, index) => {
-    return {
-      id: index,
-      name: "product",
-      image: `https://picsum.photos/id/${index * 15}/200/300`,
-    };
-  });
-
-const NewArrival = () => {
+const NewArrival = ({ product }: any) => {
   const [screenSize, setScreenSize] = useState({
     width: 0,
     height: 0,
@@ -35,7 +25,10 @@ const NewArrival = () => {
 
   const [products, setProducts] = useState(product);
 
+  useEffect(() => setProducts(product), [product]);
+
   useEffect(() => {
+    if (products.length <= 0) return;
     const interval = setInterval(() => {
       const newProducts: any = [...products];
       newProducts.unshift(newProducts.pop());
@@ -57,7 +50,7 @@ const NewArrival = () => {
       <div className="my-16 flex">
         {products
           .slice(0, screenSize.width < 640 ? 3 : 5)
-          .map((product, index) => (
+          .map((product: any, index: any) => (
             <div
               key={index}
               style={
@@ -81,8 +74,9 @@ const NewArrival = () => {
               onClick={() => router.push("/product-details")}
             >
               <Image
-                src={product.image}
-                alt={product.name}
+                src={product.productAsset.preview}
+                alt={product.productVariantName}
+                className="h-[500px] w-[300px]"
                 width={300}
                 height={500}
               />

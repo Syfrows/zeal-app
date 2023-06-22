@@ -2,7 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["picsum.photos"],
+    domains: ["picsum.photos", "localhost"],
+  },
+  modularizeImports: {
+    "@mui/material/?(((\\w*)?/?)*)": {
+      transform: "@mui/material/{{ matches.[1] }}/{{member}}",
+    },
+    "@mui/icons-material/?(((\\w*)?/?)*)": {
+      transform: "@mui/icons-material/{{ matches.[1] }}/{{member}}",
+    },
   },
 };
 
