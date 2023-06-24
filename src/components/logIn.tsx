@@ -1,4 +1,5 @@
 import { CurrentUser, InvalidCredentialsError } from "@/__generated__/graphql";
+import { useAuth } from "@/context/AuthContext";
 import { LOG_IN } from "@/graphql/accounts";
 import { useMutation } from "@apollo/client";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -17,10 +18,11 @@ const intialState: Data = {
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-const LogIn = ({ setSelectedTab, setVisibilty, setIsLoggedIn }: any) => {
+const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
   const [inputs, setInputs] = useState(intialState);
   const [errors, setErrors] = useState(intialState);
   const [loginError, setLoginError] = useState("");
+  const { setIsLoggedIn } = useAuth();
 
   const [logIn, { data, loading, error }] = useMutation(LOG_IN, {
     variables: {

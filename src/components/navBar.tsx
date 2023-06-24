@@ -4,12 +4,12 @@ import logo from "../assets/logo.png";
 import { AccountIcon, CartIcon, SearchIcon, WishListIcon } from "./icons";
 import { useRouter } from "next/router";
 import LogInSignupModal from "./logInSignupModal";
-import { useIsLoggedIn } from "@/hooks/session";
+import { useAuth } from "@/context/AuthContext";
 
 const NavBar = () => {
   const router = useRouter();
   const [isModalVisible, setModalVisibilty] = useState(false);
-  const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
+  const { isLoggedIn } = useAuth();
   return (
     <>
       <div className="flex h-16 justify-between bg-white px-1 shadow sm:px-6">
@@ -60,7 +60,6 @@ const NavBar = () => {
       <LogInSignupModal
         isVisible={isModalVisible}
         setVisibilty={setModalVisibilty}
-        setIsLoggedIn={setIsLoggedIn}
       />
     </>
   );

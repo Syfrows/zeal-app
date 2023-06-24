@@ -1,5 +1,7 @@
 import Layout from "@/components/layout";
+import LogInSignupModal from "@/components/logInSignupModal";
 import ProductAddedModal from "@/components/productAddedModal";
+import { useAuth } from "@/context/AuthContext";
 import { PRODUCT_DETAILS } from "@/graphql/productDetails";
 import { useQuery } from "@apollo/client";
 import { Add, KeyboardArrowDown } from "@mui/icons-material";
@@ -17,6 +19,8 @@ const ProductDetails = () => {
   const [isModalVisible, setModalVisiblity] = useState(false);
   const productName = useSearchParams().get("name");
   const productVairentName = useSearchParams().get("variant");
+  const [isLoginModalVisible, setLoginModalVisibilty] = useState(false);
+  const { isLoggedIn } = useAuth();
 
   const { loading, error, data } = useQuery(PRODUCT_DETAILS, {
     variables: { slug: productName },
@@ -111,8 +115,12 @@ const ProductDetails = () => {
               </span>
             </div>
             <button
-              className="rounded-xl bg-orange-600 px-4 py-3 font-bold text-white"
-              onClick={() => setModalVisiblity(true)}
+              className={`rounded-xl bg-orange-600 px-4 py-3 font-bold text-white`}
+              onClick={() =>
+                isLoggedIn
+                  ? setModalVisiblity(true)
+                  : setLoginModalVisibilty(true)
+              }
             >
               <Add /> Add to Cart
             </button>
@@ -206,6 +214,10 @@ const ProductDetails = () => {
       <ProductAddedModal
         isVisible={isModalVisible}
         setVisibilty={setModalVisiblity}
+      />
+      <LogInSignupModal
+        isVisible={isLoginModalVisible}
+        setVisibilty={setLoginModalVisibilty}
       />
     </Layout>
   );

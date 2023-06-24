@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { LOG_OUT } from "@/graphql/accounts";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -15,12 +16,15 @@ const SideNav = () => {
   const router = useRouter();
   const name = "Kartik Chate";
   const [logOut, { data, loading, error }] = useMutation(LOG_OUT);
+  const { setIsLoggedIn } = useAuth();
+
   useEffect(() => {
     if (data?.logout.success) {
       localStorage.clear();
+      setIsLoggedIn(false);
       router.push("/");
     }
-  }, [data, router]);
+  }, [data, router, setIsLoggedIn]);
 
   const getClassName = (page: Page) => {
     const route = router.asPath;

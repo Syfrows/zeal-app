@@ -8,7 +8,7 @@ import loginImage from "../assets/login.png";
 import LogIn from "./logIn";
 import SignUp from "./signUp";
 
-const LogInSignupModal = ({ isVisible, setVisibilty, setIsLoggedIn }: any) => {
+const LogInSignupModal = ({ isVisible, setVisibilty }: any) => {
   const [selectedTab, setSelectedTab] = useState(0);
   return (
     <Modal
@@ -42,7 +42,6 @@ const LogInSignupModal = ({ isVisible, setVisibilty, setIsLoggedIn }: any) => {
                 <LogIn
                   setSelectedTab={setSelectedTab}
                   setVisibilty={setVisibilty}
-                  setIsLoggedIn={setIsLoggedIn}
                 />
               ) : (
                 <SignUp setSelectedTab={setSelectedTab} />

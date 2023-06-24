@@ -37,7 +37,7 @@ const Categories = () => {
                 <Image
                   src={category.featuredAsset?.source || ""}
                   alt={category.name}
-                  className="h-48 w-full rounded-l object-contain"
+                  className="h-48 w-full rounded-l"
                   width={271}
                   height={255}
                 />
