@@ -1,81 +1,12 @@
 import Modal from "@mui/material/Modal";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import TextField from "@mui/material/TextField";
 import Image from "next/image";
 import { useState } from "react";
 import { Close } from "@mui/icons-material";
 import loginImage from "../assets/login.png";
-
-const LogInPanel = ({ setSelectedTab }: any) => {
-  return (
-    <div className="flex flex-col space-y-4 p-6">
-      <TextField
-        id="outlined-basic"
-        label="Enter your email/phone number"
-        variant="outlined"
-      />
-      <TextField
-        id="outlined-basic"
-        label="Password"
-        variant="outlined"
-        type="password"
-      />
-      <p className=" text-end text-slate-500">Forgot Password?</p>
-      <button className="bg-primary py-3 text-lg font-semibold text-white">
-        LOGIN
-      </button>
-      <p className=" text-center text-slate-500 ">New to Relax Zeal?</p>
-      <button
-        className="bg-gray-300 py-3 text-lg font-semibold text-black"
-        onClick={() => setSelectedTab(1)}
-      >
-        CREATE AN ACCOUNT
-      </button>
-    </div>
-  );
-};
-const SignupPanel = ({ setSelectedTab }: any) => {
-  return (
-    <div className="flex flex-col space-y-4 p-6">
-      <TextField
-        id="outlined-basic"
-        label="Your name"
-        variant="outlined"
-        placeholder="Enter first and last name"
-      />
-      <TextField
-        id="outlined-basic"
-        label="Mobile Number"
-        variant="outlined"
-        type="tel"
-      />
-      <TextField
-        id="outlined-basic"
-        label="Email "
-        variant="outlined"
-        type="email"
-      />
-      <TextField
-        id="outlined-basic"
-        label="Password"
-        variant="outlined"
-        type="password"
-      />
-      <p className=" text-end text-slate-500">Forgot Password?</p>
-      <button className="bg-primary py-3 text-lg font-semibold text-white">
-        SIGN UP
-      </button>
-      <p className=" text-center text-slate-500 ">Already have an account?</p>
-      <button
-        className="bg-gray-300 py-3 text-lg font-semibold text-black"
-        onClick={() => setSelectedTab(0)}
-      >
-        LOGIN
-      </button>
-    </div>
-  );
-};
+import LogIn from "./logIn";
+import SignUp from "./signUp";
 
 const LogInSignupModal = ({ isVisible, setVisibilty }: any) => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -86,7 +17,7 @@ const LogInSignupModal = ({ isVisible, setVisibilty }: any) => {
       className="overflow-auto"
     >
       <div className="mt-16 flex justify-center">
-        <div className="border-2 border-slate-400 bg-white p-4">
+        <div className="w-11/12 border-2 border-slate-400 bg-white p-4 sm:w-3/5">
           <button className="float-right" onClick={() => setVisibilty(false)}>
             <Close />
           </button>
@@ -108,9 +39,12 @@ const LogInSignupModal = ({ isVisible, setVisibilty }: any) => {
                 <Tab label="SIGN UP" />
               </Tabs>
               {selectedTab === 0 ? (
-                <LogInPanel setSelectedTab={setSelectedTab} />
+                <LogIn
+                  setSelectedTab={setSelectedTab}
+                  setVisibilty={setVisibilty}
+                />
               ) : (
-                <SignupPanel setSelectedTab={setSelectedTab} />
+                <SignUp setSelectedTab={setSelectedTab} />
               )}
             </div>
           </div>
