@@ -1,4 +1,7 @@
+import { LOG_OUT } from "@/graphql/accounts";
+import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export enum Page {
   MyOrders = "my-orders",
@@ -11,6 +14,14 @@ export enum Page {
 const SideNav = () => {
   const router = useRouter();
   const name = "Kartik Chate";
+  const [logOut, { data, loading, error }] = useMutation(LOG_OUT);
+  useEffect(() => {
+    if (data?.logout.success) {
+      localStorage.clear();
+      router.push("/");
+    }
+  }, [data, router]);
+
   const getClassName = (page: Page) => {
     const route = router.asPath;
     if (page === Page.ReturnRequests) {
@@ -27,6 +38,7 @@ const SideNav = () => {
       ? "mb-2 cursor-pointer text-xl font-bold text-sky-700"
       : "mb-2 cursor-pointer";
   };
+
   return (
     <div className="hidden sm:flex">
       <div>
@@ -64,7 +76,7 @@ const SideNav = () => {
         >
           My Addresses
         </p>
-        <p className="mb-2 cursor-pointer" onClick={() => router.push("/")}>
+        <p className="mb-2 cursor-pointer" onClick={() => logOut()}>
           Logout
         </p>
       </div>

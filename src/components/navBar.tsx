@@ -4,11 +4,12 @@ import logo from "../assets/logo.png";
 import { AccountIcon, CartIcon, SearchIcon, WishListIcon } from "./icons";
 import { useRouter } from "next/router";
 import LogInSignupModal from "./logInSignupModal";
+import { useIsLoggedIn } from "@/hooks/session";
 
 const NavBar = () => {
   const router = useRouter();
   const [isModalVisible, setModalVisibilty] = useState(false);
-
+  const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
   return (
     <>
       <div className="flex h-16 justify-between bg-white px-1 shadow sm:px-6">
@@ -26,22 +27,32 @@ const NavBar = () => {
           </button>
         </div>
         <div className="item-center my-3 flex space-x-3 sm:space-x-6">
-          <button
-            className="rounded-md bg-primary px-6 text-white "
-            onClick={() => setModalVisibilty(true)}
-          >
-            Login
-          </button>
+          {!isLoggedIn && (
+            <button
+              className="rounded-md bg-primary px-6 text-white "
+              onClick={() => setModalVisibilty(true)}
+            >
+              Login
+            </button>
+          )}
           <button className="sm:hidden">
             <SearchIcon width="20" height="18" color="black" />
           </button>
-          <button onClick={() => router.push("/cart")}>
+          <button
+            onClick={() =>
+              isLoggedIn ? router.push("/cart") : setModalVisibilty(true)
+            }
+          >
             <CartIcon width="23" height="19" color="black" />
           </button>
           <button onClick={() => router.push("/wishlist")}>
             <WishListIcon width="25" height="19" color="black" />
           </button>
-          <button onClick={() => router.push("/my-orders")}>
+          <button
+            onClick={() =>
+              isLoggedIn ? router.push("/my-orders") : setModalVisibilty(true)
+            }
+          >
             <AccountIcon width="20" height="19" color="black" />
           </button>
         </div>
@@ -49,6 +60,7 @@ const NavBar = () => {
       <LogInSignupModal
         isVisible={isModalVisible}
         setVisibilty={setModalVisibilty}
+        setIsLoggedIn={setIsLoggedIn}
       />
     </>
   );

@@ -76,3 +76,11 @@ export const LOG_IN = gql(`#graphql
     }
   }
 `);
+
+export const LOG_OUT = gql(`#graphql
+  mutation logOut{
+    logout {
+      success
+    }
+  }
+`);

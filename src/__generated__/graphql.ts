@@ -3541,6 +3541,13 @@ export type LogInMutation = {
       };
 };
 
+export type LogOutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type LogOutMutation = {
+  __typename?: "Mutation";
+  logout: { __typename?: "Success"; success: boolean };
+};
+
 export type CollectionsQueryVariables = Exact<{
   options?: InputMaybe<CollectionListOptions>;
 }>;
@@ -4083,6 +4090,31 @@ export const LogInDocument = {
     },
   ],
 } as unknown as DocumentNode<LogInMutation, LogInMutationVariables>;
+export const LogOutDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "logOut" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "logout" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "success" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<LogOutMutation, LogOutMutationVariables>;
 export const CollectionsDocument = {
   kind: "Document",
   definitions: [

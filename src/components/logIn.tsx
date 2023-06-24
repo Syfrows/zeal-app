@@ -17,7 +17,7 @@ const intialState: Data = {
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
+const LogIn = ({ setSelectedTab, setVisibilty, setIsLoggedIn }: any) => {
   const [inputs, setInputs] = useState(intialState);
   const [errors, setErrors] = useState(intialState);
   const [loginError, setLoginError] = useState("");
@@ -42,12 +42,15 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
   }, [inputs]);
 
   useEffect(() => {
-    (data?.login as CurrentUser)?.id && setVisibilty(false);
+    if ((data?.login as CurrentUser)?.id) {
+      setIsLoggedIn(true);
+      setVisibilty(false);
+    }
     if (data?.login.__typename !== "CurrentUser") {
       const error = data?.login as InvalidCredentialsError;
       setLoginError(error?.message);
     }
-  }, [data?.login, setVisibilty]);
+  }, [data?.login, setIsLoggedIn, setVisibilty]);
 
   const onLogIn = () => {
     logIn();
