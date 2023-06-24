@@ -3,9 +3,9 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Add, Remove } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import { formatPrice } from "@/helpers/helper";
 
 const CartItem = ({ item }: any) => {
-  const currency = "₹";
   return (
     <div className="flex border-2 border-slate-400 p-4">
       <Image src={item.image} alt={item.name} height={205} width={266} />
@@ -22,13 +22,11 @@ const CartItem = ({ item }: any) => {
             <p>
               Price:{" "}
               <span className="font-bold text-slate-500 line-through">
-                {currency}
-                {item.price}
-              </span>{" "}
+                {formatPrice(item.price)}
+              </span>
               <br />
               <span className="ms-11 font-bold">
-                {currency}
-                {item.salePrice}
+                {formatPrice(item.salePrice)}
               </span>
             </p>
           </div>

@@ -22,6 +22,7 @@ export const PRODUCT_DETAILS = gql(`#graphql
         }
       }
       variants {
+        id
         name
         price
         priceWithTax

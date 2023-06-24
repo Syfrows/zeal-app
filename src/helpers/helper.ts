@@ -1,0 +1,9 @@
+import { CurrencyCode } from "@/__generated__/graphql";
+
+export const formatPrice = (value: number, currency?: CurrencyCode) => {
+  currency = currency ?? CurrencyCode.Inr;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(value / 100);
+};

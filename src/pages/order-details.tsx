@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { formatPrice } from "@/helpers/helper";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -35,7 +36,6 @@ const details = {
 
 const OrderDetails = () => {
   const router = useRouter();
-  const currency = "₹";
   return (
     <Layout>
       <div className="flex flex-col space-y-8 py-12 xl:px-32">
@@ -113,10 +113,7 @@ const OrderDetails = () => {
               </p>
               <p>
                 Total:{" "}
-                <span className="font-bold">
-                  {currency}
-                  {product.price}
-                </span>
+                <span className="font-bold">{formatPrice(product.price)}</span>
               </p>
             </div>
           </div>
@@ -125,8 +122,7 @@ const OrderDetails = () => {
               Sub-Total:
             </p>
             <p className="p-3 text-center sm:w-[10%]">
-              {currency}
-              {details.subTotal}
+              {formatPrice(details.subTotal)}
             </p>
           </div>
           <div className="flex border-2 border-t-0 border-gray-300">
@@ -134,8 +130,7 @@ const OrderDetails = () => {
               Shipping Charges:
             </p>
             <p className="p-3 text-center sm:w-[10%]">
-              {currency}
-              {details.shippingCharges}
+              {formatPrice(details.shippingCharges)}
             </p>
           </div>
           <div className="flex border-2 border-t-0 border-gray-300">
@@ -143,8 +138,7 @@ const OrderDetails = () => {
               Total:
             </p>
             <p className="p-3 text-center sm:w-[10%]">
-              {currency}
-              {details.total}
+              {formatPrice(details.total)}
             </p>
           </div>
         </div>

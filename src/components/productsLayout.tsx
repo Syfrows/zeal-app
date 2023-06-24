@@ -5,9 +5,9 @@ import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useSearchParams } from "next/navigation";
+import { formatPrice } from "@/helpers/helper";
 
 const ProductCard = ({ product }: any) => {
-  const currency = "₹";
   return (
     <div className="max-w-[360px] overflow-hidden rounded-lg shadow-lg">
       <Image
@@ -29,9 +29,9 @@ const ProductCard = ({ product }: any) => {
         </div>
         <div className="flex justify-between  max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
           <p className="text-orange-600">
-            {currency + product.price.value}{" "}
+            {formatPrice(product.price.value)}
             <span className="ml-3 text-slate-400 line-through decoration-slate-400">
-              {currency + product.priceWithTax.value}
+              {formatPrice(product.priceWithTax.value)}
             </span>
           </p>
           <button className="text-orange-600 underline">Buy Now</button>

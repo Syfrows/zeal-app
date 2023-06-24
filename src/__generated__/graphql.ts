@@ -3592,6 +3592,245 @@ export type SearchQuery = {
   };
 };
 
+export type ActiveOrderFragment = {
+  __typename?: "Order";
+  id: string;
+  code: string;
+  state: string;
+  couponCodes: Array<string>;
+  subTotalWithTax: any;
+  shippingWithTax: any;
+  totalWithTax: any;
+  totalQuantity: number;
+  lines: Array<{
+    __typename?: "OrderLine";
+    id: string;
+    quantity: number;
+    linePriceWithTax: any;
+    productVariant: { __typename?: "ProductVariant"; id: string; name: string };
+    featuredAsset?: {
+      __typename?: "Asset";
+      id: string;
+      preview: string;
+    } | null;
+  }>;
+} & { " $fragmentName"?: "ActiveOrderFragment" };
+
+export type AddItemToOrderMutationVariables = Exact<{
+  productVariantId: Scalars["ID"]["input"];
+  quantity: Scalars["Int"]["input"];
+}>;
+
+export type AddItemToOrderMutation = {
+  __typename?: "Mutation";
+  addItemToOrder:
+    | {
+        __typename?: "InsufficientStockError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "NegativeQuantityError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | ({ __typename?: "Order" } & {
+        " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
+      })
+    | { __typename?: "OrderLimitError"; errorCode: ErrorCode; message: string }
+    | {
+        __typename?: "OrderModificationError";
+        errorCode: ErrorCode;
+        message: string;
+      };
+};
+
+export type AdjustOrderLineMutationVariables = Exact<{
+  orderLineId: Scalars["ID"]["input"];
+  quantity: Scalars["Int"]["input"];
+}>;
+
+export type AdjustOrderLineMutation = {
+  __typename?: "Mutation";
+  adjustOrderLine:
+    | {
+        __typename?: "InsufficientStockError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "NegativeQuantityError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | ({ __typename?: "Order" } & {
+        " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
+      })
+    | { __typename?: "OrderLimitError"; errorCode: ErrorCode; message: string }
+    | {
+        __typename?: "OrderModificationError";
+        errorCode: ErrorCode;
+        message: string;
+      };
+};
+
+export type ActiveOrderQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ActiveOrderQuery = {
+  __typename?: "Query";
+  activeOrder?:
+    | ({ __typename?: "Order" } & {
+        " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
+      })
+    | null;
+};
+
+export type SetShippingAddressMutationVariables = Exact<{
+  input: CreateAddressInput;
+}>;
+
+export type SetShippingAddressMutation = {
+  __typename?: "Mutation";
+  setOrderShippingAddress:
+    | {
+        __typename?: "NoActiveOrderError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | ({ __typename?: "Order" } & {
+        " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
+      });
+};
+
+export type GetShippingMethodsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetShippingMethodsQuery = {
+  __typename?: "Query";
+  eligibleShippingMethods: Array<{
+    __typename?: "ShippingMethodQuote";
+    id: string;
+    name: string;
+    code: string;
+    description: string;
+    priceWithTax: any;
+  }>;
+};
+
+export type SetShippingMethodMutationVariables = Exact<{
+  shippingMethodId: Array<Scalars["ID"]["input"]> | Scalars["ID"]["input"];
+}>;
+
+export type SetShippingMethodMutation = {
+  __typename?: "Mutation";
+  setOrderShippingMethod:
+    | {
+        __typename?: "IneligibleShippingMethodError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "NoActiveOrderError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | ({ __typename?: "Order" } & {
+        " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
+      })
+    | {
+        __typename?: "OrderModificationError";
+        errorCode: ErrorCode;
+        message: string;
+      };
+};
+
+export type GetPaymentMethodsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetPaymentMethodsQuery = {
+  __typename?: "Query";
+  eligiblePaymentMethods: Array<{
+    __typename?: "PaymentMethodQuote";
+    id: string;
+    name: string;
+    code: string;
+    description: string;
+    isEligible: boolean;
+    eligibilityMessage?: string | null;
+  }>;
+};
+
+export type TransitionOrderMutationVariables = Exact<{
+  state: Scalars["String"]["input"];
+}>;
+
+export type TransitionOrderMutation = {
+  __typename?: "Mutation";
+  transitionOrderToState?:
+    | ({ __typename?: "Order" } & {
+        " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
+      })
+    | {
+        __typename?: "OrderStateTransitionError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | null;
+};
+
+export type AddPaymentMutationVariables = Exact<{
+  input: PaymentInput;
+}>;
+
+export type AddPaymentMutation = {
+  __typename?: "Mutation";
+  addPaymentToOrder:
+    | {
+        __typename?: "IneligiblePaymentMethodError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "NoActiveOrderError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | ({ __typename?: "Order" } & {
+        " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
+      })
+    | {
+        __typename?: "OrderPaymentStateError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "OrderStateTransitionError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "PaymentDeclinedError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "PaymentFailedError";
+        errorCode: ErrorCode;
+        message: string;
+      };
+};
+
+export type OrderByCodeQueryVariables = Exact<{
+  code: Scalars["String"]["input"];
+}>;
+
+export type OrderByCodeQuery = {
+  __typename?: "Query";
+  orderByCode?:
+    | ({ __typename?: "Order" } & {
+        " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
+      })
+    | null;
+};
+
 export type ProductDetailsQueryVariables = Exact<{
   slug?: InputMaybe<Scalars["String"]["input"]>;
 }>;
@@ -3621,6 +3860,7 @@ export type ProductDetailsQuery = {
     }>;
     variants: Array<{
       __typename?: "ProductVariant";
+      id: string;
       name: string;
       price: any;
       priceWithTax: any;
@@ -3646,6 +3886,72 @@ export type ProductDetailsQuery = {
   } | null;
 };
 
+export const ActiveOrderFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ActiveOrderFragment, unknown>;
 export const SignUpDocument = {
   kind: "Document",
   definitions: [
@@ -4314,6 +4620,1141 @@ export const SearchDocument = {
     },
   ],
 } as unknown as DocumentNode<SearchQuery, SearchQueryVariables>;
+export const AddItemToOrderDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "AddItemToOrder" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "productVariantId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "quantity" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "addItemToOrder" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "productVariantId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "productVariantId" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "quantity" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "quantity" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AddItemToOrderMutation,
+  AddItemToOrderMutationVariables
+>;
+export const AdjustOrderLineDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "AdjustOrderLine" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderLineId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "quantity" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "adjustOrderLine" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderLineId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderLineId" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "quantity" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "quantity" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AdjustOrderLineMutation,
+  AdjustOrderLineMutationVariables
+>;
+export const ActiveOrderDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ActiveOrder" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "activeOrder" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ActiveOrderQuery, ActiveOrderQueryVariables>;
+export const SetShippingAddressDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SetShippingAddress" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CreateAddressInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "setOrderShippingAddress" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SetShippingAddressMutation,
+  SetShippingAddressMutationVariables
+>;
+export const GetShippingMethodsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetShippingMethods" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "eligibleShippingMethods" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+                { kind: "Field", name: { kind: "Name", value: "description" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "priceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetShippingMethodsQuery,
+  GetShippingMethodsQueryVariables
+>;
+export const SetShippingMethodDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SetShippingMethod" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shippingMethodId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "ListType",
+              type: {
+                kind: "NonNullType",
+                type: {
+                  kind: "NamedType",
+                  name: { kind: "Name", value: "ID" },
+                },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "setOrderShippingMethod" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shippingMethodId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shippingMethodId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SetShippingMethodMutation,
+  SetShippingMethodMutationVariables
+>;
+export const GetPaymentMethodsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetPaymentMethods" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "eligiblePaymentMethods" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+                { kind: "Field", name: { kind: "Name", value: "description" } },
+                { kind: "Field", name: { kind: "Name", value: "isEligible" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "eligibilityMessage" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetPaymentMethodsQuery,
+  GetPaymentMethodsQueryVariables
+>;
+export const TransitionOrderDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "TransitionOrder" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "state" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "transitionOrderToState" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "state" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "state" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  TransitionOrderMutation,
+  TransitionOrderMutationVariables
+>;
+export const AddPaymentDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "AddPayment" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "PaymentInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "addPaymentToOrder" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<AddPaymentMutation, AddPaymentMutationVariables>;
+export const OrderByCodeDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "OrderByCode" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "code" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "orderByCode" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "code" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "code" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<OrderByCodeQuery, OrderByCodeQueryVariables>;
 export const ProductDetailsDocument = {
   kind: "Document",
   definitions: [
@@ -4411,6 +5852,7 @@ export const ProductDetailsDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "price" } },
                       {

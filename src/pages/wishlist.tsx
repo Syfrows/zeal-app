@@ -5,9 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import LogInSignupModal from "@/components/logInSignupModal";
 import { useRouter } from "next/router";
+import { formatPrice } from "@/helpers/helper";
 
 const WishlistItem = ({ item }: any) => {
-  const currency = "₹";
   return (
     <div className="flex border-2 border-slate-400 p-4">
       <Image src={item.image} alt={item.name} height={205} width={266} />
@@ -22,14 +22,10 @@ const WishlistItem = ({ item }: any) => {
         <p>
           Price:{" "}
           <span className="font-bold text-slate-500 line-through">
-            {currency}
-            {item.price}
+            {formatPrice(item.price)}
           </span>{" "}
           <br />
-          <span className="ms-11 font-bold">
-            {currency}
-            {item.salePrice}
-          </span>
+          <span className="ms-11 font-bold">{formatPrice(item.salePrice)}</span>
         </p>
         <div className="flex space-x-8">
           <button className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold">

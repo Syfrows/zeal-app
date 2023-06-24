@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { formatPrice } from "@/helpers/helper";
 import { ArrowBack } from "@mui/icons-material";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -19,8 +20,6 @@ const products = new Array(3).fill(product).map((e, index) => {
     image: `https://picsum.photos/id/${index}/360/300`,
   };
 });
-
-const currency = "₹";
 
 const Product = ({ product }: any) => {
   return (
@@ -47,12 +46,10 @@ const Product = ({ product }: any) => {
         {product.quantity}
       </p>
       <p className="w-[20%] border-e-2 border-gray-300 p-3 text-center sm:w-[10%]">
-        {currency}
-        {product.salePrice}
+        {formatPrice(product.salePrice)}
       </p>
       <p className="w-[25%] p-3 text-center sm:w-[10%]">
-        {currency}
-        {product.salePrice * product.quantity}
+        {formatPrice(product.salePrice * product.quantity)}
       </p>
     </div>
   );
@@ -106,8 +103,7 @@ const OrderConfirmation = () => {
               Sub-Total:
             </p>
             <p className="p-3 text-center sm:w-[10%]">
-              {currency}
-              {cartValue}
+              {formatPrice(cartValue)}
             </p>
           </div>
           <div className="flex border-2 border-t-0 border-gray-300">
@@ -115,8 +111,7 @@ const OrderConfirmation = () => {
               Shipping Charges:
             </p>
             <p className="p-3 text-center sm:w-[10%]">
-              {currency}
-              {shippingCharges}
+              {formatPrice(shippingCharges)}
             </p>
           </div>
           <div className="flex border-2 border-t-0 border-gray-300">
@@ -124,8 +119,7 @@ const OrderConfirmation = () => {
               Sub-Total:
             </p>
             <p className="p-3 text-center sm:w-[10%]">
-              {currency}
-              {TotalAmount}
+              {formatPrice(TotalAmount)}
             </p>
           </div>
         </div>

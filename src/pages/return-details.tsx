@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { formatPrice } from "@/helpers/helper";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Image from "next/image";
@@ -22,7 +23,6 @@ const responses = [
 ];
 
 const ReturnDetails = () => {
-  const currency = "₹";
   const [selectedResponse, setSelectedResponse] = useState<any>(null);
   const router = useRouter();
   return (
@@ -43,8 +43,7 @@ const ReturnDetails = () => {
             <p>
               {orderDetails.numberOfItems} item,{" "}
               <span className="font-bold">
-                {currency}
-                {orderDetails.amount}
+                {formatPrice(orderDetails.amount)}
               </span>
             </p>
             <div className="my-6 border-t-2 border-gray-300" />

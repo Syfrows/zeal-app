@@ -1,12 +1,12 @@
 import Layout from "@/components/layout";
 import SideNav from "@/components/sideNav";
+import { formatPrice } from "@/helpers/helper";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 
 const OrderItem = ({ order }: any) => {
   const router = useRouter();
-  const currency = "₹";
   return (
     <div className="flex flex-col border-2 border-gray-400 p-4 sm:flex-row">
       <Image
@@ -24,10 +24,7 @@ const OrderItem = ({ order }: any) => {
             </p>
             <p>
               {order.numberOfItems} item,{" "}
-              <span className="font-bold">
-                {currency}
-                {order.amount}
-              </span>
+              <span className="font-bold">{formatPrice(order.amount)}</span>
             </p>
           </div>
           <div className="text-end">

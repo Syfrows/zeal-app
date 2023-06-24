@@ -1,3 +1,4 @@
+import { formatPrice } from "@/helpers/helper";
 import { Close, CheckCircle } from "@mui/icons-material";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
@@ -16,7 +17,6 @@ const product = {
 
 const ProductAddedModal = ({ isVisible, setVisibilty }: any) => {
   const router = useRouter();
-  const currency = "₹";
   return (
     <Modal
       open={isVisible}
@@ -60,8 +60,7 @@ const ProductAddedModal = ({ isVisible, setVisibilty }: any) => {
                 <p>
                   Price:{" "}
                   <span className="font-bold">
-                    {currency}
-                    {product.price}
+                    {formatPrice(product.price)}
                   </span>
                 </p>
               </div>
@@ -70,8 +69,7 @@ const ProductAddedModal = ({ isVisible, setVisibilty }: any) => {
             <p className="mb-2 text-center">
               Cart subtotal:{" "}
               <span className="font-bold">
-                {currency}
-                {product.cartSubtotal}
+                {formatPrice(product.cartSubtotal)}
               </span>
             </p>
             <div className="flex justify-center">

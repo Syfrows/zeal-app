@@ -3,6 +3,7 @@ import LogInSignupModal from "@/components/logInSignupModal";
 import ProductAddedModal from "@/components/productAddedModal";
 import { useAuth } from "@/context/AuthContext";
 import { PRODUCT_DETAILS } from "@/graphql/productDetails";
+import { formatPrice } from "@/helpers/helper";
 import { useQuery } from "@apollo/client";
 import { Add, KeyboardArrowDown } from "@mui/icons-material";
 import Rating from "@mui/material/Rating";
@@ -13,7 +14,6 @@ import { useEffect, useState } from "react";
 
 const ProductDetails = () => {
   const router = useRouter();
-  const currency = "₹";
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [isModalVisible, setModalVisiblity] = useState(false);
@@ -96,15 +96,13 @@ const ProductDetails = () => {
                 )}
                 % off!{" "}
                 <span className="text-2xl font-medium text-black">
-                  {currency}
-                  {selectedVariant.price}
+                  {formatPrice(selectedVariant.price)}
                 </span>
               </p>
               <p>
                 M.R.P:{" "}
                 <span className="line-through">
-                  {currency}
-                  {selectedVariant.priceWithTax}
+                  {formatPrice(selectedVariant.priceWithTax)}
                 </span>
               </p>
             </div>
@@ -175,10 +173,7 @@ const ProductDetails = () => {
             </p>
             <p className="text-gray-500">
               Delivery charges:{" "}
-              <span className="font-bold text-black">
-                {currency}
-                {150}
-              </span>
+              <span className="font-bold text-black">{formatPrice(15000)}</span>
             </p>
           </div>
           <div>

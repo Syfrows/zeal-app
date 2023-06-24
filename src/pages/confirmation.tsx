@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { formatPrice } from "@/helpers/helper";
 import { CheckCircle } from "@mui/icons-material";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -21,7 +22,6 @@ const products = new Array(3).fill(product).map((e, index) => {
 });
 
 const Product = ({ item, isReturn }: any) => {
-  const currency = "₹";
   return (
     <div className="flex border-2 border-slate-400 p-4 max-sm:flex-col max-sm:items-center">
       <Image src={item.image} alt={item.name} height={205} width={266} />
@@ -39,13 +39,11 @@ const Product = ({ item, isReturn }: any) => {
             <p>
               Price:{" "}
               <span className="font-bold text-slate-500 line-through">
-                {currency}
-                {item.price}
+                {formatPrice(item.price)}
               </span>{" "}
               <br />
               <span className="ms-11 font-bold">
-                {currency}
-                {item.salePrice}
+                {formatPrice(item.salePrice)}
               </span>
               <span className="ms-4 text-green-500">
                 {`You saved ₹${item.price - item.salePrice}`}
