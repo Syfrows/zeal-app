@@ -24,13 +24,14 @@ const ProductCard = ({ product }: any) => {
           </p>
           <div className="flex space-x-2">
             <Rating name="read-only" value={4.4} precision={0.1} readOnly />
-            <p className="">{4.4}</p>
+            <p className="max-[390px]:hidden">{4.4}</p>
           </div>
         </div>
         <div className="flex justify-between  max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
           <p className="text-orange-600">
             {formatPrice(product.price.value)}
-            <span className="ml-3 text-slate-400 line-through decoration-slate-400">
+            <br className="min-[390px]:hidden" />
+            <span className="text-slate-400 line-through decoration-slate-400 min-[390px]:ml-3">
               {formatPrice(product.priceWithTax.value)}
             </span>
           </p>

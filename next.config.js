@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["picsum.photos", "localhost"],
+    domains: ["picsum.photos", "localhost", "api.relaxzeal.com"],
   },
   modularizeImports: {
     "@mui/material/?(((\\w*)?/?)*)": {
