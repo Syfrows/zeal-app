@@ -4,18 +4,27 @@ import Modal from "@mui/material/Modal";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-const product = {
-  image: "https://picsum.photos/360/300",
-  name: "Men cotton jacket",
-  size: "M",
-  colour: "White",
-  price: 170,
-  salePrice: 150,
-  quantity: 1,
-  cartSubtotal: 1499,
-};
+export interface Product {
+  image: string;
+  name: string;
+  size: string;
+  colour: string;
+  price: number;
+  quantity: number;
+  cartSubtotal: number;
+}
 
-const ProductAddedModal = ({ isVisible, setVisibilty }: any) => {
+export interface ProductAddedModalProps {
+  isVisible: boolean;
+  setVisibilty: (isVisible: boolean) => void;
+  product: Product;
+}
+
+const ProductAddedModal = ({
+  isVisible,
+  setVisibilty,
+  product,
+}: ProductAddedModalProps) => {
   const router = useRouter();
   return (
     <Modal

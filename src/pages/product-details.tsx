@@ -1,42 +1,55 @@
 import Layout from "@/components/layout";
 import LogInSignupModal from "@/components/logInSignupModal";
-import ProductAddedModal from "@/components/productAddedModal";
+import ProductAddedModal, { Product } from "@/components/productAddedModal";
 import { useAuth } from "@/context/AuthContext";
+import { ADD_ITEM_TO_ORDER } from "@/graphql/orderWorkflow";
 import { PRODUCT_DETAILS } from "@/graphql/productDetails";
 import { formatPrice } from "@/helpers/helper";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Add, KeyboardArrowDown } from "@mui/icons-material";
+import CircularProgress from "@mui/material/CircularProgress";
 import Rating from "@mui/material/Rating";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputBase from "@mui/material/InputBase";
+import InputAdornment from "@mui/material/InputAdornment";
+import { ActiveOrderFragment } from "@/__generated__/graphql";
 
 const ProductDetails = () => {
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState("");
   const [isModalVisible, setModalVisiblity] = useState(false);
   const productName = useSearchParams().get("name");
   const productVairentName = useSearchParams().get("variant");
   const [isLoginModalVisible, setLoginModalVisibilty] = useState(false);
   const { isLoggedIn } = useAuth();
+  const [quantity, setQuantity] = useState(1);
 
   const { loading, error, data } = useQuery(PRODUCT_DETAILS, {
     variables: { slug: productName },
   });
 
+  const [addToCart, { data: addToCartData, loading: addToCartLoading }] =
+    useMutation(ADD_ITEM_TO_ORDER);
+
   const product = data?.product;
   const selectedVariant = product?.variants?.find(
     (x) => x.name === productVairentName
   );
+  const [selectedOptions, setSelectedOptions] = useState(
+    selectedVariant?.options || []
+  );
   const productAssest = product?.assets?.concat(selectedVariant?.assets ?? []);
-  const productSizes = product?.optionGroups.find((x) => x.name === "size");
-  const selectedOptionId = selectedVariant?.options.find(
-    (x) => x.groupId === productSizes?.id
-  )?.id;
+  const productOptions = product?.optionGroups;
 
-  useEffect(() => setSelectedSize(selectedOptionId ?? ""), [selectedOptionId]);
+  useEffect(() => {
+    if (!addToCartData) return;
+    setModalVisiblity(true);
+  }, [addToCartData]);
 
   if (!product || !selectedVariant) {
     return (
@@ -45,6 +58,63 @@ const ProductDetails = () => {
       </Layout>
     );
   }
+
+  const findSelectedOption = (optionType: string) => {
+    const optionGroup = productOptions?.find(
+      (x) => x.name.toLowerCase() === optionType
+    );
+    const selectedOption = optionGroup?.options.find((x) =>
+      selectedOptions.some((y) => y.id == x.id && y.groupId === optionGroup.id)
+    );
+    return selectedOption?.name || "";
+  };
+
+  const cartData =
+    addToCartData?.addItemToOrder.__typename === "Order"
+      ? (addToCartData.addItemToOrder as ActiveOrderFragment)
+      : null;
+
+  const addedProduct: Product = {
+    image: product.assets[0].source,
+    name: product.name,
+    size: findSelectedOption("size"),
+    colour: findSelectedOption("color"),
+    price: selectedVariant.price,
+    quantity: quantity,
+    cartSubtotal: cartData?.subTotalWithTax,
+  };
+
+  const onAddToCart = () => {
+    if (!isLoggedIn) {
+      setLoginModalVisibilty(true);
+      return;
+    }
+    addToCart({
+      variables: { productVariantId: selectedVariant.id, quantity: quantity },
+    });
+  };
+
+  const onProductOptionSelect = (groupId: string, optionId: string) => {
+    let newOptions = selectedOptions.map((x) =>
+      x.groupId === groupId ? { ...x, id: optionId } : x
+    );
+    let variant = product.variants.find((x) =>
+      x.options.every(
+        (x) => newOptions.find((y) => y.groupId === x.groupId)?.id === x.id
+      )
+    );
+    if (!variant) {
+      variant = product.variants.find((x) =>
+        x.options.find((x) => x.groupId === groupId && x.id === optionId)
+      );
+      newOptions = variant?.options || selectedOptions;
+    }
+    router.replace(
+      `/product-details?name=${productName}&variant=${variant?.name}`
+    );
+    setSelectedOptions(newOptions);
+    setSelectedImage(0);
+  };
 
   return (
     <Layout>
@@ -106,58 +176,83 @@ const ProductDetails = () => {
                 </span>
               </p>
             </div>
-            <div className="bottom-2 space-x-4 rounded-xl border-gray-500 bg-gray-100 p-4">
-              <span>1</span> <span className="border-s-2 border-gray-300" />{" "}
-              <span>
-                Pcs <KeyboardArrowDown />
-              </span>
+            <div>
+              <Select
+                className="rounded-xl border-gray-500 bg-gray-100 p-4"
+                value={quantity}
+                input={<InputBase />}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <span>| Pcs</span>
+                  </InputAdornment>
+                }
+                IconComponent={() => (
+                  <InputAdornment position="end">
+                    <KeyboardArrowDown />
+                  </InputAdornment>
+                )}
+                onChange={(event) => setQuantity(Number(event.target.value))}
+              >
+                {Array(6)
+                  .fill(0)
+                  .map((_value, index) => {
+                    if (index === 0) return;
+                    return (
+                      <MenuItem key={index} value={index}>
+                        {index}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
             </div>
             <button
-              className={`rounded-xl bg-orange-600 px-4 py-3 font-bold text-white`}
-              onClick={() =>
-                isLoggedIn
-                  ? setModalVisiblity(true)
-                  : setLoginModalVisibilty(true)
-              }
+              className={`rounded-xl bg-orange-600 px-4 py-3 font-bold text-white ${
+                addToCartLoading && "opacity-60"
+              }`}
+              onClick={onAddToCart}
+              disabled={addToCartLoading}
             >
-              <Add /> Add to Cart
+              {addToCartLoading ? (
+                <CircularProgress color="inherit" size={16} className="me-2" />
+              ) : (
+                <Add />
+              )}
+              Add to Cart
             </button>
           </div>
-          {productSizes && (
-            <div className="flex flex-col space-y-4 self-start rounded-xl border-2 border-gray-200 px-6 py-4">
-              <p>
-                {productSizes?.name?.toUpperCase()}: Click to select{" "}
-                {productSizes?.name}
-              </p>
-              <div>
-                {productSizes?.options?.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`mb-2 me-4 rounded-xl px-8 py-2 ${
-                      option.id === selectedSize
-                        ? `bg-orange-600 text-white`
-                        : `border-2 border-gray-500 text-black`
-                    }`}
-                    onClick={() => {
-                      setSelectedSize(option.id);
-                      setSelectedImage(0);
-                      const variant = product.variants.find((x) =>
-                        x.options.find(
-                          (x) =>
-                            x.groupId === productSizes.id && x.id === option.id
-                        )
-                      )?.name;
-                      router.replace(
-                        `/product-details?name=${productName}&variant=${variant}`
-                      );
-                    }}
-                  >
-                    {option.name}
-                  </button>
-                ))}
+          {productOptions?.map((optionGroup, index) => {
+            const selectedId = selectedOptions.find(
+              (x) => x.groupId === optionGroup.id
+            )?.id;
+            return (
+              <div
+                key={index}
+                className="flex flex-col space-y-4 self-start rounded-xl border-2 border-gray-200 px-6 py-4"
+              >
+                <p>
+                  {optionGroup.name.toUpperCase()}: Click to select{" "}
+                  {optionGroup.name}
+                </p>
+                <div>
+                  {optionGroup.options.map((option) => (
+                    <button
+                      key={option.id}
+                      className={`mb-2 me-4 rounded-xl px-8 py-2 ${
+                        option.id === selectedId
+                          ? `bg-orange-600 text-white`
+                          : `border-2 border-gray-500 text-black`
+                      }`}
+                      onClick={() =>
+                        onProductOptionSelect(optionGroup.id, option.id)
+                      }
+                    >
+                      {option.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })}
           <div className="space-y-3">
             <p>
               <span className="text-blue-400">Size Chart </span>{" "}
@@ -209,6 +304,7 @@ const ProductDetails = () => {
       <ProductAddedModal
         isVisible={isModalVisible}
         setVisibilty={setModalVisiblity}
+        product={addedProduct}
       />
       <LogInSignupModal
         isVisible={isLoginModalVisible}
