@@ -15,6 +15,12 @@ export const ACTIVE_ORDER_FRAGMENT = gql(`#graphql
       productVariant {
         id
         name
+        options {
+          name
+          group {
+            name
+          }
+        }
       }
       featuredAsset {
         id
@@ -22,6 +28,7 @@ export const ACTIVE_ORDER_FRAGMENT = gql(`#graphql
       }
       quantity
       linePriceWithTax
+      linePrice
     }
   }
 `);

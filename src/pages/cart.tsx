@@ -1,52 +1,99 @@
 import Layout from "@/components/layout";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import { Add, Remove } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { formatPrice } from "@/helpers/helper";
+import { ACTIVE_ORDER, ADJUST_ORDER_LINE } from "@/graphql/orderWorkflow";
+import { useMutation, useQuery } from "@apollo/client";
+import { ActiveOrderFragment, OrderLine } from "@/__generated__/graphql";
+import { useEffect, useState } from "react";
 
-const CartItem = ({ item }: any) => {
+interface CartItemProps {
+  item: OrderLine;
+  setActiveOrder: (activeOrder: ActiveOrderFragment) => void;
+}
+
+const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
+  const findProductOption = (optionType: string) => {
+    return (
+      item.productVariant.options.find(
+        (x) => x.group.name.toLowerCase() === optionType
+      )?.name || "NA"
+    );
+  };
+  const [adjustOrder, { data, loading }] = useMutation(ADJUST_ORDER_LINE);
+
+  const updateOrder = (quantity: number) => {
+    adjustOrder({
+      variables: {
+        orderLineId: item.id,
+        quantity: quantity,
+      },
+    });
+  };
+
+  useEffect(() => {
+    const activeOrder =
+      data?.adjustOrderLine.__typename === "Order"
+        ? (data?.adjustOrderLine as ActiveOrderFragment)
+        : null;
+    activeOrder && setActiveOrder(activeOrder);
+  }, [data, setActiveOrder]);
+
   return (
     <div className="flex border-2 border-slate-400 p-4">
-      <Image src={item.image} alt={item.name} height={205} width={266} />
+      <Image
+        src={item.featuredAsset?.preview ?? ""}
+        alt={item.featuredAsset?.name ?? ""}
+        height={205}
+        width={266}
+      />
       <div className="mx-8 space-y-4">
-        <p className="text-2xl font-semibold">{item.name}</p>
+        <p className="text-2xl font-semibold">{item.productVariant.name}</p>
         <div className="flex">
           <div className="space-y-4">
             <p>
-              Size: <span className="font-bold">{item.size}</span>
+              Size:{" "}
+              <span className="font-bold">{findProductOption("size")}</span>
             </p>
             <p>
-              Colour: <span className="font-bold">{item.colour}</span>
+              Colour:{" "}
+              <span className="font-bold">{findProductOption("color")}</span>
             </p>
             <p>
               Price:{" "}
               <span className="font-bold text-slate-500 line-through">
-                {formatPrice(item.price)}
+                {formatPrice(item.linePriceWithTax)}
               </span>
               <br />
               <span className="ms-11 font-bold">
-                {formatPrice(item.salePrice)}
+                {formatPrice(item.linePrice)}
               </span>
             </p>
           </div>
           <div className="mx-8 self-center">
             <p className="mb-6 space-x-2">
               Quantity:
-              <button className="ms-2">
+              <button
+                className="ms-2"
+                onClick={() => updateOrder(item.quantity - 1)}
+              >
                 <Remove />
               </button>
               <span className="border-2 border-slate-300 px-2 py-1">
                 {item.quantity}
               </span>
-              <button>
+              <button onClick={() => updateOrder(item.quantity + 1)}>
                 <Add />
               </button>
             </p>
           </div>
         </div>
         <div className="flex space-x-8">
-          <button className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold">
+          <button
+            className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold"
+            onClick={() => updateOrder(0)}
+          >
             Remove
           </button>
           <button className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold">
@@ -59,30 +106,22 @@ const CartItem = ({ item }: any) => {
 };
 
 const Cart = () => {
-  const searchParams = useSearchParams();
-  const isEmpty = searchParams.get("e");
   const router = useRouter();
+  const { loading, error, data } = useQuery(ACTIVE_ORDER);
+  const [activeOrder, setActiveOrder] = useState(
+    data?.activeOrder as ActiveOrderFragment
+  );
+  const products = activeOrder?.lines;
 
-  const product = {
-    image: null,
-    name: "Men cotton jacket",
-    size: "M",
-    colour: "White",
-    price: 170,
-    salePrice: 150,
-    quantity: 1,
-  };
-  const products = new Array(isEmpty ? 0 : 3).fill(product).map((e, index) => {
-    return {
-      ...product,
-      image: `https://picsum.photos/id/${index}/360/300`,
-    };
-  });
+  useEffect(
+    () => setActiveOrder(data?.activeOrder as ActiveOrderFragment),
+    [data]
+  );
 
   return (
     <Layout>
       <div className="flex flex-col items-center justify-items-center p-12">
-        {products.length === 0 ? (
+        {!products ? (
           <div className="w-full space-y-3">
             <p className="text-2xl font-semibold">SHOPPING CART</p>
             <p>Your cart is empty!</p>
@@ -96,7 +135,10 @@ const Cart = () => {
               <div className="space-y-8">
                 {products.map((item, index) => (
                   <div key={index}>
-                    <CartItem item={item} />
+                    <CartItem
+                      item={item as OrderLine}
+                      setActiveOrder={setActiveOrder}
+                    />
                   </div>
                 ))}
               </div>
@@ -116,12 +158,16 @@ const Cart = () => {
                   <div className=" border-[1px] border-gray-500" />
                   <div className="flex px-2 text-end">
                     <p className="w-1/2">Sub-Total:</p>
-                    <p className="w-1/2">RS. 949.00</p>
+                    <p className="w-1/2">
+                      {formatPrice(activeOrder.subTotalWithTax)}
+                    </p>
                   </div>
                   <div className="border-[1px] border-gray-500" />
                   <div className="flex px-2 text-end">
                     <p className="w-1/2">Total:</p>
-                    <p className="w-1/2">RS. 949.00</p>
+                    <p className="w-1/2">
+                      {formatPrice(activeOrder.totalWithTax)}
+                    </p>
                   </div>
                   <div className="border-[1px] border-gray-500" />
                 </div>

@@ -3607,7 +3607,17 @@ export type ActiveOrderFragment = {
     id: string;
     quantity: number;
     linePriceWithTax: any;
-    productVariant: { __typename?: "ProductVariant"; id: string; name: string };
+    linePrice: any;
+    productVariant: {
+      __typename?: "ProductVariant";
+      id: string;
+      name: string;
+      options: Array<{
+        __typename?: "ProductOption";
+        name: string;
+        group: { __typename?: "ProductOptionGroup"; name: string };
+      }>;
+    };
     featuredAsset?: {
       __typename?: "Asset";
       id: string;
@@ -3922,6 +3932,32 @@ export const ActiveOrderFragmentDoc = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -3944,6 +3980,7 @@ export const ActiveOrderFragmentDoc = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
@@ -4741,6 +4778,32 @@ export const AddItemToOrderDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -4763,6 +4826,7 @@ export const AddItemToOrderDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
@@ -4895,6 +4959,32 @@ export const AdjustOrderLineDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -4917,6 +5007,7 @@ export const AdjustOrderLineDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
@@ -4987,6 +5078,32 @@ export const ActiveOrderDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5009,6 +5126,7 @@ export const ActiveOrderDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
@@ -5122,6 +5240,32 @@ export const SetShippingAddressDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5144,6 +5288,7 @@ export const SetShippingAddressDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
@@ -5301,6 +5446,32 @@ export const SetShippingMethodDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5323,6 +5494,7 @@ export const SetShippingMethodDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
@@ -5475,6 +5647,32 @@ export const TransitionOrderDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5497,6 +5695,7 @@ export const TransitionOrderDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
@@ -5613,6 +5812,32 @@ export const AddPaymentDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5635,6 +5860,7 @@ export const AddPaymentDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
@@ -5725,6 +5951,32 @@ export const OrderByCodeDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5747,6 +5999,7 @@ export const OrderByCodeDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
               ],
             },
           },
