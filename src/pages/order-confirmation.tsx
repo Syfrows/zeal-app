@@ -1,11 +1,26 @@
-import { ActiveOrderFragment, OrderLine } from "@/__generated__/graphql";
+import {
+  ActiveOrderFragment,
+  AddPaymentMutation,
+  Order,
+  OrderLine,
+} from "@/__generated__/graphql";
 import Layout from "@/components/layout";
-import { ACTIVE_ORDER } from "@/graphql/orderWorkflow";
+import {
+  ACTIVE_ORDER,
+  ADD_PAYMENT,
+  GET_PAYMENT_METHODS,
+  TRANSITION_ORDER,
+} from "@/graphql/orderWorkflow";
 import { formatPrice } from "@/helpers/helper";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ArrowBack } from "@mui/icons-material";
+import CircularProgress from "@mui/material/CircularProgress";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface ProductProps {
   product: OrderLine;
@@ -57,9 +72,44 @@ const Product = ({ product }: ProductProps) => {
 
 const OrderConfirmation = () => {
   const router = useRouter();
+  const [paymentMethod, setPaymentMethod] = useState("");
   const { data } = useQuery(ACTIVE_ORDER);
   const activeOrders = data?.activeOrder as ActiveOrderFragment;
   const products = activeOrders?.lines;
+  const paymentMethodsData = useQuery(GET_PAYMENT_METHODS);
+  const paymentMethods = paymentMethodsData.data?.eligiblePaymentMethods;
+  const [transitionOrder] = useMutation(TRANSITION_ORDER);
+  const [addPayment] = useMutation(ADD_PAYMENT);
+  const [isLoading, setIsLoading] = useState(false);
+  const isConfirmOrderDisabled = !paymentMethod || isLoading;
+
+  const onConfirmOrder = () => {
+    setIsLoading(true);
+    transitionOrder({
+      variables: {
+        state: "ArrangingPayment",
+      },
+      onCompleted: onTransitionOrder,
+    });
+  };
+
+  const onTransitionOrder = () => {
+    addPayment({
+      variables: {
+        input: {
+          method: paymentMethod,
+          metadata: {},
+        },
+      },
+      onCompleted: onPaymentAdded,
+    });
+  };
+
+  const onPaymentAdded = (data: AddPaymentMutation) => {
+    const order = data.addPaymentToOrder as Order;
+    router.push(`/confirmation?orderCode=${order.code}`);
+  };
+
   return (
     <Layout>
       <div className="space-y-4 xl:px-32 xl:py-4">
@@ -68,12 +118,12 @@ const OrderConfirmation = () => {
             <ArrowBack />
             <p className="ms-4 text-2xl font-semibold">CONFIRM YOUR ORDER</p>
           </div>
-          <button
+          {/* <button
             className="bg-primary px-4 py-2 font-semibold text-white"
             onClick={() => router.push("/confirmation")}
           >
             Continue
-          </button>
+          </button> */}
         </div>
         <div>
           <div className="flex items-center justify-between bg-gray-300 p-3 font-semibold">
@@ -122,11 +172,34 @@ const OrderConfirmation = () => {
             </p>
           </div>
         </div>
+        <div className="flex items-center justify-center">
+          <p className="me-4 font-bold">Payment Options : </p>
+          <RadioGroup
+            row
+            value={paymentMethod}
+            onChange={(event) => setPaymentMethod(event.target.value)}
+          >
+            {paymentMethods?.map((method, index) => (
+              <FormControlLabel
+                key={index}
+                value={method.code}
+                control={<Radio color="default" />}
+                label={method.name}
+              />
+            ))}
+          </RadioGroup>
+        </div>
         <div className="flex flex-col items-center">
           <button
-            className="mt-4 bg-primary px-6 py-3 font-semibold text-white"
-            onClick={() => router.push("/confirmation")}
+            className={`mt-4 bg-primary px-6 py-3 font-semibold text-white ${
+              isConfirmOrderDisabled && "opacity-50"
+            }`}
+            onClick={onConfirmOrder}
+            disabled={isConfirmOrderDisabled}
           >
+            {isLoading && (
+              <CircularProgress color="inherit" size={16} className="mr-2" />
+            )}
             CONFIRM ORDER
           </button>
           <p className="my-4 text-center font-semibold">

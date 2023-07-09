@@ -21,7 +21,7 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface AddressDetailsProps {
   address: Address;
@@ -96,7 +96,6 @@ const Address = () => {
   const onSetShippingAddress = (_data: SetShippingAddressMutation) => {
     getShippingMethods({
       onCompleted: onGetShippingMethods,
-      fetchPolicy: "network-only",
     });
   };
 

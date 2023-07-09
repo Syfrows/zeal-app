@@ -46,6 +46,11 @@ const ProductDetails = () => {
   const productAssest = product?.assets?.concat(selectedVariant?.assets ?? []);
   const productOptions = product?.optionGroups;
 
+  useEffect(
+    () => setSelectedOptions(selectedVariant?.options || []),
+    [selectedVariant?.options]
+  );
+
   useEffect(() => {
     if (!addToCartData) return;
     setModalVisiblity(true);
@@ -66,7 +71,7 @@ const ProductDetails = () => {
     const selectedOption = optionGroup?.options.find((x) =>
       selectedOptions.some((y) => y.id == x.id && y.groupId === optionGroup.id)
     );
-    return selectedOption?.name || "";
+    return selectedOption?.name || "NA";
   };
 
   const cartData =
