@@ -3548,6 +3548,54 @@ export type LogOutMutation = {
   logout: { __typename?: "Success"; success: boolean };
 };
 
+export type CreateCustomerAddressMutationVariables = Exact<{
+  input: CreateAddressInput;
+}>;
+
+export type CreateCustomerAddressMutation = {
+  __typename?: "Mutation";
+  createCustomerAddress: { __typename?: "Address"; id: string };
+};
+
+export type GetAddressQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAddressQuery = {
+  __typename?: "Query";
+  activeCustomer?: {
+    __typename?: "Customer";
+    addresses?: Array<{
+      __typename?: "Address";
+      id: string;
+      streetLine1: string;
+      streetLine2?: string | null;
+      postalCode?: string | null;
+      city?: string | null;
+      province?: string | null;
+      phoneNumber?: string | null;
+      defaultShippingAddress?: boolean | null;
+      country: {
+        __typename?: "Country";
+        id: string;
+        code: string;
+        name: string;
+      };
+    }> | null;
+  } | null;
+};
+
+export type AvailableCountriesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AvailableCountriesQuery = {
+  __typename?: "Query";
+  availableCountries: Array<{
+    __typename?: "Country";
+    id: string;
+    name: string;
+    code: string;
+    enabled: boolean;
+  }>;
+};
+
 export type CollectionsQueryVariables = Exact<{
   options?: InputMaybe<CollectionListOptions>;
 }>;
@@ -4458,6 +4506,171 @@ export const LogOutDocument = {
     },
   ],
 } as unknown as DocumentNode<LogOutMutation, LogOutMutationVariables>;
+export const CreateCustomerAddressDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "createCustomerAddress" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CreateAddressInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createCustomerAddress" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateCustomerAddressMutation,
+  CreateCustomerAddressMutationVariables
+>;
+export const GetAddressDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getAddress" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "activeCustomer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "addresses" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "streetLine1" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "streetLine2" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "postalCode" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "city" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "province" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "country" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "code" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "phoneNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "defaultShippingAddress" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAddressQuery, GetAddressQueryVariables>;
+export const AvailableCountriesDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "availableCountries" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "availableCountries" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+                { kind: "Field", name: { kind: "Name", value: "enabled" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AvailableCountriesQuery,
+  AvailableCountriesQueryVariables
+>;
 export const CollectionsDocument = {
   kind: "Document",
   definitions: [

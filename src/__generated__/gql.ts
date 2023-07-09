@@ -21,6 +21,12 @@ const documents = {
     types.LogInDocument,
   "#graphql\n  mutation logOut{\n    logout {\n      success\n    }\n  }\n":
     types.LogOutDocument,
+  "#graphql\n  mutation createCustomerAddress($input: CreateAddressInput!){\n    createCustomerAddress(input: $input) {\n        id\n    }\n  }\n":
+    types.CreateCustomerAddressDocument,
+  "#graphql\n  query getAddress{\n    activeCustomer {\n      addresses {\n        id\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n":
+    types.GetAddressDocument,
+  "#graphql\n  query availableCountries{\n    availableCountries {\n      id\n      name\n      code\n      enabled\n    }\n  }\n":
+    types.AvailableCountriesDocument,
   "#graphql\n  query collections($options: CollectionListOptions) {\n    collections(options: $options) {\n      items {\n        id\n        name\n        featuredAsset {\n          source\n        }\n      }\n    }\n  }\n":
     types.CollectionsDocument,
   "#graphql\n  query search($input: SearchInput!) {\n    search(input: $input) {\n      items {\n        slug\n        productVariantName\n        priceWithTax{\n          ...on SinglePrice{\n            value\n            }\n        }\n        price{\n          ...on SinglePrice{\n            value\n            }\n        }\n        productAsset {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n":
@@ -89,6 +95,24 @@ export function gql(
 export function gql(
   source: "#graphql\n  mutation logOut{\n    logout {\n      success\n    }\n  }\n"
 ): (typeof documents)["#graphql\n  mutation logOut{\n    logout {\n      success\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  mutation createCustomerAddress($input: CreateAddressInput!){\n    createCustomerAddress(input: $input) {\n        id\n    }\n  }\n"
+): (typeof documents)["#graphql\n  mutation createCustomerAddress($input: CreateAddressInput!){\n    createCustomerAddress(input: $input) {\n        id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  query getAddress{\n    activeCustomer {\n      addresses {\n        id\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query getAddress{\n    activeCustomer {\n      addresses {\n        id\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  query availableCountries{\n    availableCountries {\n      id\n      name\n      code\n      enabled\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query availableCountries{\n    availableCountries {\n      id\n      name\n      code\n      enabled\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
