@@ -3655,6 +3655,7 @@ export type ActiveOrderFragment = {
     __typename?: "OrderLine";
     id: string;
     quantity: number;
+    unitPriceWithTax: any;
     linePriceWithTax: any;
     linePrice: any;
     productVariant: {
@@ -4025,6 +4026,10 @@ export const ActiveOrderFragmentDoc = {
                   },
                 },
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
@@ -5042,6 +5047,10 @@ export const AddItemToOrderDocument = {
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
                 {
                   kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
+                {
+                  kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "linePrice" } },
@@ -5223,6 +5232,10 @@ export const AdjustOrderLineDocument = {
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
                 {
                   kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
+                {
+                  kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "linePrice" } },
@@ -5340,6 +5353,10 @@ export const ActiveOrderDocument = {
                   },
                 },
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
@@ -5502,6 +5519,10 @@ export const SetShippingAddressDocument = {
                   },
                 },
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
@@ -5710,6 +5731,10 @@ export const SetShippingMethodDocument = {
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
                 {
                   kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
+                {
+                  kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "linePrice" } },
@@ -5911,6 +5936,10 @@ export const TransitionOrderDocument = {
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
                 {
                   kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
+                {
+                  kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "linePrice" } },
@@ -6076,6 +6105,10 @@ export const AddPaymentDocument = {
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
                 {
                   kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
+                {
+                  kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "linePrice" } },
@@ -6213,6 +6246,10 @@ export const OrderByCodeDocument = {
                   },
                 },
                 { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "linePriceWithTax" },

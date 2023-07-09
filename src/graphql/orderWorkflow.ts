@@ -27,6 +27,7 @@ export const ACTIVE_ORDER_FRAGMENT = gql(`#graphql
         preview
       }
       quantity
+      unitPriceWithTax
       linePriceWithTax
       linePrice
     }
