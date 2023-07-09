@@ -34,7 +34,7 @@ const intialState: Address = {
   phoneNumber: "",
 };
 
-const NewAddress = ({ isVisible, setVisibilty }: any) => {
+const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
   const { data } = useQuery(AVAILABLE_COUNTRIES);
   const countries = data?.availableCountries.map((x) => {
@@ -56,9 +56,9 @@ const NewAddress = ({ isVisible, setVisibilty }: any) => {
   useEffect(() => {
     if (createAddressData?.data) {
       setVisibilty(false);
-      createAddressData.reset();
+      refetch();
     }
-  }, [createAddressData, setVisibilty]);
+  }, [createAddressData, setVisibilty, refetch]);
   const onContinue = () => {
     createAddress({
       variables: {

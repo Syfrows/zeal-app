@@ -3566,6 +3566,7 @@ export type GetAddressQuery = {
     addresses?: Array<{
       __typename?: "Address";
       id: string;
+      fullName?: string | null;
       streetLine1: string;
       streetLine2?: string | null;
       postalCode?: string | null;
@@ -4583,6 +4584,10 @@ export const GetAddressDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fullName" },
+                      },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "streetLine1" },

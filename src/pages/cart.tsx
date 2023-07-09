@@ -173,7 +173,7 @@ const Cart = () => {
                 </div>
                 <button
                   className="w-72 bg-primary py-4 font-semibold text-white"
-                  onClick={() => router.push("/address")}
+                  onClick={() => router.push("/address?order=true")}
                 >
                   Proceed to Buy
                 </button>

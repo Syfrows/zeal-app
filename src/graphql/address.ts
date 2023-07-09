@@ -13,6 +13,7 @@ export const GET_ADDRESS = gql(`#graphql
     activeCustomer {
       addresses {
         id
+        fullName
         streetLine1
         streetLine2
         postalCode
