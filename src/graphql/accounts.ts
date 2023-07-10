@@ -84,3 +84,27 @@ export const LOG_OUT = gql(`#graphql
     }
   }
 `);
+
+export const ACCOUNT_INFO = gql(`#graphql
+  query getAccountInfo{
+    activeCustomer {
+      title
+      firstName
+      lastName
+      phoneNumber
+      emailAddress
+    }
+  }
+`);
+
+export const UPDATE_ACCOUNT_INFO = gql(`#graphql
+  mutation updateAccountInfo($input: UpdateCustomerInput!){
+    updateCustomer(input: $input){
+      title
+      firstName
+      lastName
+      phoneNumber
+      emailAddress
+    }
+  }
+`);

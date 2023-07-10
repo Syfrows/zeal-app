@@ -21,6 +21,10 @@ const documents = {
     types.LogInDocument,
   "#graphql\n  mutation logOut{\n    logout {\n      success\n    }\n  }\n":
     types.LogOutDocument,
+  "#graphql\n  query getAccountInfo{\n    activeCustomer {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n":
+    types.GetAccountInfoDocument,
+  "#graphql\n  mutation updateAccountInfo($input: UpdateCustomerInput!){\n    updateCustomer(input: $input){\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n":
+    types.UpdateAccountInfoDocument,
   "#graphql\n  mutation createCustomerAddress($input: CreateAddressInput!){\n    createCustomerAddress(input: $input) {\n        id\n    }\n  }\n":
     types.CreateCustomerAddressDocument,
   "#graphql\n  query getAddress{\n    activeCustomer {\n      addresses {\n        id\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n":
@@ -53,6 +57,10 @@ const documents = {
     types.AddPaymentDocument,
   "#graphql\n  query OrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      ...ActiveOrder\n    }\n  }\n":
     types.OrderByCodeDocument,
+  "#graphql\n  query getOrders{\n    activeCustomer {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n":
+    types.GetOrdersDocument,
+  "#graphql\n  query OrderById($id: ID!) {\n    order(id: $id) {\n      ...ActiveOrder,\n      shippingAddress {\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country\n        phoneNumber\n      }\n      orderPlacedAt\n      payments {\n        method\n      }\n      shippingLines {\n        shippingMethod {\n          name\n        }\n      }\n    }\n  }\n":
+    types.OrderByIdDocument,
   "#graphql\n  query productDetails($slug: String) {\n    product(slug : $slug){\n      name\n      description\n      collections {\n        name\n      }\n      assets {\n        name\n        preview\n        source\n      }\n      optionGroups {\n        id\n        name\n        options {\n          id\n          name\n        }\n      }\n      variants {\n        id\n        name\n        price\n        priceWithTax\n        sku\n        stockLevel\n        assets {\n          name\n          preview\n          source\n        }\n        options {\n          groupId\n          id\n        }\n      }\n      customFields {\n        reviewRating\n        reviewCount\n      }\n    }\n  }\n":
     types.ProductDetailsDocument,
 };
@@ -95,6 +103,18 @@ export function gql(
 export function gql(
   source: "#graphql\n  mutation logOut{\n    logout {\n      success\n    }\n  }\n"
 ): (typeof documents)["#graphql\n  mutation logOut{\n    logout {\n      success\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  query getAccountInfo{\n    activeCustomer {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query getAccountInfo{\n    activeCustomer {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  mutation updateAccountInfo($input: UpdateCustomerInput!){\n    updateCustomer(input: $input){\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n"
+): (typeof documents)["#graphql\n  mutation updateAccountInfo($input: UpdateCustomerInput!){\n    updateCustomer(input: $input){\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -191,6 +211,18 @@ export function gql(
 export function gql(
   source: "#graphql\n  query OrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      ...ActiveOrder\n    }\n  }\n"
 ): (typeof documents)["#graphql\n  query OrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      ...ActiveOrder\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  query getOrders{\n    activeCustomer {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query getOrders{\n    activeCustomer {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  query OrderById($id: ID!) {\n    order(id: $id) {\n      ...ActiveOrder,\n      shippingAddress {\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country\n        phoneNumber\n      }\n      orderPlacedAt\n      payments {\n        method\n      }\n      shippingLines {\n        shippingMethod {\n          name\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query OrderById($id: ID!) {\n    order(id: $id) {\n      ...ActiveOrder,\n      shippingAddress {\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country\n        phoneNumber\n      }\n      orderPlacedAt\n      payments {\n        method\n      }\n      shippingLines {\n        shippingMethod {\n          name\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

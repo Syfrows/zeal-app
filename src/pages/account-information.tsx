@@ -1,21 +1,38 @@
 import Layout from "@/components/layout";
 import SideNav from "@/components/sideNav";
+import { ACCOUNT_INFO, UPDATE_ACCOUNT_INFO } from "@/graphql/accounts";
+import { useMutation, useQuery } from "@apollo/client";
+import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
-
-const details = {
-  firstName: "Kartik",
-  lastName: "Chate",
-  email: "kchate@gmail.com",
-  mobile: "+91-8275579111",
-};
+import { useEffect, useState } from "react";
 
 const AccountInformation = () => {
   const [value, setValue] = useState("yes");
+  const { data } = useQuery(ACCOUNT_INFO);
+  const details = data?.activeCustomer;
+  const [inputs, setInputs] = useState<any>(details);
+  const [updateAccountInfo, { loading }] = useMutation(UPDATE_ACCOUNT_INFO);
 
+  useEffect(() => setInputs(details), [details]);
+
+  const onContinue = () => {
+    updateAccountInfo({
+      variables: {
+        input: {
+          title: inputs.firstname + " " + inputs.lastName,
+          firstName: inputs.firstName,
+          lastName: inputs.lastName,
+          phoneNumber: inputs.phoneNumber,
+        },
+      },
+      onCompleted: (data) => setInputs(data.updateCustomer),
+    });
+  };
+
+  if (!details) return <Layout></Layout>;
   return (
     <Layout>
       <div className="flex justify-center py-12 xl:px-32">
@@ -27,20 +44,26 @@ const AccountInformation = () => {
           <p className="mt-5 font-bold text-gray-500">Your Personal Details</p>
           <div className="my-5 border-t-2 border-gray-300" />
           <div className="flex flex-col space-y-4">
-            <div className="flex">
+            <div className="flex space-x-3">
               <TextField
                 label="First Name"
                 variant="outlined"
                 placeholder="First Name"
                 className="me-5"
-                value={details.firstName}
+                value={inputs?.firstName}
+                onChange={(event) =>
+                  setInputs({ ...inputs, firstName: event.target.value })
+                }
                 required
               />
               <TextField
                 label="Last Name"
                 variant="outlined"
                 placeholder="Last Name"
-                value={details.lastName}
+                value={inputs?.lastName}
+                onChange={(event) =>
+                  setInputs({ ...inputs, lastName: event.target.value })
+                }
                 required
               />
             </div>
@@ -48,20 +71,17 @@ const AccountInformation = () => {
               label="Email"
               variant="outlined"
               placeholder="Email"
-              value={details.email}
-              required
+              value={inputs?.emailAddress}
+              disabled
             />
             <TextField
               label="Telephone"
               variant="outlined"
               placeholder="Telephone"
-              value={details.mobile}
-              required
-            />
-            <TextField
-              label="Verify Password"
-              variant="outlined"
-              placeholder="Verify Password"
+              value={inputs?.phoneNumber}
+              onChange={(event) =>
+                setInputs({ ...inputs, phoneNumber: event.target.value })
+              }
               required
             />
             <div className="flex items-center">
@@ -84,7 +104,15 @@ const AccountInformation = () => {
               </RadioGroup>
             </div>
           </div>
-          <button className="mt-8 self-end bg-primary px-6 py-3 font-semibold text-white">
+          <button
+            className={`mt-8 self-end bg-primary px-6 py-3 font-semibold text-white ${
+              loading && "opacity-50"
+            }`}
+            onClick={onContinue}
+          >
+            {loading && (
+              <CircularProgress color="inherit" size={16} className="mr-2" />
+            )}
             Continue
           </button>
         </div>

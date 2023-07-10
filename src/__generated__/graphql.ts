@@ -3548,6 +3548,36 @@ export type LogOutMutation = {
   logout: { __typename?: "Success"; success: boolean };
 };
 
+export type GetAccountInfoQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAccountInfoQuery = {
+  __typename?: "Query";
+  activeCustomer?: {
+    __typename?: "Customer";
+    title?: string | null;
+    firstName: string;
+    lastName: string;
+    phoneNumber?: string | null;
+    emailAddress: string;
+  } | null;
+};
+
+export type UpdateAccountInfoMutationVariables = Exact<{
+  input: UpdateCustomerInput;
+}>;
+
+export type UpdateAccountInfoMutation = {
+  __typename?: "Mutation";
+  updateCustomer: {
+    __typename?: "Customer";
+    title?: string | null;
+    firstName: string;
+    lastName: string;
+    phoneNumber?: string | null;
+    emailAddress: string;
+  };
+};
+
 export type CreateCustomerAddressMutationVariables = Exact<{
   input: CreateAddressInput;
 }>;
@@ -3888,6 +3918,64 @@ export type OrderByCodeQuery = {
     | ({ __typename?: "Order" } & {
         " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
       })
+    | null;
+};
+
+export type GetOrdersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetOrdersQuery = {
+  __typename?: "Query";
+  activeCustomer?: {
+    __typename?: "Customer";
+    orders: {
+      __typename?: "OrderList";
+      items: Array<{
+        __typename?: "Order";
+        id: string;
+        totalQuantity: number;
+        totalWithTax: any;
+        orderPlacedAt?: any | null;
+        state: string;
+        lines: Array<{
+          __typename?: "OrderLine";
+          featuredAsset?: {
+            __typename?: "Asset";
+            name: string;
+            preview: string;
+          } | null;
+        }>;
+      }>;
+    };
+  } | null;
+};
+
+export type OrderByIdQueryVariables = Exact<{
+  id: Scalars["ID"]["input"];
+}>;
+
+export type OrderByIdQuery = {
+  __typename?: "Query";
+  order?:
+    | ({
+        __typename?: "Order";
+        orderPlacedAt?: any | null;
+        shippingAddress?: {
+          __typename?: "OrderAddress";
+          fullName?: string | null;
+          streetLine1?: string | null;
+          streetLine2?: string | null;
+          postalCode?: string | null;
+          city?: string | null;
+          province?: string | null;
+          country?: string | null;
+          phoneNumber?: string | null;
+        } | null;
+        payments?: Array<{ __typename?: "Payment"; method: string }> | null;
+        shippingLines: Array<{
+          __typename?: "ShippingLine";
+          shippingMethod: { __typename?: "ShippingMethod"; name: string };
+        }>;
+      } & { " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment } })
     | null;
 };
 
@@ -4512,6 +4600,99 @@ export const LogOutDocument = {
     },
   ],
 } as unknown as DocumentNode<LogOutMutation, LogOutMutationVariables>;
+export const GetAccountInfoDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getAccountInfo" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "activeCustomer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "title" } },
+                { kind: "Field", name: { kind: "Name", value: "firstName" } },
+                { kind: "Field", name: { kind: "Name", value: "lastName" } },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAccountInfoQuery, GetAccountInfoQueryVariables>;
+export const UpdateAccountInfoDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "updateAccountInfo" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UpdateCustomerInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateCustomer" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "title" } },
+                { kind: "Field", name: { kind: "Name", value: "firstName" } },
+                { kind: "Field", name: { kind: "Name", value: "lastName" } },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdateAccountInfoMutation,
+  UpdateAccountInfoMutationVariables
+>;
 export const CreateCustomerAddressDocument = {
   kind: "Document",
   definitions: [
@@ -6263,6 +6444,317 @@ export const OrderByCodeDocument = {
     },
   ],
 } as unknown as DocumentNode<OrderByCodeQuery, OrderByCodeQueryVariables>;
+export const GetOrdersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getOrders" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "activeCustomer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "orders" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "items" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "totalQuantity" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "totalWithTax" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "orderPlacedAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "state" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "lines" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "featuredAsset",
+                                    },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "name" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "preview",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetOrdersQuery, GetOrdersQueryVariables>;
+export const OrderByIdDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "OrderById" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "order" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "ActiveOrder" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "shippingAddress" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fullName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "streetLine1" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "streetLine2" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "postalCode" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "city" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "province" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "country" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "phoneNumber" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "orderPlacedAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "payments" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "method" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "shippingLines" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "shippingMethod" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ActiveOrder" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Order" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "couponCodes" } },
+          { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          { kind: "Field", name: { kind: "Name", value: "totalQuantity" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "lines" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "productVariant" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "options" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "group" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "featuredAsset" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "preview" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "quantity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "unitPriceWithTax" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "linePriceWithTax" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "linePrice" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<OrderByIdQuery, OrderByIdQueryVariables>;
 export const ProductDetailsDocument = {
   kind: "Document",
   definitions: [
