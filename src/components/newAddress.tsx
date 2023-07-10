@@ -53,6 +53,10 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
   const [createAddress, createAddressData] = useMutation(
     CREATE_CUSTOMER_ADDRESS
   );
+  useEffect(
+    () => setSelectedCountry(countries?.find((X) => X?.code === "IN")),
+    [countries]
+  );
   useEffect(() => {
     if (createAddressData?.data) {
       setVisibilty(false);
@@ -172,6 +176,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
                   setSelectedCountry(value);
                   setAddress({ ...address, countryCode: value?.code || "" });
                 }}
+                value={selectedCountry}
                 className="w-1/2"
               />
               <TextField

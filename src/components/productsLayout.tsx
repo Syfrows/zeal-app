@@ -1,11 +1,12 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Rating from "@mui/material/Rating";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useSearchParams } from "next/navigation";
 import { formatPrice } from "@/helpers/helper";
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 
 const ProductCard = ({ product }: any) => {
   return (
@@ -13,13 +14,13 @@ const ProductCard = ({ product }: any) => {
       <Image
         src={product.productAsset.preview}
         alt={product.productVariantName}
-        height={300}
+        height={360}
         width={360}
-        className="h-[200px] w-[360px] sm:h-[300px]"
+        className="aspect-square sm:h-[300px]"
       />
       <div className="space-y-3 p-2 sm:p-6">
         <div className="flex justify-between max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
-          <p className="line-clamp-2	 font-medium	">
+          <p className="line-clamp-2 h-12	font-medium">
             {product.productVariantName}
           </p>
           <div className="flex space-x-2">
@@ -51,9 +52,29 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
     //variables: { options: { filter: { parentId: { eq: "1" } } } },
   });
   const items = data ? data?.collections.items : [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const filters = [{ name: "All", id: "" }, ...items];
 
   const router = useRouter();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isContentScrollable, setIsContentScrollable] = useState(false);
+  useEffect(() => {
+    if (scrollRef.current) {
+      const { scrollWidth, clientWidth } = scrollRef.current;
+      setIsContentScrollable(scrollWidth > clientWidth);
+    }
+  }, [filters]);
+  const scrollForward = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft += 100;
+    }
+  };
+  const scrollBackward = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft -= 100;
+    }
+  };
+
   return (
     <div className="py-8">
       <div className="mb-10 flex items-center justify-between">
@@ -67,23 +88,38 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
           </button>
         )}
       </div>
-      <div className="flex space-x-4 overflow-x-auto [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden">
-        {filters &&
-          filters.map((filter, index) => (
-            <button
-              key={index}
-              className={`rounded-md border-2 px-4 py-2 ${
-                filter.id === selectFilterIndex && "bg-orange-600 text-white"
-              }`}
-              onClick={() => {
-                setSelectedFilterIndex(filter.id);
-                setFilterId(filter.id);
-                refetch({ input: { collectionId: filter.id, take: 12 } });
-              }}
-            >
-              {filter.name}
-            </button>
-          ))}
+      <div className="flex items-center space-x-3">
+        {isContentScrollable && (
+          <button onClick={scrollBackward}>
+            <ArrowBackIos />
+          </button>
+        )}
+        <div
+          ref={scrollRef}
+          className="flex space-x-4 overflow-x-auto [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden"
+        >
+          {filters &&
+            filters.map((filter, index) => (
+              <button
+                key={index}
+                className={`whitespace-nowrap rounded-md border-2 px-4 py-2 ${
+                  filter.id === selectFilterIndex && "bg-orange-600 text-white"
+                }`}
+                onClick={() => {
+                  setSelectedFilterIndex(filter.id);
+                  setFilterId(filter.id);
+                  refetch({ input: { collectionId: filter.id, take: 12 } });
+                }}
+              >
+                {filter.name}
+              </button>
+            ))}
+        </div>
+        {isContentScrollable && (
+          <button onClick={scrollForward}>
+            <ArrowForwardIos />
+          </button>
+        )}
       </div>
       <div className="my-14 grid grid-cols-2 place-items-center gap-8 lg:grid-cols-3">
         {products.map((product: any, index: any) => (

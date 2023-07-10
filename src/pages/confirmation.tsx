@@ -22,12 +22,13 @@ const Product = ({ item, isReturn }: ProductProps) => {
     );
   };
   return (
-    <div className="flex border-2 border-slate-400 p-4 max-sm:flex-col max-sm:items-center">
+    <div className="flex border-2 border-slate-400 p-4 max-sm:flex-col max-sm:items-center max-sm:space-y-4">
       <Image
         src={item.featuredAsset?.preview || ""}
         alt={item.featuredAsset?.name || ""}
-        height={205}
-        width={266}
+        height={250}
+        width={250}
+        className="aspect-square"
       />
       <div className="mx-8 space-y-4">
         <p className="text-2xl font-semibold">{item.productVariant.name}</p>
@@ -51,7 +52,8 @@ const Product = ({ item, isReturn }: ProductProps) => {
               <span className="ms-11 font-bold">
                 {formatPrice(item.linePrice)}
               </span>
-              <span className="ms-4 text-green-500">
+              <br />
+              <span className="ms-11 text-green-500">
                 {`You saved ${formatPrice(
                   item.linePriceWithTax - item.linePrice
                 )}`}

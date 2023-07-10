@@ -6,13 +6,18 @@ import { ADD_ITEM_TO_ORDER } from "@/graphql/orderWorkflow";
 import { PRODUCT_DETAILS } from "@/graphql/productDetails";
 import { formatPrice } from "@/helpers/helper";
 import { useMutation, useQuery } from "@apollo/client";
-import { Add, KeyboardArrowDown } from "@mui/icons-material";
+import {
+  Add,
+  ArrowBackIos,
+  ArrowForwardIos,
+  KeyboardArrowDown,
+} from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Rating from "@mui/material/Rating";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputBase from "@mui/material/InputBase";
@@ -45,6 +50,27 @@ const ProductDetails = () => {
   );
   const productAssest = product?.assets?.concat(selectedVariant?.assets ?? []);
   const productOptions = product?.optionGroups;
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isContentScrollable, setIsContentScrollable] = useState(false);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      const { scrollWidth, clientWidth } = scrollRef.current;
+      setIsContentScrollable(scrollWidth > clientWidth);
+    }
+  }, [productAssest]);
+
+  const scrollForward = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft += 100;
+    }
+  };
+  const scrollBackward = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft -= 100;
+    }
+  };
 
   useEffect(
     () => setSelectedOptions(selectedVariant?.options || []),
@@ -123,29 +149,46 @@ const ProductDetails = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col sm:flex-row">
+      <div className="flex flex-col sm:flex-row sm:space-x-4">
         <div className="flex flex-col items-center sm:w-1/2">
           <Image
             src={productAssest?.[selectedImage]?.source ?? ""}
             alt={productAssest?.[selectedImage]?.name ?? ""}
-            height={569}
-            width={436}
+            height={500}
+            width={500}
+            className="aspect-square"
           />
-          <div className="my-5 flex space-x-4">
-            {productAssest?.map((image, index) => {
-              return (
-                index !== selectedImage && (
-                  <Image
-                    key={index}
-                    src={image?.preview}
-                    alt={image?.name}
-                    height={115}
-                    width={115}
-                    onClick={() => setSelectedImage(index)}
-                  />
-                )
-              );
-            })}
+          <div className="flex space-x-3 py-2 sm:px-8">
+            {isContentScrollable && (
+              <button onClick={scrollBackward}>
+                <ArrowBackIos />
+              </button>
+            )}
+            <div
+              ref={scrollRef}
+              className="my-5 flex space-x-4 overflow-x-auto [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden"
+            >
+              {productAssest?.map((image, index) => {
+                return (
+                  index !== selectedImage && (
+                    <Image
+                      key={index}
+                      src={image?.preview}
+                      alt={image?.name}
+                      height={115}
+                      width={115}
+                      onClick={() => setSelectedImage(index)}
+                      className="aspect-square"
+                    />
+                  )
+                );
+              })}
+            </div>
+            {isContentScrollable && (
+              <button onClick={scrollForward}>
+                <ArrowForwardIos />
+              </button>
+            )}
           </div>
         </div>
         <div className="flex flex-col space-y-4 sm:w-1/2">

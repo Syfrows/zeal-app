@@ -76,7 +76,7 @@ const NewArrival = ({ product }: any) => {
               <Image
                 src={product.productAsset.preview}
                 alt={product.productVariantName}
-                className="h-[500px] w-[300px]"
+                className="aspect-[3/5]"
                 width={300}
                 height={500}
               />

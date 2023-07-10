@@ -45,8 +45,8 @@ const ProductAddedModal = ({
                 src={product.image}
                 alt={product.name}
                 height={205}
-                width={266}
-                className="self-center max-sm:mb-6"
+                width={205}
+                className="aspect-square self-center max-sm:mb-6"
               />
               <div className="space-y-3 sm:px-12">
                 <p className="text-2xl font-semibold">{product.name}</p>

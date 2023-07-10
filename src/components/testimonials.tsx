@@ -41,7 +41,7 @@ const Testimonials = () => {
           What Say Our Regular Customer
         </p>
         <div className="flex flex-col items-center text-center">
-          <p className="mb-9 text-lg italic">{testimonial.comment}</p>
+          <p className="mb-9 italic sm:text-lg">{testimonial.comment}</p>
           <Image
             src={testimonial.avatar}
             alt={testimonial.name}

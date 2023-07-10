@@ -37,9 +37,9 @@ const Categories = () => {
                 <Image
                   src={category.featuredAsset?.source || ""}
                   alt={category.name}
-                  className="h-48 w-full rounded-l"
-                  width={271}
-                  height={255}
+                  className="aspect-square rounded-l"
+                  width={240}
+                  height={240}
                 />
                 <p className="mt-2 text-center text-lg font-medium">
                   {category.name}

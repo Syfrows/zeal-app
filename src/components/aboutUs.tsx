@@ -15,10 +15,10 @@ const AboutUs = () => {
   support you every step of the way.`;
 
   return (
-    <div className="flex flex-col items-center p-14 text-center">
+    <div className="flex flex-col items-center text-center sm:p-14">
       <p className="mb-12 text-3xl font-semibold">About Us</p>
       <div className="mb-28 flex">
-        <p className="text-2xl">{text}</p>
+        <p className="sm:text-2xl">{text}</p>
         <Image
           src={aboutus}
           alt="aboutus"

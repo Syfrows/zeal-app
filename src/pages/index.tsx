@@ -48,7 +48,7 @@ export default function Home() {
             <input
               type="text"
               placeholder="Enter your email address."
-              className="flex-1 px-4 py-1 focus:outline-none"
+              className="flex-1 px-4 py-1 focus:outline-none max-[350px]:w-32"
             />
             <button className="flex items-center justify-center bg-primary px-4 text-sm font-semibold text-white">
               Subscribe Now

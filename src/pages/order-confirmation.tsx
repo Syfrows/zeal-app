@@ -36,16 +36,16 @@ const Product = ({ product }: ProductProps) => {
   };
   return (
     <div className="flex border-2 border-t-0 border-gray-300">
-      <div className="flex w-[40%] border-e-2 border-gray-300 max-sm:flex-col sm:w-[70%]">
+      <div className="flex w-[30%] border-e-2 border-gray-300 max-sm:flex-col sm:w-[70%]">
         <Image
           src={product.featuredAsset?.preview ?? ""}
           alt={product.featuredAsset?.name ?? ""}
-          height={106}
-          width={138}
-          className="border-gray-300 p-3 sm:border-e-2"
+          height={150}
+          width={150}
+          className="aspect-square border-gray-300 p-3 sm:border-e-2"
         />
-        <div className="mx-3 space-y-3 p-3">
-          <p className="line-clamp-2 font-semibold">
+        <div className="space-y-3 p-3 sm:mx-3">
+          <p className="line-clamp-2 font-semibold max-sm:text-sm">
             {product.productVariant.name}
           </p>
           <p className="text-xs">
@@ -57,13 +57,13 @@ const Product = ({ product }: ProductProps) => {
           </p>
         </div>
       </div>
-      <p className="w-[15%] border-e-2 border-gray-300 p-3 text-center sm:w-[10%]">
+      <p className="w-[15%] border-e-2 border-gray-300 p-3 text-center max-sm:text-sm sm:w-[10%]">
         {product.quantity}
       </p>
-      <p className="w-[20%] border-e-2 border-gray-300 p-3 text-center sm:w-[10%]">
+      <p className="w-[28%] border-e-2 border-gray-300 p-3 text-center max-sm:text-sm sm:w-[10%]">
         {formatPrice(product.unitPriceWithTax)}
       </p>
-      <p className="w-[25%] p-3 text-center sm:w-[10%]">
+      <p className="w-[27%] p-3 text-center max-sm:text-sm sm:w-[10%]">
         {formatPrice(product.linePriceWithTax)}
       </p>
     </div>
@@ -131,16 +131,16 @@ const OrderConfirmation = () => {
             <p>TOTAL AMOUNT: {formatPrice(activeOrders?.totalWithTax)}</p>
           </div>
           <div className="flex border-2 border-gray-300">
-            <p className="w-[40%] border-e-2 border-gray-300 p-3 sm:w-[70%]">
+            <p className="w-[30%] border-e-2 border-gray-300 p-3 sm:w-[70%]">
               Product Details
             </p>
             <p className="w-[15%] border-e-2 border-gray-300 p-3 text-center sm:w-[10%]">
               Qty
             </p>
-            <p className="w-[20%] border-e-2 border-gray-300 p-3 text-center sm:w-[10%]">
+            <p className="w-[28%] border-e-2 border-gray-300 p-3 text-center sm:w-[10%]">
               Unit Price
             </p>
-            <p className="w-[25%] p-3 text-center sm:w-[10%]">Total</p>
+            <p className="w-[27%] p-3 text-center sm:w-[10%]">Total</p>
           </div>
           {products?.map((product, index) => (
             <div key={index}>
@@ -148,7 +148,7 @@ const OrderConfirmation = () => {
             </div>
           ))}
           <div className="flex border-2 border-t-0 border-gray-300">
-            <p className="w-[55%] border-e-2 border-gray-300 p-3 text-end font-semibold  sm:w-[90%]">
+            <p className="w-[45%] border-e-2 border-gray-300 p-3 text-end font-semibold  sm:w-[90%]">
               Sub-Total:
             </p>
             <p className="p-3 text-center sm:w-[10%]">
@@ -156,15 +156,15 @@ const OrderConfirmation = () => {
             </p>
           </div>
           <div className="flex border-2 border-t-0 border-gray-300">
-            <p className="w-[55%] border-e-2 border-gray-300 p-3 text-end font-semibold  sm:w-[90%]">
+            <p className="w-[45%] border-e-2 border-gray-300 p-3 text-end font-semibold  sm:w-[90%]">
               Shipping Charges:
             </p>
-            <p className="p-3 text-center sm:w-[10%]">
+            <p className="self-center p-3 text-center sm:w-[10%]">
               {formatPrice(activeOrders?.shippingWithTax)}
             </p>
           </div>
           <div className="flex border-2 border-t-0 border-gray-300">
-            <p className="w-[55%] border-e-2 border-gray-300 p-3 text-end font-semibold  sm:w-[90%]">
+            <p className="w-[45%] border-e-2 border-gray-300 p-3 text-end font-semibold  sm:w-[90%]">
               Sub-Total:
             </p>
             <p className="p-3 text-center sm:w-[10%]">

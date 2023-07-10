@@ -45,8 +45,9 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
       <Image
         src={item.featuredAsset?.preview ?? ""}
         alt={item.featuredAsset?.name ?? ""}
-        height={205}
-        width={266}
+        height={260}
+        width={260}
+        className="aspect-square"
       />
       <div className="mx-8 space-y-4">
         <p className="text-2xl font-semibold">{item.productVariant.name}</p>
