@@ -12,9 +12,9 @@ export enum Page {
   Address = "address",
 }
 
-const SideNav = () => {
+const SideNav = ({ isDrawer }: any) => {
   const router = useRouter();
-  const name = "Kartik Chate";
+  const name = "";
   const [logOut, { data, loading, error }] = useMutation(LOG_OUT);
   const { setIsLoggedIn } = useAuth();
 
@@ -44,7 +44,7 @@ const SideNav = () => {
   };
 
   return (
-    <div className="hidden sm:flex">
+    <div className={isDrawer ? "flex px-8 py-4" : "hidden sm:flex"}>
       <div>
         <p className="text-2xl font-semibold">Account</p>
         <p className="font-bold text-gray-500">{name}</p>
@@ -84,7 +84,7 @@ const SideNav = () => {
           Logout
         </p>
       </div>
-      <div className="mx-10 border-s-2 border-gray-300" />
+      <div className="mx-10 hidden border-s-2 border-gray-300 sm:flex" />
     </div>
   );
 };

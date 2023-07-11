@@ -41,7 +41,7 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
   }, [data, setActiveOrder]);
 
   return (
-    <div className="flex border-2 border-slate-400 p-4">
+    <div className="flex flex-col border-2 border-slate-400 p-4 max-md:space-y-4 md:flex-row">
       <Image
         src={item.featuredAsset?.preview ?? ""}
         alt={item.featuredAsset?.name ?? ""}
@@ -49,9 +49,9 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
         width={260}
         className="aspect-square"
       />
-      <div className="mx-8 space-y-4">
+      <div className="space-y-4 md:mx-8">
         <p className="text-2xl font-semibold">{item.productVariant.name}</p>
-        <div className="flex">
+        <div className="flex flex-col xl:flex-row">
           <div className="space-y-4">
             <p>
               Size:{" "}
@@ -72,7 +72,7 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
               </span>
             </p>
           </div>
-          <div className="mx-8 self-center">
+          <div className="mt-8 self-center xl:mx-8">
             <p className="mb-6 space-x-2">
               Quantity:
               <button
@@ -132,7 +132,7 @@ const Cart = () => {
             <p className="mb-8 text-2xl font-semibold">
               HERE’S WHAT IN YOUR CART
             </p>
-            <div className="flex space-x-12">
+            <div className="flex flex-col max-xl:space-y-12 xl:flex-row xl:space-x-12">
               <div className="space-y-8">
                 {products.map((item, index) => (
                   <div key={index}>
@@ -143,7 +143,7 @@ const Cart = () => {
                   </div>
                 ))}
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col max-xl:self-center">
                 <p className="mb-3 text-2xl font-medium">Coupon and Vouchers</p>
                 <p className="mb-2">Discount Coupon Code:</p>
                 <span>

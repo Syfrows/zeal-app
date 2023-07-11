@@ -5,11 +5,15 @@ import { AccountIcon, CartIcon, SearchIcon, WishListIcon } from "./icons";
 import { useRouter } from "next/router";
 import LogInSignupModal from "./logInSignupModal";
 import { useAuth } from "@/context/AuthContext";
+import Drawer from "@mui/material/Drawer";
+import SideNav from "./sideNav";
+import { Menu } from "@mui/icons-material";
 
 const NavBar = () => {
   const router = useRouter();
   const [isModalVisible, setModalVisibilty] = useState(false);
   const { isLoggedIn } = useAuth();
+  const [openDrawer, setOpenDrawer] = useState(false);
   return (
     <>
       <div className="flex h-16 justify-between bg-white px-1 shadow sm:px-6">
@@ -55,12 +59,27 @@ const NavBar = () => {
           >
             <AccountIcon width="20" height="19" color="black" />
           </button>
+          {isLoggedIn && (
+            <button
+              onClick={() => setOpenDrawer(!openDrawer)}
+              className="sm:hidden"
+            >
+              <Menu />
+            </button>
+          )}
         </div>
       </div>
       <LogInSignupModal
         isVisible={isModalVisible}
         setVisibilty={setModalVisibilty}
       />
+      <Drawer
+        anchor={"left"}
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+      >
+        <SideNav isDrawer={true} />
+      </Drawer>
     </>
   );
 };
