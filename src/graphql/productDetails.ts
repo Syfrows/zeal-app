@@ -37,6 +37,9 @@ export const PRODUCT_DETAILS = gql(`#graphql
           groupId
           id
         }
+        customFields {
+          MRP
+        }
       }
       customFields {
         reviewRating

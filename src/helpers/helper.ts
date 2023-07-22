@@ -7,3 +7,9 @@ export const formatPrice = (value: number, currency?: CurrencyCode) => {
     currency,
   }).format(value / 100);
 };
+
+export enum StockLevel {
+  InStock = "IN_STOCK",
+  LowStock = "LOW_STOCK",
+  OutOfStock = "OUT_OF_STOCK",
+}

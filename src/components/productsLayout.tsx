@@ -30,11 +30,11 @@ const ProductCard = ({ product }: any) => {
         </div>
         <div className="flex justify-between  max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
           <p className="text-orange-600">
-            {formatPrice(product.price.value)}
+            {formatPrice(product.priceWithTax.value)}
             <br className="min-[390px]:hidden" />
-            <span className="text-slate-400 line-through decoration-slate-400 min-[390px]:ml-3">
+            {/* <span className="text-slate-400 line-through decoration-slate-400 min-[390px]:ml-3">
               {formatPrice(product.priceWithTax.value)}
-            </span>
+            </span> */}
           </p>
           <button className="text-orange-600 underline">Buy Now</button>
         </div>

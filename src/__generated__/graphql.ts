@@ -196,7 +196,7 @@ export type Collection = Node & {
   breadcrumbs: Array<CollectionBreadcrumb>;
   children?: Maybe<Array<Collection>>;
   createdAt: Scalars["DateTime"]["output"];
-  customFields?: Maybe<Scalars["JSON"]["output"]>;
+  customFields?: Maybe<CollectionCustomFields>;
   description: Scalars["String"]["output"];
   featuredAsset?: Maybe<Asset>;
   filters: Array<ConfigurableOperation>;
@@ -223,7 +223,13 @@ export type CollectionBreadcrumb = {
   slug: Scalars["String"]["output"];
 };
 
+export type CollectionCustomFields = {
+  __typename?: "CollectionCustomFields";
+  Category?: Maybe<Scalars["Boolean"]["output"]>;
+};
+
 export type CollectionFilterParameter = {
+  Category?: InputMaybe<BooleanOperators>;
   createdAt?: InputMaybe<DateOperators>;
   description?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
@@ -266,6 +272,7 @@ export type CollectionResult = {
 };
 
 export type CollectionSortParameter = {
+  Category?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -774,6 +781,7 @@ export type Customer = Node & {
   createdAt: Scalars["DateTime"]["output"];
   customFields?: Maybe<Scalars["JSON"]["output"]>;
   emailAddress: Scalars["String"]["output"];
+  favorites: FavoriteList;
   firstName: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   lastName: Scalars["String"]["output"];
@@ -782,6 +790,11 @@ export type Customer = Node & {
   title?: Maybe<Scalars["String"]["output"]>;
   updatedAt: Scalars["DateTime"]["output"];
   user?: Maybe<User>;
+};
+
+export type CustomerFavoritesArgs = {
+  options?: InputMaybe<FavoriteListOptions>;
+  productNameFilter?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type CustomerOrdersArgs = {
@@ -1050,6 +1063,47 @@ export type FacetValueTranslation = {
   languageCode: LanguageCode;
   name: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
+};
+
+export type Favorite = Node & {
+  __typename?: "Favorite";
+  createdAt: Scalars["DateTime"]["output"];
+  customer: Customer;
+  id: Scalars["ID"]["output"];
+  product?: Maybe<Product>;
+  productVariant?: Maybe<ProductVariant>;
+  updatedAt: Scalars["DateTime"]["output"];
+};
+
+export type FavoriteFilterParameter = {
+  createdAt?: InputMaybe<DateOperators>;
+  id?: InputMaybe<IdOperators>;
+  updatedAt?: InputMaybe<DateOperators>;
+};
+
+export type FavoriteList = PaginatedList & {
+  __typename?: "FavoriteList";
+  items: Array<Favorite>;
+  totalItems: Scalars["Int"]["output"];
+};
+
+export type FavoriteListOptions = {
+  /** Allows the results to be filtered */
+  filter?: InputMaybe<FavoriteFilterParameter>;
+  /** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+  filterOperator?: InputMaybe<LogicalOperator>;
+  /** Skips the first n results, for use in pagination */
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  /** Specifies which properties to sort the results by */
+  sort?: InputMaybe<FavoriteSortParameter>;
+  /** Takes n results, for use in pagination */
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type FavoriteSortParameter = {
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type FloatCustomFieldConfig = CustomField & {
@@ -1699,6 +1753,7 @@ export type Mutation = {
    */
   setOrderShippingMethod: SetOrderShippingMethodResult;
   submitProductReview: ProductReview;
+  toggleFavorite: FavoriteList;
   /** Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates` */
   transitionOrderToState?: Maybe<TransitionOrderToStateResult>;
   /** Update an existing Customer */
@@ -1811,6 +1866,11 @@ export type MutationSetOrderShippingMethodArgs = {
 
 export type MutationSubmitProductReviewArgs = {
   input: SubmitProductReviewInput;
+};
+
+export type MutationToggleFavoriteArgs = {
+  options?: InputMaybe<FavoriteListOptions>;
+  productVariantId: Scalars["ID"]["input"];
 };
 
 export type MutationTransitionOrderToStateArgs = {
@@ -2727,7 +2787,7 @@ export type ProductVariant = Node & {
   assets: Array<Asset>;
   createdAt: Scalars["DateTime"]["output"];
   currencyCode: CurrencyCode;
-  customFields?: Maybe<Scalars["JSON"]["output"]>;
+  customFields?: Maybe<ProductVariantCustomFields>;
   facetValues: Array<FacetValue>;
   featuredAsset?: Maybe<Asset>;
   id: Scalars["ID"]["output"];
@@ -2746,7 +2806,13 @@ export type ProductVariant = Node & {
   updatedAt: Scalars["DateTime"]["output"];
 };
 
+export type ProductVariantCustomFields = {
+  __typename?: "ProductVariantCustomFields";
+  MRP?: Maybe<Scalars["Int"]["output"]>;
+};
+
 export type ProductVariantFilterParameter = {
+  MRP?: InputMaybe<NumberOperators>;
   createdAt?: InputMaybe<DateOperators>;
   currencyCode?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
@@ -2780,6 +2846,7 @@ export type ProductVariantListOptions = {
 };
 
 export type ProductVariantSortParameter = {
+  MRP?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
@@ -4025,6 +4092,10 @@ export type ProductDetailsQuery = {
         groupId: string;
         id: string;
       }>;
+      customFields?: {
+        __typename?: "ProductVariantCustomFields";
+        MRP?: number | null;
+      } | null;
     }>;
     customFields?: {
       __typename?: "ProductCustomFields";
@@ -6898,6 +6969,19 @@ export const ProductDetailsDocument = {
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
                             },
                           ],
                         },

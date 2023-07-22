@@ -4,7 +4,7 @@ import ProductAddedModal, { Product } from "@/components/productAddedModal";
 import { useAuth } from "@/context/AuthContext";
 import { ADD_ITEM_TO_ORDER } from "@/graphql/orderWorkflow";
 import { PRODUCT_DETAILS } from "@/graphql/productDetails";
-import { formatPrice } from "@/helpers/helper";
+import { StockLevel, formatPrice } from "@/helpers/helper";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   Add,
@@ -22,7 +22,9 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputBase from "@mui/material/InputBase";
 import InputAdornment from "@mui/material/InputAdornment";
-import { ActiveOrderFragment } from "@/__generated__/graphql";
+import { ActiveOrderFragment, ErrorResult } from "@/__generated__/graphql";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const ProductDetails = () => {
   const router = useRouter();
@@ -33,6 +35,8 @@ const ProductDetails = () => {
   const [isLoginModalVisible, setLoginModalVisibilty] = useState(false);
   const { isLoggedIn } = useAuth();
   const [quantity, setQuantity] = useState(1);
+  const [info, setInfo] = useState("");
+  const [moreDescription, setMoreDescription] = useState(false);
 
   const { loading, error, data } = useQuery(PRODUCT_DETAILS, {
     variables: { slug: productName },
@@ -79,7 +83,9 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (!addToCartData) return;
-    setModalVisiblity(true);
+    addToCartData?.addItemToOrder.__typename === "Order"
+      ? setModalVisiblity(true)
+      : setInfo((addToCartData?.addItemToOrder as ErrorResult).message);
   }, [addToCartData]);
 
   if (!product || !selectedVariant) {
@@ -147,6 +153,10 @@ const ProductDetails = () => {
     setSelectedImage(0);
   };
 
+  const mrp = selectedVariant.customFields?.MRP || 0;
+  const disableAddtoCart =
+    addToCartLoading || selectedVariant.stockLevel === StockLevel.OutOfStock;
+
   return (
     <Layout>
       <div className="flex flex-col sm:flex-row sm:space-x-4">
@@ -202,26 +212,29 @@ const ProductDetails = () => {
             />
             <p className="text-xs">{`(${product.customFields?.reviewCount} customer review)`}</p>
           </div>
-          <p>{product.description}</p>
-          <p className="text-red-400 underline">View more detail</p>
+          <p className={moreDescription ? "" : "line-clamp-2"}>
+            {product.description}
+          </p>
+          <button
+            className="text-start text-red-400 underline"
+            onClick={() => setMoreDescription(!moreDescription)}
+          >
+            {`View ${!moreDescription ? "more" : "less"} detail`}
+          </button>
           <div className="flex flex-col rounded-xl border-2 border-gray-200 p-6 max-sm:space-y-4 sm:flex-row sm:space-x-8 sm:self-start">
             <div>
               <p className="text-red-400">
-                {Math.round(
-                  ((selectedVariant.priceWithTax - selectedVariant.price) /
-                    selectedVariant.priceWithTax) *
-                    100
-                )}
-                % off!{" "}
+                {mrp
+                  ? `${Math.round(
+                      ((mrp - selectedVariant.priceWithTax) / mrp) * 100
+                    )} % off! `
+                  : ""}
                 <span className="text-2xl font-medium text-black">
-                  {formatPrice(selectedVariant.price)}
+                  {formatPrice(selectedVariant.priceWithTax)}
                 </span>
               </p>
               <p>
-                M.R.P:{" "}
-                <span className="line-through">
-                  {formatPrice(selectedVariant.priceWithTax)}
-                </span>
+                M.R.P: <span className="line-through">{formatPrice(mrp)}</span>
               </p>
             </div>
             <div>
@@ -255,10 +268,10 @@ const ProductDetails = () => {
             </div>
             <button
               className={`rounded-xl bg-orange-600 px-4 py-3 font-bold text-white ${
-                addToCartLoading && "opacity-60"
+                disableAddtoCart && "opacity-60"
               }`}
               onClick={onAddToCart}
-              disabled={addToCartLoading}
+              disabled={disableAddtoCart}
             >
               {addToCartLoading ? (
                 <CircularProgress color="inherit" size={16} className="me-2" />
@@ -358,6 +371,15 @@ const ProductDetails = () => {
         isVisible={isLoginModalVisible}
         setVisibilty={setLoginModalVisibilty}
       />
+      <Snackbar
+        open={!!info}
+        autoHideDuration={6000}
+        onClose={() => setInfo("")}
+      >
+        <Alert onClose={() => setInfo("")} severity="info">
+          {info}
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 };
