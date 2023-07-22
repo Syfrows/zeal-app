@@ -31,11 +31,11 @@ const documents = {
     types.GetAddressDocument,
   "#graphql\n  query availableCountries{\n    availableCountries {\n      id\n      name\n      code\n      enabled\n    }\n  }\n":
     types.AvailableCountriesDocument,
-  "#graphql\n  query collections($options: CollectionListOptions) {\n    collections(options: $options) {\n      items {\n        id\n        name\n        featuredAsset {\n          source\n        }\n      }\n    }\n  }\n":
+  "#graphql\n  query collections($options: CollectionListOptions) {\n    collections(options: $options) {\n      items {\n        id\n        name\n        featuredAsset {\n          source\n        }\n        customFields {\n          Category\n        }\n      }\n    }\n  }\n":
     types.CollectionsDocument,
   "#graphql\n  query search($input: SearchInput!) {\n    search(input: $input) {\n      items {\n        slug\n        productVariantName\n        priceWithTax{\n          ...on SinglePrice{\n            value\n            }\n        }\n        price{\n          ...on SinglePrice{\n            value\n            }\n        }\n        productAsset {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n":
     types.SearchDocument,
-  "#graphql\n  fragment ActiveOrder on Order {\n    id\n    code\n    state\n    couponCodes\n    subTotalWithTax\n    shippingWithTax\n    totalWithTax\n    totalQuantity\n    lines {\n      id\n      productVariant {\n        id\n        name\n        options {\n          name\n          group {\n            name\n          }\n        }\n      }\n      featuredAsset {\n        id\n        preview\n      }\n      quantity\n      unitPriceWithTax\n      linePriceWithTax\n      linePrice\n    }\n  }\n":
+  "#graphql\n  fragment ActiveOrder on Order {\n    id\n    code\n    state\n    couponCodes\n    subTotalWithTax\n    shippingWithTax\n    totalWithTax\n    totalQuantity\n    lines {\n      id\n      productVariant {\n        id\n        name\n        options {\n          name\n          group {\n            name\n          }\n        }\n        customFields {\n          MRP\n        }\n      }\n      featuredAsset {\n        id\n        preview\n      }\n      quantity\n      unitPriceWithTax\n      linePriceWithTax\n      linePrice\n    }\n  }\n":
     types.ActiveOrderFragmentDoc,
   "#graphql\n  mutation AddItemToOrder($productVariantId: ID! $quantity: Int!){\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
     types.AddItemToOrderDocument,
@@ -137,8 +137,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "#graphql\n  query collections($options: CollectionListOptions) {\n    collections(options: $options) {\n      items {\n        id\n        name\n        featuredAsset {\n          source\n        }\n      }\n    }\n  }\n"
-): (typeof documents)["#graphql\n  query collections($options: CollectionListOptions) {\n    collections(options: $options) {\n      items {\n        id\n        name\n        featuredAsset {\n          source\n        }\n      }\n    }\n  }\n"];
+  source: "#graphql\n  query collections($options: CollectionListOptions) {\n    collections(options: $options) {\n      items {\n        id\n        name\n        featuredAsset {\n          source\n        }\n        customFields {\n          Category\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query collections($options: CollectionListOptions) {\n    collections(options: $options) {\n      items {\n        id\n        name\n        featuredAsset {\n          source\n        }\n        customFields {\n          Category\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -149,8 +149,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "#graphql\n  fragment ActiveOrder on Order {\n    id\n    code\n    state\n    couponCodes\n    subTotalWithTax\n    shippingWithTax\n    totalWithTax\n    totalQuantity\n    lines {\n      id\n      productVariant {\n        id\n        name\n        options {\n          name\n          group {\n            name\n          }\n        }\n      }\n      featuredAsset {\n        id\n        preview\n      }\n      quantity\n      unitPriceWithTax\n      linePriceWithTax\n      linePrice\n    }\n  }\n"
-): (typeof documents)["#graphql\n  fragment ActiveOrder on Order {\n    id\n    code\n    state\n    couponCodes\n    subTotalWithTax\n    shippingWithTax\n    totalWithTax\n    totalQuantity\n    lines {\n      id\n      productVariant {\n        id\n        name\n        options {\n          name\n          group {\n            name\n          }\n        }\n      }\n      featuredAsset {\n        id\n        preview\n      }\n      quantity\n      unitPriceWithTax\n      linePriceWithTax\n      linePrice\n    }\n  }\n"];
+  source: "#graphql\n  fragment ActiveOrder on Order {\n    id\n    code\n    state\n    couponCodes\n    subTotalWithTax\n    shippingWithTax\n    totalWithTax\n    totalQuantity\n    lines {\n      id\n      productVariant {\n        id\n        name\n        options {\n          name\n          group {\n            name\n          }\n        }\n        customFields {\n          MRP\n        }\n      }\n      featuredAsset {\n        id\n        preview\n      }\n      quantity\n      unitPriceWithTax\n      linePriceWithTax\n      linePrice\n    }\n  }\n"
+): (typeof documents)["#graphql\n  fragment ActiveOrder on Order {\n    id\n    code\n    state\n    couponCodes\n    subTotalWithTax\n    shippingWithTax\n    totalWithTax\n    totalQuantity\n    lines {\n      id\n      productVariant {\n        id\n        name\n        options {\n          name\n          group {\n            name\n          }\n        }\n        customFields {\n          MRP\n        }\n      }\n      featuredAsset {\n        id\n        preview\n      }\n      quantity\n      unitPriceWithTax\n      linePriceWithTax\n      linePrice\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

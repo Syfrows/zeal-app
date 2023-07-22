@@ -3707,6 +3707,10 @@ export type CollectionsQuery = {
       id: string;
       name: string;
       featuredAsset?: { __typename?: "Asset"; source: string } | null;
+      customFields?: {
+        __typename?: "CollectionCustomFields";
+        Category?: boolean | null;
+      } | null;
     }>;
   };
 };
@@ -3764,6 +3768,10 @@ export type ActiveOrderFragment = {
         name: string;
         group: { __typename?: "ProductOptionGroup"; name: string };
       }>;
+      customFields?: {
+        __typename?: "ProductVariantCustomFields";
+        MRP?: number | null;
+      } | null;
     };
     featuredAsset?: {
       __typename?: "Asset";
@@ -4163,6 +4171,19 @@ export const ActiveOrderFragmentDoc = {
                                   },
                                 ],
                               },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
                             },
                           ],
                         },
@@ -4993,6 +5014,19 @@ export const CollectionsDocument = {
                           ],
                         },
                       },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "Category" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5279,6 +5313,19 @@ export const AddItemToOrderDocument = {
                           ],
                         },
                       },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5464,6 +5511,19 @@ export const AdjustOrderLineDocument = {
                           ],
                         },
                       },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -5583,6 +5643,19 @@ export const ActiveOrderDocument = {
                                   },
                                 ],
                               },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
                             },
                           ],
                         },
@@ -5749,6 +5822,19 @@ export const SetShippingAddressDocument = {
                                   },
                                 ],
                               },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
                             },
                           ],
                         },
@@ -5963,6 +6049,19 @@ export const SetShippingMethodDocument = {
                           ],
                         },
                       },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -6168,6 +6267,19 @@ export const TransitionOrderDocument = {
                           ],
                         },
                       },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -6337,6 +6449,19 @@ export const AddPaymentDocument = {
                           ],
                         },
                       },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -6476,6 +6601,19 @@ export const OrderByCodeDocument = {
                                   },
                                 ],
                               },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
                             },
                           ],
                         },
@@ -6787,6 +6925,19 @@ export const OrderByIdDocument = {
                                   },
                                 ],
                               },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "customFields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "MRP" },
                             },
                           ],
                         },

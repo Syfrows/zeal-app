@@ -11,6 +11,7 @@ import {
   ArrowBackIos,
   ArrowForwardIos,
   KeyboardArrowDown,
+  Remove,
 } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Rating from "@mui/material/Rating";
@@ -18,10 +19,6 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputBase from "@mui/material/InputBase";
-import InputAdornment from "@mui/material/InputAdornment";
 import { ActiveOrderFragment, ErrorResult } from "@/__generated__/graphql";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -116,7 +113,7 @@ const ProductDetails = () => {
     name: product.name,
     size: findSelectedOption("size"),
     colour: findSelectedOption("color"),
-    price: selectedVariant.price,
+    price: selectedVariant.priceWithTax,
     quantity: quantity,
     cartSubtotal: cartData?.subTotalWithTax,
   };
@@ -238,33 +235,21 @@ const ProductDetails = () => {
               </p>
             </div>
             <div>
-              <Select
-                className="rounded-xl border-gray-500 bg-gray-100 p-4"
-                value={quantity}
-                input={<InputBase />}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <span>| Pcs</span>
-                  </InputAdornment>
-                }
-                IconComponent={() => (
-                  <InputAdornment position="end">
-                    <KeyboardArrowDown />
-                  </InputAdornment>
-                )}
-                onChange={(event) => setQuantity(Number(event.target.value))}
-              >
-                {Array(6)
-                  .fill(0)
-                  .map((_value, index) => {
-                    if (index === 0) return;
-                    return (
-                      <MenuItem key={index} value={index}>
-                        {index}
-                      </MenuItem>
-                    );
-                  })}
-              </Select>
+              <p className="rounded-xl border-gray-500 bg-gray-100 p-5">
+                Quantity:
+                <button
+                  className="ms-2"
+                  onClick={() => quantity > 1 && setQuantity(quantity - 1)}
+                >
+                  <Remove />
+                </button>
+                <span className="border-2 border-slate-300 px-2 py-1">
+                  {quantity}
+                </span>
+                <button onClick={() => setQuantity(quantity + 1)}>
+                  <Add />
+                </button>
+              </p>
             </div>
             <button
               className={`rounded-xl bg-orange-600 px-4 py-3 font-bold text-white ${

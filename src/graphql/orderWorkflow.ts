@@ -21,6 +21,9 @@ export const ACTIVE_ORDER_FRAGMENT = gql(`#graphql
             name
           }
         }
+        customFields {
+          MRP
+        }
       }
       featuredAsset {
         id

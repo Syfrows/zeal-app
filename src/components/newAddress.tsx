@@ -53,16 +53,22 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
   const [createAddress, createAddressData] = useMutation(
     CREATE_CUSTOMER_ADDRESS
   );
-  useEffect(
-    () => setSelectedCountry(countries?.find((X) => X?.code === "IN")),
-    [countries]
-  );
+
+  useEffect(() => {
+    const value = countries?.find((X) => X?.code === "IN");
+    setSelectedCountry(value);
+    setAddress((prev) => {
+      return { ...prev, countryCode: value?.code || "" };
+    });
+  }, [countries]);
+
   useEffect(() => {
     if (createAddressData?.data) {
       setVisibilty(false);
       refetch();
     }
   }, [createAddressData, setVisibilty, refetch]);
+
   const onContinue = () => {
     createAddress({
       variables: {
@@ -156,7 +162,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
                 label="Post Code"
                 variant="outlined"
                 placeholder="Post Code"
-                inputProps={{ maxLength: 5 }}
+                inputProps={{ maxLength: 6 }}
                 required
                 onChange={(event) =>
                   setAddress({

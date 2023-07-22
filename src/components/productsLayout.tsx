@@ -51,7 +51,9 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
   const { loading, error, data } = useQuery(COLLECTIONS, {
     //variables: { options: { filter: { parentId: { eq: "1" } } } },
   });
-  const items = data ? data?.collections.items : [];
+  const items = data
+    ? data?.collections.items.filter((x) => x.customFields?.Category)
+    : [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const filters = [{ name: "All", id: "" }, ...items];
 

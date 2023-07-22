@@ -39,7 +39,7 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
         : null;
     activeOrder && setActiveOrder(activeOrder);
   }, [data, setActiveOrder]);
-
+  const price = (item.productVariant.customFields?.MRP || 0) * item.quantity;
   return (
     <div className="flex flex-col border-2 border-slate-400 p-4 max-md:space-y-4 md:flex-row">
       <Image
@@ -64,11 +64,11 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
             <p>
               Price:{" "}
               <span className="font-bold text-slate-500 line-through">
-                {formatPrice(item.linePriceWithTax)}
+                {formatPrice(price)}
               </span>
               <br />
               <span className="ms-11 font-bold">
-                {formatPrice(item.linePrice)}
+                {formatPrice(item.linePriceWithTax)}
               </span>
             </p>
           </div>
@@ -122,7 +122,7 @@ const Cart = () => {
   return (
     <Layout>
       <div className="flex flex-col items-center justify-items-center p-12">
-        {!products ? (
+        {!products || products?.length === 0 ? (
           <div className="w-full space-y-3">
             <p className="text-2xl font-semibold">SHOPPING CART</p>
             <p>Your cart is empty!</p>

@@ -21,6 +21,7 @@ const Product = ({ item, isReturn }: ProductProps) => {
       )?.name || "NA"
     );
   };
+  const price = (item.productVariant.customFields?.MRP || 0) * item.quantity;
   return (
     <div className="flex border-2 border-slate-400 p-4 max-sm:flex-col max-sm:items-center max-sm:space-y-4">
       <Image
@@ -46,17 +47,15 @@ const Product = ({ item, isReturn }: ProductProps) => {
             <p>
               Price:{" "}
               <span className="font-bold text-slate-500 line-through">
-                {formatPrice(item.linePriceWithTax)}
+                {formatPrice(price)}
               </span>{" "}
               <br />
               <span className="ms-11 font-bold">
-                {formatPrice(item.linePrice)}
+                {formatPrice(item.linePriceWithTax)}
               </span>
               <br />
               <span className="ms-11 text-green-500">
-                {`You saved ${formatPrice(
-                  item.linePriceWithTax - item.linePrice
-                )}`}
+                {`You saved ${formatPrice(price - item.linePriceWithTax)}`}
               </span>
             </p>
             {isReturn && <p>Return till 14th May</p>}

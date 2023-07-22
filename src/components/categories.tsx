@@ -10,7 +10,9 @@ const Categories = () => {
   const { loading, error, data } = useQuery(COLLECTIONS, {
     // variables: { options: { filter: { parentId: { eq: "1" } } } },
   });
-  const categories = data?.collections.items;
+  const categories = data?.collections.items.filter(
+    (x) => x.customFields?.Category
+  );
 
   return (
     <div className="py-8">

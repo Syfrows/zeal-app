@@ -9,6 +9,9 @@ export const COLLECTIONS = gql(`#graphql
         featuredAsset {
           source
         }
+        customFields {
+          Category
+        }
       }
     }
   }
