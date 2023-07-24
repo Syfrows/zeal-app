@@ -41,3 +41,40 @@ export const SEARCH = gql(`#graphql
     }
   }
 `);
+
+export const NEW_ARRIVAL = gql(`#graphql
+  query newArrival($slug : String) {
+    collection(slug : $slug){
+      id
+      name
+      productVariants {
+        items {
+          name
+          product {
+            slug
+            featuredAsset {
+              preview
+            }
+          }
+        }
+      }
+    }
+  }
+`);
+
+export const HERO_SECTION = gql(`#graphql
+  query heroSection($slug : String) {
+    collection(slug : $slug){
+      id
+      name
+      children {
+        id
+        name
+        featuredAsset {
+          name
+          preview
+        }
+      }
+    }
+  }
+`);

@@ -1,14 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useQuery } from "@apollo/client";
+import { NEW_ARRIVAL } from "@/graphql/landingPage";
 
-const NewArrival = ({ product }: any) => {
+const NewArrival = () => {
   const [screenSize, setScreenSize] = useState({
     width: 0,
     height: 0,
   });
   const router = useRouter();
+  const { data, error, loading } = useQuery(NEW_ARRIVAL, {
+    variables: { slug: "new-arrival" },
+  });
+
+  const product = useMemo(
+    () => data?.collection?.productVariants.items || [],
+    [data?.collection?.productVariants.items]
+  );
 
   useEffect(() => {
     setScreenSize({
@@ -50,7 +60,7 @@ const NewArrival = ({ product }: any) => {
       <div className="my-16 flex">
         {products
           .slice(0, screenSize.width < 640 ? 3 : 5)
-          .map((product: any, index: any) => (
+          .map((product, index: number) => (
             <div
               key={index}
               style={
@@ -71,11 +81,15 @@ const NewArrival = ({ product }: any) => {
                   ? "translate-x-6"
                   : "-translate-x-6"
               }`}
-              onClick={() => router.push("/product-details")}
+              onClick={() =>
+                router.push(
+                  `/product-details?name=${product.product.slug}&variant=${product.name}`
+                )
+              }
             >
               <Image
-                src={product.productAsset.preview}
-                alt={product.productVariantName}
+                src={product.product.featuredAsset?.preview || ""}
+                alt={product.name}
                 className="aspect-[3/5]"
                 width={300}
                 height={500}

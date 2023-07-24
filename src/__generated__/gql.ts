@@ -35,6 +35,10 @@ const documents = {
     types.CollectionsDocument,
   "#graphql\n  query search($input: SearchInput!) {\n    search(input: $input) {\n      items {\n        slug\n        productVariantName\n        priceWithTax{\n          ...on SinglePrice{\n            value\n            }\n        }\n        price{\n          ...on SinglePrice{\n            value\n            }\n        }\n        productAsset {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n":
     types.SearchDocument,
+  "#graphql\n  query newArrival($slug : String) {\n    collection(slug : $slug){\n      id\n      name\n      productVariants {\n        items {\n          name\n          product {\n            slug\n            featuredAsset {\n              preview\n            }\n          }\n        }\n      }\n    }\n  }\n":
+    types.NewArrivalDocument,
+  "#graphql\n  query heroSection($slug : String) {\n    collection(slug : $slug){\n      id\n      name\n      children {\n        id\n        name\n        featuredAsset {\n          name\n          preview\n        }\n      }\n    }\n  }\n":
+    types.HeroSectionDocument,
   "#graphql\n  fragment ActiveOrder on Order {\n    id\n    code\n    state\n    couponCodes\n    subTotalWithTax\n    shippingWithTax\n    totalWithTax\n    totalQuantity\n    lines {\n      id\n      productVariant {\n        id\n        name\n        options {\n          name\n          group {\n            name\n          }\n        }\n        customFields {\n          MRP\n        }\n      }\n      featuredAsset {\n        id\n        preview\n      }\n      quantity\n      unitPriceWithTax\n      linePriceWithTax\n      linePrice\n    }\n  }\n":
     types.ActiveOrderFragmentDoc,
   "#graphql\n  mutation AddItemToOrder($productVariantId: ID! $quantity: Int!){\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
@@ -145,6 +149,18 @@ export function gql(
 export function gql(
   source: "#graphql\n  query search($input: SearchInput!) {\n    search(input: $input) {\n      items {\n        slug\n        productVariantName\n        priceWithTax{\n          ...on SinglePrice{\n            value\n            }\n        }\n        price{\n          ...on SinglePrice{\n            value\n            }\n        }\n        productAsset {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n"
 ): (typeof documents)["#graphql\n  query search($input: SearchInput!) {\n    search(input: $input) {\n      items {\n        slug\n        productVariantName\n        priceWithTax{\n          ...on SinglePrice{\n            value\n            }\n        }\n        price{\n          ...on SinglePrice{\n            value\n            }\n        }\n        productAsset {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  query newArrival($slug : String) {\n    collection(slug : $slug){\n      id\n      name\n      productVariants {\n        items {\n          name\n          product {\n            slug\n            featuredAsset {\n              preview\n            }\n          }\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query newArrival($slug : String) {\n    collection(slug : $slug){\n      id\n      name\n      productVariants {\n        items {\n          name\n          product {\n            slug\n            featuredAsset {\n              preview\n            }\n          }\n        }\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  query heroSection($slug : String) {\n    collection(slug : $slug){\n      id\n      name\n      children {\n        id\n        name\n        featuredAsset {\n          name\n          preview\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query heroSection($slug : String) {\n    collection(slug : $slug){\n      id\n      name\n      children {\n        id\n        name\n        featuredAsset {\n          name\n          preview\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

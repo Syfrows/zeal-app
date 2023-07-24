@@ -28,7 +28,7 @@ export default function Home() {
             setFilterId={setFilterId}
           />
           <PlatformFeatures />
-          <NewArrival product={products.slice(0, 5)} />
+          <NewArrival />
           <Testimonials />
         </div>
         <div

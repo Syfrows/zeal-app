@@ -16,7 +16,7 @@ const ProductCard = ({ product }: any) => {
         alt={product.productVariantName}
         height={360}
         width={360}
-        className="aspect-square sm:h-[300px]"
+        className="aspect-square"
       />
       <div className="space-y-3 p-2 sm:p-6">
         <div className="flex justify-between max-sm:flex-col max-sm:space-y-2 sm:space-x-2">

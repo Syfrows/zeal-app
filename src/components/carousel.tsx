@@ -1,32 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ArrowLeftIcon, ArrowRightIcon } from "./icons";
 import Image from "next/image";
-import hero from "../assets/hero.png";
 import { useRouter } from "next/router";
-
-const slides = [
-  {
-    src: hero,
-  },
-  {
-    src: hero,
-  },
-  {
-    src: hero,
-  },
-];
+import { useQuery } from "@apollo/client";
+import { HERO_SECTION } from "@/graphql/landingPage";
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
+  const { data, error, loading } = useQuery(HERO_SECTION, {
+    variables: {
+      slug: "hero-section",
+    },
+  });
+
+  const slides = useMemo(
+    () => data?.collection?.children || [],
+    [data?.collection?.children]
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 6000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [slides]);
 
   const handleSlideClick = (index: any) => {
     setCurrentSlide(index);
@@ -46,14 +45,16 @@ const Carousel = () => {
         <div
           key={index}
           className={`absolute h-full w-full ${
-            currentSlide === index ? "opacity-100" : "opacity-0"
+            currentSlide === index ? "z-10 opacity-100" : "opacity-0"
           } transition-opacity duration-1000`}
-          onClick={() => router.push("/products")}
+          onClick={() => router.push(`/products?filter=${slide.id}`)}
         >
           <Image
-            src={slide.src}
+            src={slide.featuredAsset?.preview || ""}
             alt="RelaxZeal"
             className="aspect-video sm:aspect-[4/1]"
+            width={1536}
+            height={384}
           />
         </div>
       ))}
