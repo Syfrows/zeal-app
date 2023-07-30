@@ -1,6 +1,6 @@
 import Layout from "@/components/layout";
 import ProductsLayout from "@/components/productsLayout";
-import { SEARCH } from "@/graphql/landingPage";
+import { PRODUCTS_BY_COLLECTION } from "@/graphql/products";
 import { useQuery } from "@apollo/client";
 import Pagination from "@mui/material/Pagination";
 import { useSearchParams } from "next/navigation";
@@ -8,11 +8,19 @@ import { useEffect, useState } from "react";
 
 const Products = () => {
   const selectedfilterId = useSearchParams().get("filter");
-  const { data, refetch } = useQuery(SEARCH, {
-    variables: { input: { skip: 0, take: 12, collectionId: selectedfilterId } },
+  const { data, refetch } = useQuery(PRODUCTS_BY_COLLECTION, {
+    variables: {
+      id: selectedfilterId,
+      slug: selectedfilterId ? "" : "all",
+      options: { skip: 0, take: 12 },
+    },
   });
-  const products = data ? data?.search.items : [];
-  const totalCount = data ? Math.ceil(data?.search.totalItems / 12) : 1;
+  const products = data?.collection
+    ? data.collection.productVariants.items
+    : [];
+  const totalCount = data?.collection
+    ? Math.ceil(data.collection.productVariants.totalItems / 12)
+    : 1;
   const [currentPage, setCurrentPage] = useState(1);
   const [filterId, setFilterId] = useState(
     selectedfilterId ? selectedfilterId : ""
@@ -36,10 +44,10 @@ const Products = () => {
             onChange={(_event, value) => {
               setCurrentPage(value);
               refetch({
-                input: {
+                id: filterId,
+                options: {
                   skip: (value - 1) * 12,
                   take: 12,
-                  collectionId: filterId,
                 },
               });
             }}

@@ -7,14 +7,16 @@ import ProductsLayout from "@/components/productsLayout";
 import AboutUs from "@/components/aboutUs";
 import NewArrival from "@/components/newArrival";
 import { useQuery } from "@apollo/client";
-import { SEARCH } from "@/graphql/landingPage";
 import { useState } from "react";
+import { PRODUCTS_BY_COLLECTION } from "@/graphql/products";
 
 export default function Home() {
-  const { data, refetch } = useQuery(SEARCH, {
-    variables: { input: { take: 6 } },
+  const { data, refetch } = useQuery(PRODUCTS_BY_COLLECTION, {
+    variables: { slug: "all", options: { take: 6 } },
   });
-  const products = data ? data?.search.items : [];
+  const products = data?.collection
+    ? data.collection.productVariants.items
+    : [];
   const [_filterId, setFilterId] = useState("");
   return (
     <main>

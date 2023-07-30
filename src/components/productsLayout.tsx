@@ -7,34 +7,43 @@ import { COLLECTIONS } from "@/graphql/landingPage";
 import { useSearchParams } from "next/navigation";
 import { formatPrice } from "@/helpers/helper";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { ProductVariant } from "@/__generated__/graphql";
 
-const ProductCard = ({ product }: any) => {
+const ProductCard = ({ item }: { item: ProductVariant }) => {
+  const productImage =
+    item.featuredAsset?.preview || item.product.featuredAsset?.preview || "";
+  const rating = item.product.customFields?.reviewRating || 0;
   return (
     <div className="max-w-[360px] overflow-hidden rounded-lg shadow-lg">
       <Image
-        src={product.productAsset.preview}
-        alt={product.productVariantName}
+        src={productImage}
+        alt={item.name}
         height={360}
         width={360}
         className="aspect-square"
       />
       <div className="space-y-3 p-2 sm:p-6">
         <div className="flex justify-between max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
-          <p className="line-clamp-2 h-12	font-medium">
-            {product.productVariantName}
-          </p>
-          <div className="flex space-x-2">
-            <Rating name="read-only" value={4.4} precision={0.1} readOnly />
-            <p className="max-[390px]:hidden">{4.4}</p>
-          </div>
+          <p className="line-clamp-2 h-12	font-medium">{item.name}</p>
+          {rating !== 0 && (
+            <div className="flex space-x-2">
+              <Rating
+                name="read-only"
+                value={rating}
+                precision={0.1}
+                readOnly
+              />
+              <p className="max-[390px]:hidden">{rating}</p>
+            </div>
+          )}
         </div>
         <div className="flex justify-between  max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
           <p className="text-orange-600">
-            {formatPrice(product.priceWithTax.value)}
+            {formatPrice(item.priceWithTax)}
             <br className="min-[390px]:hidden" />
-            {/* <span className="text-slate-400 line-through decoration-slate-400 min-[390px]:ml-3">
-              {formatPrice(product.priceWithTax.value)}
-            </span> */}
+            <span className="text-slate-400 line-through decoration-slate-400 min-[390px]:ml-3">
+              {formatPrice(item.customFields?.MRP || 0)}
+            </span>
           </p>
           <button className="text-orange-600 underline">Buy Now</button>
         </div>
@@ -110,7 +119,11 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
                 onClick={() => {
                   setSelectedFilterIndex(filter.id);
                   setFilterId(filter.id);
-                  refetch({ input: { collectionId: filter.id, take: 12 } });
+                  refetch({
+                    id: filter.id,
+                    slug: filter.id ? "" : "all",
+                    input: { take: 12 },
+                  });
                 }}
               >
                 {filter.name}
@@ -124,16 +137,16 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
         )}
       </div>
       <div className="my-14 grid grid-cols-2 place-items-center gap-8 lg:grid-cols-3">
-        {products.map((product: any, index: any) => (
+        {products.map((item: ProductVariant, index: number) => (
           <div
             key={index}
             onClick={() =>
               router.push(
-                `/product-details?name=${product.slug}&variant=${product.productVariantName}`
+                `/product-details?name=${item.product.slug}&variant=${item.name}`
               )
             }
           >
-            <ProductCard product={product} />
+            <ProductCard item={item} />
           </div>
         ))}
       </div>

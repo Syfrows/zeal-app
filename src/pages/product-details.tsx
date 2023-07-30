@@ -143,6 +143,10 @@ const ProductDetails = () => {
       );
       newOptions = variant?.options || selectedOptions;
     }
+    if (!variant) {
+      setInfo("Product variant not available.");
+      return;
+    }
     router.replace(
       `/product-details?name=${productName}&variant=${variant?.name}`
     );
@@ -153,7 +157,7 @@ const ProductDetails = () => {
   const mrp = selectedVariant.customFields?.MRP || 0;
   const disableAddtoCart =
     addToCartLoading || selectedVariant.stockLevel === StockLevel.OutOfStock;
-
+  const rating = product.customFields?.reviewRating || 0;
   return (
     <Layout>
       <div className="flex flex-col sm:flex-row sm:space-x-4">
@@ -200,15 +204,17 @@ const ProductDetails = () => {
         </div>
         <div className="flex flex-col space-y-4 sm:w-1/2">
           <p className="text-3xl font-semibold">{selectedVariant.name}</p>
-          <div className="flex items-center space-x-2">
-            <Rating
-              name="read-only"
-              value={product.customFields?.reviewRating}
-              precision={0.1}
-              readOnly
-            />
-            <p className="text-xs">{`(${product.customFields?.reviewCount} customer review)`}</p>
-          </div>
+          {rating !== 0 && (
+            <div className="flex items-center space-x-2">
+              <Rating
+                name="read-only"
+                value={rating}
+                precision={0.1}
+                readOnly
+              />
+              <p className="text-xs">{`(${product.customFields?.reviewCount} customer review)`}</p>
+            </div>
+          )}
           <p
             className={moreDescription ? "" : "line-clamp-2"}
             dangerouslySetInnerHTML={{ __html: product.description }}
@@ -299,11 +305,11 @@ const ProductDetails = () => {
             );
           })}
           <div className="space-y-3">
-            <p>
+            <button>
               <span className="text-blue-400">Size Chart </span>{" "}
               <KeyboardArrowDown />
-            </p>
-            <input
+            </button>
+            {/* <input
               type="text"
               placeholder="Enter Postal Code"
               className="flex-1 rounded-lg border-2 border-gray-400 px-4 py-1 focus:outline-none"
@@ -314,7 +320,7 @@ const ProductDetails = () => {
             <p className="text-gray-500">
               Delivery charges:{" "}
               <span className="font-bold text-black">{formatPrice(15000)}</span>
-            </p>
+            </p> */}
           </div>
           <div>
             <p className="text-xl font-semibold">Description</p>
@@ -324,8 +330,6 @@ const ProductDetails = () => {
                 __html: product.customFields?.Info || product.description,
               }}
             />
-            <p className="mb-2 mt-8 font-medium">Size Chart</p>
-            <p>Measurements and chart will be attached</p>
           </div>
           <div className="space-y-4 py-12">
             <div className="flex">
