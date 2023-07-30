@@ -44,6 +44,7 @@ export const PRODUCT_DETAILS = gql(`#graphql
       customFields {
         reviewRating
         reviewCount
+        Info
       }
     }
   }

@@ -4,7 +4,7 @@ import ProductAddedModal, { Product } from "@/components/productAddedModal";
 import { useAuth } from "@/context/AuthContext";
 import { ADD_ITEM_TO_ORDER } from "@/graphql/orderWorkflow";
 import { PRODUCT_DETAILS } from "@/graphql/productDetails";
-import { StockLevel, formatPrice } from "@/helpers/helper";
+import { StockLevel, discount, formatPrice } from "@/helpers/helper";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   Add,
@@ -209,9 +209,10 @@ const ProductDetails = () => {
             />
             <p className="text-xs">{`(${product.customFields?.reviewCount} customer review)`}</p>
           </div>
-          <p className={moreDescription ? "" : "line-clamp-2"}>
-            {product.description}
-          </p>
+          <p
+            className={moreDescription ? "" : "line-clamp-2"}
+            dangerouslySetInnerHTML={{ __html: product.description }}
+          />
           <button
             className="text-start text-red-400 underline"
             onClick={() => setMoreDescription(!moreDescription)}
@@ -221,10 +222,8 @@ const ProductDetails = () => {
           <div className="flex flex-col rounded-xl border-2 border-gray-200 p-6 max-sm:space-y-4 sm:flex-row sm:space-x-8 sm:self-start">
             <div>
               <p className="text-red-400">
-                {mrp
-                  ? `${Math.round(
-                      ((mrp - selectedVariant.priceWithTax) / mrp) * 100
-                    )} % off! `
+                {discount(mrp, selectedVariant.priceWithTax) > 0
+                  ? `${discount(mrp, selectedVariant.priceWithTax)} % off! `
                   : ""}
                 <span className="text-2xl font-medium text-black">
                   {formatPrice(selectedVariant.priceWithTax)}
@@ -320,8 +319,11 @@ const ProductDetails = () => {
           <div>
             <p className="text-xl font-semibold">Description</p>
             <div className="my-4 border-t-2 border-gray-300" />
-            <p className="my-2 font-medium">Origins</p>
-            <p>{product.description}</p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: product.customFields?.Info || product.description,
+              }}
+            />
             <p className="mb-2 mt-8 font-medium">Size Chart</p>
             <p>Measurements and chart will be attached</p>
           </div>

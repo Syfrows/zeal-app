@@ -2602,12 +2602,14 @@ export type ProductVariantListArgs = {
 
 export type ProductCustomFields = {
   __typename?: "ProductCustomFields";
+  Info?: Maybe<Scalars["String"]["output"]>;
   featuredReview?: Maybe<ProductReview>;
   reviewCount?: Maybe<Scalars["Float"]["output"]>;
   reviewRating?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type ProductFilterParameter = {
+  Info?: InputMaybe<StringOperators>;
   createdAt?: InputMaybe<DateOperators>;
   description?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
@@ -2760,6 +2762,7 @@ export type ProductReviewSortParameter = {
 };
 
 export type ProductSortParameter = {
+  Info?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   featuredReview?: InputMaybe<SortOrder>;
@@ -4157,6 +4160,7 @@ export type ProductDetailsQuery = {
       __typename?: "ProductCustomFields";
       reviewRating?: number | null;
       reviewCount?: number | null;
+      Info?: string | null;
     } | null;
   } | null;
 };
@@ -7370,6 +7374,7 @@ export const ProductDetailsDocument = {
                         kind: "Field",
                         name: { kind: "Name", value: "reviewCount" },
                       },
+                      { kind: "Field", name: { kind: "Name", value: "Info" } },
                     ],
                   },
                 },

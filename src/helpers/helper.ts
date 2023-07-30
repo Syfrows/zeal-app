@@ -13,3 +13,7 @@ export enum StockLevel {
   LowStock = "LOW_STOCK",
   OutOfStock = "OUT_OF_STOCK",
 }
+
+export const discount = (mrp: number, price: number) => {
+  return Math.round(((mrp - price) / mrp) * 100);
+};
