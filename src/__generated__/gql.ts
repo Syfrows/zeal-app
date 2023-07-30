@@ -67,6 +67,10 @@ const documents = {
     types.OrderByIdDocument,
   "#graphql\n  query productDetails($slug: String) {\n    product(slug : $slug){\n      name\n      description\n      collections {\n        name\n      }\n      assets {\n        name\n        preview\n        source\n      }\n      optionGroups {\n        id\n        name\n        options {\n          id\n          name\n        }\n      }\n      variants {\n        id\n        name\n        price\n        priceWithTax\n        sku\n        stockLevel\n        assets {\n          name\n          preview\n          source\n        }\n        options {\n          groupId\n          id\n        }\n        customFields {\n          MRP\n        }\n      }\n      customFields {\n        reviewRating\n        reviewCount\n        Info\n      }\n    }\n  }\n":
     types.ProductDetailsDocument,
+  "#graphql\n  query getWishList{\n    activeCustomer {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n":
+    types.GetWishListDocument,
+  "#graphql\n  mutation toggleFavorite($productVariantId: ID!){\n    toggleFavorite(productVariantId: $productVariantId) {\n      items {\n        id\n      }\n      totalItems\n    }\n  }\n":
+    types.ToggleFavoriteDocument,
 };
 
 /**
@@ -245,6 +249,18 @@ export function gql(
 export function gql(
   source: "#graphql\n  query productDetails($slug: String) {\n    product(slug : $slug){\n      name\n      description\n      collections {\n        name\n      }\n      assets {\n        name\n        preview\n        source\n      }\n      optionGroups {\n        id\n        name\n        options {\n          id\n          name\n        }\n      }\n      variants {\n        id\n        name\n        price\n        priceWithTax\n        sku\n        stockLevel\n        assets {\n          name\n          preview\n          source\n        }\n        options {\n          groupId\n          id\n        }\n        customFields {\n          MRP\n        }\n      }\n      customFields {\n        reviewRating\n        reviewCount\n        Info\n      }\n    }\n  }\n"
 ): (typeof documents)["#graphql\n  query productDetails($slug: String) {\n    product(slug : $slug){\n      name\n      description\n      collections {\n        name\n      }\n      assets {\n        name\n        preview\n        source\n      }\n      optionGroups {\n        id\n        name\n        options {\n          id\n          name\n        }\n      }\n      variants {\n        id\n        name\n        price\n        priceWithTax\n        sku\n        stockLevel\n        assets {\n          name\n          preview\n          source\n        }\n        options {\n          groupId\n          id\n        }\n        customFields {\n          MRP\n        }\n      }\n      customFields {\n        reviewRating\n        reviewCount\n        Info\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  query getWishList{\n    activeCustomer {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query getWishList{\n    activeCustomer {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  mutation toggleFavorite($productVariantId: ID!){\n    toggleFavorite(productVariantId: $productVariantId) {\n      items {\n        id\n      }\n      totalItems\n    }\n  }\n"
+): (typeof documents)["#graphql\n  mutation toggleFavorite($productVariantId: ID!){\n    toggleFavorite(productVariantId: $productVariantId) {\n      items {\n        id\n      }\n      totalItems\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

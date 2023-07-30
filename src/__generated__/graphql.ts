@@ -4165,6 +4165,58 @@ export type ProductDetailsQuery = {
   } | null;
 };
 
+export type GetWishListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetWishListQuery = {
+  __typename?: "Query";
+  activeCustomer?: {
+    __typename?: "Customer";
+    favorites: {
+      __typename?: "FavoriteList";
+      items: Array<{
+        __typename?: "Favorite";
+        id: string;
+        productVariant?: {
+          __typename?: "ProductVariant";
+          id: string;
+          name: string;
+          priceWithTax: any;
+          product: {
+            __typename?: "Product";
+            featuredAsset?: {
+              __typename?: "Asset";
+              name: string;
+              preview: string;
+            } | null;
+          };
+          options: Array<{
+            __typename?: "ProductOption";
+            name: string;
+            group: { __typename?: "ProductOptionGroup"; name: string };
+          }>;
+          customFields?: {
+            __typename?: "ProductVariantCustomFields";
+            MRP?: number | null;
+          } | null;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type ToggleFavoriteMutationVariables = Exact<{
+  productVariantId: Scalars["ID"]["input"];
+}>;
+
+export type ToggleFavoriteMutation = {
+  __typename?: "Mutation";
+  toggleFavorite: {
+    __typename?: "FavoriteList";
+    totalItems: number;
+    items: Array<{ __typename?: "Favorite"; id: string }>;
+  };
+};
+
 export const ActiveOrderFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -7386,3 +7438,217 @@ export const ProductDetailsDocument = {
     },
   ],
 } as unknown as DocumentNode<ProductDetailsQuery, ProductDetailsQueryVariables>;
+export const GetWishListDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getWishList" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "activeCustomer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "favorites" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "items" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "productVariant" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "priceWithTax",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "product" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "featuredAsset",
+                                          },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "name",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "preview",
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "options" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "name" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "group",
+                                          },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "name",
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "customFields",
+                                    },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "MRP" },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetWishListQuery, GetWishListQueryVariables>;
+export const ToggleFavoriteDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "toggleFavorite" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "productVariantId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "toggleFavorite" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "productVariantId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "productVariantId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "items" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "totalItems" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ToggleFavoriteMutation,
+  ToggleFavoriteMutationVariables
+>;

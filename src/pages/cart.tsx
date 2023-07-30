@@ -7,6 +7,7 @@ import { ACTIVE_ORDER, ADJUST_ORDER_LINE } from "@/graphql/orderWorkflow";
 import { useMutation, useQuery } from "@apollo/client";
 import { ActiveOrderFragment, OrderLine } from "@/__generated__/graphql";
 import { useEffect, useState } from "react";
+import { TOGGLE_WISHLIST } from "@/graphql/wishlist";
 
 interface CartItemProps {
   item: OrderLine;
@@ -22,6 +23,7 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
     );
   };
   const [adjustOrder, { data, loading }] = useMutation(ADJUST_ORDER_LINE);
+  const [addToWishlist] = useMutation(TOGGLE_WISHLIST);
 
   const updateOrder = (quantity: number) => {
     adjustOrder({
@@ -32,6 +34,17 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
     });
   };
 
+  const onMoveToWishlist = () => {
+    addToWishlist({
+      variables: { productVariantId: item.productVariant.id },
+      onCompleted: onItemMovedToWishList,
+    });
+  };
+
+  const onItemMovedToWishList = () => {
+    updateOrder(0);
+  };
+
   useEffect(() => {
     const activeOrder =
       data?.adjustOrderLine.__typename === "Order"
@@ -39,7 +52,9 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
         : null;
     activeOrder && setActiveOrder(activeOrder);
   }, [data, setActiveOrder]);
+
   const price = (item.productVariant.customFields?.MRP || 0) * item.quantity;
+
   return (
     <div className="flex flex-col border-2 border-slate-400 p-4 max-md:space-y-4 md:flex-row">
       <Image
@@ -97,7 +112,10 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
           >
             Remove
           </button>
-          <button className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold">
+          <button
+            className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold"
+            onClick={onMoveToWishlist}
+          >
             Move to wishlist
           </button>
         </div>
