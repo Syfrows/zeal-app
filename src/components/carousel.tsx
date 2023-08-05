@@ -59,7 +59,7 @@ const Carousel = () => {
         </div>
       ))}
 
-      <div className="absolute bottom-0 left-0 right-0 mb-4 flex items-center justify-center">
+      <div className="absolute bottom-0 left-0 right-0 z-10 mb-4 flex items-center justify-center">
         {slides.map((slide, index) => (
           <div
             key={index}

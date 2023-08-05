@@ -23,6 +23,7 @@ import { ActiveOrderFragment, ErrorResult } from "@/__generated__/graphql";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import placeHolder from "../assets/placeHolder.png";
+import SizeChartModal from "@/components/sizeChartModal";
 
 const ProductDetails = () => {
   const router = useRouter();
@@ -31,6 +32,7 @@ const ProductDetails = () => {
   const productName = useSearchParams().get("name");
   const productVairentName = useSearchParams().get("variant");
   const [isLoginModalVisible, setLoginModalVisibilty] = useState(false);
+  const [isSizeChartModalVisible, setSizeChartModalVisibilty] = useState(false);
   const { isLoggedIn } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [info, setInfo] = useState("");
@@ -306,7 +308,7 @@ const ProductDetails = () => {
             );
           })}
           <div className="space-y-3">
-            <button>
+            <button onClick={() => setSizeChartModalVisibilty(true)}>
               <span className="text-blue-400">Size Chart </span>{" "}
               <KeyboardArrowDown />
             </button>
@@ -372,6 +374,10 @@ const ProductDetails = () => {
           {info}
         </Alert>
       </Snackbar>
+      <SizeChartModal
+        isVisible={isSizeChartModalVisible}
+        setVisibility={setSizeChartModalVisibilty}
+      />
     </Layout>
   );
 };
