@@ -1,7 +1,6 @@
 import Image from "next/image";
 import wishlist from "../assets/wishlist.png";
 import Layout from "@/components/layout";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import LogInSignupModal from "@/components/logInSignupModal";
 import { useRouter } from "next/router";
@@ -11,6 +10,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_WISHLIST, TOGGLE_WISHLIST } from "@/graphql/wishlist";
 import { Favorite } from "@/__generated__/graphql";
 import { ADD_ITEM_TO_ORDER } from "@/graphql/orderWorkflow";
+import placeHolder from "../assets/placeHolder.png";
 
 const WishlistItem = ({
   item,
@@ -51,7 +51,7 @@ const WishlistItem = ({
   return (
     <div className="flex border-2 border-slate-400 p-4">
       <Image
-        src={product?.product.featuredAsset?.preview || ""}
+        src={product?.product?.featuredAsset?.preview || placeHolder}
         alt={product?.name || ""}
         height={260}
         width={260}

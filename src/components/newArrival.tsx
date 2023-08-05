@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { NEW_ARRIVAL } from "@/graphql/landingPage";
+import placeHolder from "../assets/placeHolder.png";
 
 const NewArrival = () => {
   const [screenSize, setScreenSize] = useState({
@@ -88,7 +89,7 @@ const NewArrival = () => {
               }
             >
               <Image
-                src={product.product.featuredAsset?.preview || ""}
+                src={product.product.featuredAsset?.preview || placeHolder}
                 alt={product.name}
                 className="aspect-[3/5]"
                 width={300}

@@ -5,14 +5,18 @@ import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useSearchParams } from "next/navigation";
-import { formatPrice } from "@/helpers/helper";
+import { discount, formatPrice } from "@/helpers/helper";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { ProductVariant } from "@/__generated__/graphql";
+import placeHolder from "../assets/placeHolder.png";
 
 const ProductCard = ({ item }: { item: ProductVariant }) => {
   const productImage =
-    item.featuredAsset?.preview || item.product.featuredAsset?.preview || "";
+    item.featuredAsset?.preview ||
+    item.product.featuredAsset?.preview ||
+    placeHolder;
   const rating = item.product.customFields?.reviewRating || 0;
+  const mrp = item.customFields?.MRP || 0;
   return (
     <div className="max-w-[360px] overflow-hidden rounded-lg shadow-lg">
       <Image
@@ -41,8 +45,16 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
           <p className="text-orange-600">
             {formatPrice(item.priceWithTax)}
             <br className="min-[390px]:hidden" />
-            <span className="text-slate-400 line-through decoration-slate-400 min-[390px]:ml-3">
-              {formatPrice(item.customFields?.MRP || 0)}
+            <span className="text-slate-400 line-through decoration-slate-400 min-[390px]:mx-3">
+              {formatPrice(mrp)}
+            </span>
+            <br className="min-[390px]:hidden" />
+            <span className="text-red-400">
+              {discount(mrp, item.priceWithTax) > 0 ? (
+                `${discount(mrp, item.priceWithTax)} % off! `
+              ) : (
+                <span className="text-transparent">.</span>
+              )}
             </span>
           </p>
           <button className="text-orange-600 underline">Buy Now</button>

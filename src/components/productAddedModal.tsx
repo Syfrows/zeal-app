@@ -3,6 +3,7 @@ import { Close, CheckCircle } from "@mui/icons-material";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import placeHolder from "../assets/placeHolder.png";
 
 export interface Product {
   image: string;
@@ -42,7 +43,7 @@ const ProductAddedModal = ({
           <div className="p-8">
             <div className="flex flex-col sm:flex-row">
               <Image
-                src={product.image}
+                src={product.image || placeHolder}
                 alt={product.name}
                 height={205}
                 width={205}

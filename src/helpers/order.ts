@@ -1,4 +1,5 @@
 export enum OrderState {
+  AddingItems = "AddingItems",
   ArrangingPayment = "ArrangingPayment",
   PaymentAuthorized = "PaymentAuthorized",
   PaymentSettled = "PaymentSettled",

@@ -8,6 +8,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ActiveOrderFragment, OrderLine } from "@/__generated__/graphql";
 import { useEffect, useState } from "react";
 import { TOGGLE_WISHLIST } from "@/graphql/wishlist";
+import placeHolder from "../assets/placeHolder.png";
 
 interface CartItemProps {
   item: OrderLine;
@@ -58,7 +59,7 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
   return (
     <div className="flex flex-col border-2 border-slate-400 p-4 max-md:space-y-4 md:flex-row">
       <Image
-        src={item.featuredAsset?.preview ?? ""}
+        src={item.featuredAsset?.preview ?? placeHolder}
         alt={item.featuredAsset?.name ?? ""}
         height={260}
         width={260}

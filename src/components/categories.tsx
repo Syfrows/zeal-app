@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useQuery } from "@apollo/client";
+import placeHolder from "../assets/placeHolder.png";
 
 const Categories = () => {
   const [showAll, setShowAll] = useState(false);
@@ -37,7 +38,7 @@ const Categories = () => {
                 onClick={() => router.push(`/products?filter=${category.id}`)}
               >
                 <Image
-                  src={category.featuredAsset?.source || ""}
+                  src={category.featuredAsset?.source || placeHolder}
                   alt={category.name}
                   className="aspect-square rounded-l"
                   width={240}

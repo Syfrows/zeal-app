@@ -7,6 +7,7 @@ import { CheckCircle } from "@mui/icons-material";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import placeHolder from "../assets/placeHolder.png";
 
 interface ProductProps {
   item: OrderLine;
@@ -25,7 +26,7 @@ const Product = ({ item, isReturn }: ProductProps) => {
   return (
     <div className="flex border-2 border-slate-400 p-4 max-sm:flex-col max-sm:items-center max-sm:space-y-4">
       <Image
-        src={item.featuredAsset?.preview || ""}
+        src={item.featuredAsset?.preview || placeHolder}
         alt={item.featuredAsset?.name || ""}
         height={250}
         width={250}

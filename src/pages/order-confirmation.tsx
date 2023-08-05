@@ -21,6 +21,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import placeHolder from "../assets/placeHolder.png";
 
 interface ProductProps {
   product: OrderLine;
@@ -38,7 +39,7 @@ const Product = ({ product }: ProductProps) => {
     <div className="flex border-2 border-t-0 border-gray-300">
       <div className="flex w-[30%] border-e-2 border-gray-300 max-sm:flex-col sm:w-[70%]">
         <Image
-          src={product.featuredAsset?.preview ?? ""}
+          src={product.featuredAsset?.preview ?? placeHolder}
           alt={product.featuredAsset?.name ?? ""}
           height={150}
           width={150}

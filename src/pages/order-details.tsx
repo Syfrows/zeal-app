@@ -7,37 +7,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { DateTime } from "luxon";
-
-const address = {
-  name: "Kartik Chate",
-  address: "Plot No.19,Ramnagar,Cidco,",
-  city: "Aurangabad",
-  pin: "431001",
-  state: "Maharashtra",
-  country: "Aurangabad",
-  mobile: "+91-8275513320",
-};
-
-const product = {
-  image: "https://picsum.photos/360/300",
-  name: "Pacer fit Shirt",
-  size: "M",
-  price: 799,
-  quantity: 1,
-};
-
-const details = {
-  orderId: "#98332",
-  dateAdded: "05/05/2023",
-  paymentMethod: "UPI",
-  shippingMethod: "Delhivery",
-  billingAddress: address,
-  shippingAddress: address,
-  product: product,
-  subTotal: 799,
-  shippingCharges: 0,
-  total: 799,
-};
+import placeHolder from "../assets/placeHolder.png";
 
 const OrderDetails = () => {
   const router = useRouter();
@@ -129,7 +99,7 @@ const OrderDetails = () => {
                 className="flex flex-col border-2 border-gray-300 p-4 sm:flex-row"
               >
                 <Image
-                  src={product.featuredAsset?.preview || ""}
+                  src={product.featuredAsset?.preview || placeHolder}
                   alt={product.featuredAsset?.name || ""}
                   height={250}
                   width={250}

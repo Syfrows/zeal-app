@@ -22,6 +22,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActiveOrderFragment, ErrorResult } from "@/__generated__/graphql";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import placeHolder from "../assets/placeHolder.png";
 
 const ProductDetails = () => {
   const router = useRouter();
@@ -109,7 +110,7 @@ const ProductDetails = () => {
       : null;
 
   const addedProduct: Product = {
-    image: product.assets[0].source,
+    image: product.assets[0]?.source,
     name: product.name,
     size: findSelectedOption("size"),
     colour: findSelectedOption("color"),
@@ -163,7 +164,7 @@ const ProductDetails = () => {
       <div className="flex flex-col sm:flex-row sm:space-x-4">
         <div className="flex flex-col items-center sm:w-1/2">
           <Image
-            src={productAssest?.[selectedImage]?.source ?? ""}
+            src={productAssest?.[selectedImage]?.source ?? placeHolder}
             alt={productAssest?.[selectedImage]?.name ?? ""}
             height={500}
             width={500}

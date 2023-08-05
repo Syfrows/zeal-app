@@ -9,6 +9,7 @@ import { DateTime } from "luxon";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import placeHolder from "../assets/placeHolder.png";
 
 interface OrderItemProps {
   order: Order;
@@ -21,8 +22,8 @@ const OrderItem = ({ order }: OrderItemProps) => {
   return (
     <div className="flex flex-col border-2 border-gray-400 p-4 sm:flex-row">
       <Image
-        src={orderline.featuredAsset?.preview || ""}
-        alt={orderline.featuredAsset?.name || ""}
+        src={orderline?.featuredAsset?.preview || placeHolder}
+        alt={orderline?.featuredAsset?.name || ""}
         height={280}
         width={280}
         className="aspect-square h-[205px] self-center"
@@ -85,7 +86,7 @@ const MyOrders = () => {
   const orders = ordersData?.filter((x) =>
     isReturns
       ? x.state === OrderState.Cancelled
-      : x.state !== OrderState.Cancelled
+      : x.state !== OrderState.Cancelled && x.state !== OrderState.AddingItems
   );
 
   return (
