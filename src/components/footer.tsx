@@ -17,8 +17,13 @@ const Footer = () => {
       <div className="flex justify-center bg-primary px-4 py-14 text-white max-sm:flex-col max-sm:space-y-8 sm:max-lg:space-x-16 lg:space-x-24">
         <div className="w-64">
           <div className="mb-4 flex">
-            <Image src={logo} alt="RelaxZeal" className="mr-3" />
-            <p className="text-3xl font-medium">Zeal</p>
+            <Image
+              src={logo}
+              alt="RelaxZeal"
+              className="mr-3"
+              width={75}
+              height={75}
+            />
           </div>
           <address>{addressText}</address>
           <div className="mt-3 flex space-x-4">
