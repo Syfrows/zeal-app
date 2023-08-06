@@ -64,14 +64,14 @@ const OrderItem = ({ order }: OrderItemProps) => {
               {isReturns ? "Cancel Return " : "Details"}
             </button>
           )}
-          {!isReturns && (
+          {/* {!isReturns && (
             <button
               className="rounded-lg border-2 border-primary px-6 py-3 font-semibold"
               onClick={() => router.push("/return-details")}
             >
               Return or Replace
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </div>

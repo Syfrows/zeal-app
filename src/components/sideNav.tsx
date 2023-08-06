@@ -61,12 +61,12 @@ const SideNav = ({ isDrawer }: any) => {
         >
           Manage Wishlist
         </p>
-        <p
+        {/* <p
           className={getClassName(Page.ReturnRequests)}
           onClick={() => router.push("/my-orders?isReturns=true")}
         >
           View Return Request
-        </p>
+        </p> */}
         <div className="my-4 border-t-2 border-gray-300" />
         <p
           className={getClassName(Page.AccountInformation)}

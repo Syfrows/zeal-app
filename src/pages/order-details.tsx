@@ -22,12 +22,12 @@ const OrderDetails = () => {
   return (
     <Layout>
       <div className="flex flex-col space-y-8 py-12 xl:px-32">
-        <button
+        {/* <button
           className="self-end rounded-lg border-2 border-primary px-6 py-3 font-semibold"
           onClick={() => router.push("/return-details")}
         >
           Return or Replace
-        </button>
+        </button> */}
         <div className="flex flex-col border-2 border-gray-300 p-4">
           <p className="font-bold">Order Details</p>
           <div className="my-4 border-t-2 border-gray-300" />
