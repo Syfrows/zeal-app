@@ -61,6 +61,8 @@ const documents = {
     types.AddPaymentDocument,
   "#graphql\n  query OrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      ...ActiveOrder\n    }\n  }\n":
     types.OrderByCodeDocument,
+  "#graphql\n  mutation generateRazorpayOrderId($vendureOrderId: ID!) {\n    generateRazorpayOrderId(orderId: $vendureOrderId) {\n      __typename\n      ... on RazorpayOrderIdSuccess {\n        razorpayOrderId\n      }\n      ... on RazorpayOrderIdGenerationError {\n        errorCode\n        message\n      }\n    }\n  }\n  ":
+    types.GenerateRazorpayOrderIdDocument,
   "#graphql\n  query getOrders{\n    activeCustomer {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n":
     types.GetOrdersDocument,
   "#graphql\n  query OrderById($id: ID!) {\n    order(id: $id) {\n      ...ActiveOrder,\n      shippingAddress {\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country\n        phoneNumber\n      }\n      orderPlacedAt\n      payments {\n        method\n      }\n      shippingLines {\n        shippingMethod {\n          name\n        }\n      }\n    }\n  }\n":
@@ -233,6 +235,12 @@ export function gql(
 export function gql(
   source: "#graphql\n  query OrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      ...ActiveOrder\n    }\n  }\n"
 ): (typeof documents)["#graphql\n  query OrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      ...ActiveOrder\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  mutation generateRazorpayOrderId($vendureOrderId: ID!) {\n    generateRazorpayOrderId(orderId: $vendureOrderId) {\n      __typename\n      ... on RazorpayOrderIdSuccess {\n        razorpayOrderId\n      }\n      ... on RazorpayOrderIdGenerationError {\n        errorCode\n        message\n      }\n    }\n  }\n  "
+): (typeof documents)["#graphql\n  mutation generateRazorpayOrderId($vendureOrderId: ID!) {\n    generateRazorpayOrderId(orderId: $vendureOrderId) {\n      __typename\n      ... on RazorpayOrderIdSuccess {\n        razorpayOrderId\n      }\n      ... on RazorpayOrderIdGenerationError {\n        errorCode\n        message\n      }\n    }\n  }\n  "];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

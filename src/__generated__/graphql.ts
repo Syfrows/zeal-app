@@ -1697,6 +1697,7 @@ export type Mutation = {
   createCustomerAddress: Address;
   /** Delete an existing Address */
   deleteCustomerAddress: Success;
+  generateRazorpayOrderId: GenerateRazorpayOrderIdResult;
   /** Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})` */
   login: NativeAuthenticationResult;
   /** End the current authenticated session */
@@ -1806,6 +1807,10 @@ export type MutationCreateCustomerAddressArgs = {
 
 export type MutationDeleteCustomerAddressArgs = {
   id: Scalars["ID"]["input"];
+};
+
+export type MutationGenerateRazorpayOrderIdArgs = {
+  orderId: Scalars["ID"]["input"];
 };
 
 export type MutationLoginArgs = {
@@ -1985,7 +1990,7 @@ export type Order = Node & {
   couponCodes: Array<Scalars["String"]["output"]>;
   createdAt: Scalars["DateTime"]["output"];
   currencyCode: CurrencyCode;
-  customFields?: Maybe<Scalars["JSON"]["output"]>;
+  customFields?: Maybe<OrderCustomFields>;
   customer?: Maybe<Customer>;
   discounts: Array<Discount>;
   fulfillments?: Maybe<Array<Fulfillment>>;
@@ -2051,6 +2056,11 @@ export type OrderAddress = {
   streetLine2?: Maybe<Scalars["String"]["output"]>;
 };
 
+export type OrderCustomFields = {
+  __typename?: "OrderCustomFields";
+  razorpay_order_id?: Maybe<Scalars["String"]["output"]>;
+};
+
 export type OrderFilterParameter = {
   active?: InputMaybe<BooleanOperators>;
   code?: InputMaybe<StringOperators>;
@@ -2058,6 +2068,7 @@ export type OrderFilterParameter = {
   currencyCode?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
   orderPlacedAt?: InputMaybe<DateOperators>;
+  razorpay_order_id?: InputMaybe<StringOperators>;
   shipping?: InputMaybe<NumberOperators>;
   shippingWithTax?: InputMaybe<NumberOperators>;
   state?: InputMaybe<StringOperators>;
@@ -2179,6 +2190,7 @@ export type OrderSortParameter = {
   createdAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   orderPlacedAt?: InputMaybe<SortOrder>;
+  razorpay_order_id?: InputMaybe<SortOrder>;
   shipping?: InputMaybe<SortOrder>;
   shippingWithTax?: InputMaybe<SortOrder>;
   state?: InputMaybe<SortOrder>;
@@ -3015,6 +3027,17 @@ export type QuerySearchArgs = {
   input: SearchInput;
 };
 
+export type RazorpayOrderIdGenerationError = {
+  __typename?: "RazorpayOrderIdGenerationError";
+  errorCode?: Maybe<Scalars["String"]["output"]>;
+  message?: Maybe<Scalars["String"]["output"]>;
+};
+
+export type RazorpayOrderIdSuccess = {
+  __typename?: "RazorpayOrderIdSuccess";
+  razorpayOrderId: Scalars["String"]["output"];
+};
+
 export type RefreshCustomerVerificationResult =
   | NativeAuthStrategyError
   | Success;
@@ -3456,8 +3479,12 @@ export type UpdateCustomerPasswordResult =
   | PasswordValidationError
   | Success;
 
+export type UpdateOrderCustomFieldsInput = {
+  razorpay_order_id?: InputMaybe<Scalars["String"]["input"]>;
+};
+
 export type UpdateOrderInput = {
-  customFields?: InputMaybe<Scalars["JSON"]["input"]>;
+  customFields?: InputMaybe<UpdateOrderCustomFieldsInput>;
 };
 
 export type UpdateOrderItemsResult =
@@ -3518,6 +3545,10 @@ export type Zone = Node & {
   name: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
 };
+
+export type GenerateRazorpayOrderIdResult =
+  | RazorpayOrderIdGenerationError
+  | RazorpayOrderIdSuccess;
 
 export type SignUpMutationVariables = Exact<{
   input: RegisterCustomerInput;
@@ -4045,6 +4076,21 @@ export type OrderByCodeQuery = {
         " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
       })
     | null;
+};
+
+export type GenerateRazorpayOrderIdMutationVariables = Exact<{
+  vendureOrderId: Scalars["ID"]["input"];
+}>;
+
+export type GenerateRazorpayOrderIdMutation = {
+  __typename?: "Mutation";
+  generateRazorpayOrderId:
+    | {
+        __typename: "RazorpayOrderIdGenerationError";
+        errorCode?: string | null;
+        message?: string | null;
+      }
+    | { __typename: "RazorpayOrderIdSuccess"; razorpayOrderId: string };
 };
 
 export type GetOrdersQueryVariables = Exact<{ [key: string]: never }>;
@@ -6961,6 +7007,96 @@ export const OrderByCodeDocument = {
     },
   ],
 } as unknown as DocumentNode<OrderByCodeQuery, OrderByCodeQueryVariables>;
+export const GenerateRazorpayOrderIdDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "generateRazorpayOrderId" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "vendureOrderId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "generateRazorpayOrderId" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "vendureOrderId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "RazorpayOrderIdSuccess" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "razorpayOrderId" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: {
+                      kind: "Name",
+                      value: "RazorpayOrderIdGenerationError",
+                    },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GenerateRazorpayOrderIdMutation,
+  GenerateRazorpayOrderIdMutationVariables
+>;
 export const GetOrdersDocument = {
   kind: "Document",
   definitions: [

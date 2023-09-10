@@ -22,6 +22,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import placeHolder from "../assets/placeHolder.png";
+import useRazorpayCheckout from "@/hooks/useRazorpayCheckout";
+import { OrderState } from "@/helpers/order";
 
 interface ProductProps {
   product: OrderLine;
@@ -88,23 +90,47 @@ const OrderConfirmation = () => {
     setIsLoading(true);
     transitionOrder({
       variables: {
-        state: "ArrangingPayment",
+        state: OrderState.ArrangingPayment,
       },
-      onCompleted: onTransitionOrder,
+      onCompleted: handlePayment,
     });
   };
 
-  const onTransitionOrder = () => {
+  const handlePayment = () => {
+    if (paymentMethod === "razorpay") {
+      handleRazorpayPayment();
+      return;
+    }
+    onTransitionOrder();
+  };
+
+  const onTransitionOrder = (metadata?: any) => {
     addPayment({
       variables: {
         input: {
           method: paymentMethod,
-          metadata: {},
+          metadata: JSON.stringify(metadata) || {},
         },
       },
       onCompleted: onPaymentAdded,
     });
   };
+
+  const onPaymentModalClose = () => {
+    transitionOrder({
+      variables: {
+        state: OrderState.AddingItems,
+      },
+      onCompleted: () => setIsLoading(false),
+    });
+  };
+
+  const handleRazorpayPayment = useRazorpayCheckout({
+    orderId: activeOrders?.id,
+    amount: activeOrders?.totalWithTax,
+    onSucess: onTransitionOrder,
+    onClose: onPaymentModalClose,
+  });
 
   const onPaymentAdded = (data: AddPaymentMutation) => {
     const order = data.addPaymentToOrder as Order;

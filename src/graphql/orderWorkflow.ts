@@ -149,3 +149,18 @@ export const ORDER_BY_CODE = gql(`#graphql
     }
   }
 `);
+
+export const GENERATE_RAZORPAY_ORDER_ID = gql(`#graphql
+  mutation generateRazorpayOrderId($vendureOrderId: ID!) {
+    generateRazorpayOrderId(orderId: $vendureOrderId) {
+      __typename
+      ... on RazorpayOrderIdSuccess {
+        razorpayOrderId
+      }
+      ... on RazorpayOrderIdGenerationError {
+        errorCode
+        message
+      }
+    }
+  }
+  `);
