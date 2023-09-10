@@ -52,7 +52,7 @@ const NewArrival = () => {
   const middleIndex = screenSize.width < 640 ? 1 : 2;
 
   return (
-    <div className="mb-16 flex flex-col items-center text-center">
+    <div className="flex flex-col items-center text-center sm:mb-16">
       <p className=" mb-5 text-4xl font-semibold">New Arrival</p>
       <p>
         We too believe that shopping is relaxing is thing as whenever I get too
@@ -91,8 +91,8 @@ const NewArrival = () => {
               <Image
                 src={product.product.featuredAsset?.preview || placeHolder}
                 alt={product.name}
-                className="aspect-[3/5]"
-                width={300}
+                className="aspect-square"
+                width={500}
                 height={500}
               />
             </div>

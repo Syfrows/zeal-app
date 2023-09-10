@@ -40,7 +40,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="relative -m-4 aspect-video sm:aspect-[4/1]">
+    <div className="relative -m-4 aspect-[3/1]">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -52,7 +52,7 @@ const Carousel = () => {
           <Image
             src={slide.featuredAsset?.preview || ""}
             alt="RelaxZeal"
-            className="aspect-video sm:aspect-[4/1]"
+            className="aspect-[3/1]"
             width={1536}
             height={384}
           />

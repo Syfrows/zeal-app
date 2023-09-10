@@ -23,14 +23,14 @@ const PlatformFeatures = () => {
     },
   ];
   return (
-    <div className="mb-16 flex flex-wrap justify-center">
+    <div className="mb-16 flex overflow-x-auto xl:justify-center">
       {features.map((feature, index) => (
         <div
           key={index}
           className="m-6 flex w-80 flex-col items-center rounded-lg p-8 text-center shadow-lg"
         >
           <div className="mb-5 rounded-lg bg-blue-100 p-4">{feature.icon}</div>
-          <p className=" mb-3 text-xl font-semibold">{feature.title}</p>
+          <p className=" mb-3 w-60 text-xl font-semibold">{feature.title}</p>
           <p>{feature.subTitle}</p>
         </div>
       ))}

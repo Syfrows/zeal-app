@@ -44,11 +44,11 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
         <div className="flex justify-between  max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
           <p className="text-orange-600">
             {formatPrice(item.priceWithTax)}
-            <br className="min-[390px]:hidden" />
-            <span className="text-slate-400 line-through decoration-slate-400 min-[390px]:mx-3">
+            <br className="min-[400px]:hidden" />
+            <span className="text-slate-400 line-through decoration-slate-400 min-[400px]:mx-3">
               {formatPrice(mrp)}
             </span>
-            <br className="min-[390px]:hidden" />
+            <br className="min-[400px]:hidden" />
             <span className="text-red-400">
               {discount(mrp, item.priceWithTax) > 0 ? (
                 `${discount(mrp, item.priceWithTax)} % off! `
