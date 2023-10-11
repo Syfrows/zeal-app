@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import Drawer from "@mui/material/Drawer";
 import SideNav from "./sideNav";
 import { Menu } from "@mui/icons-material";
+import Search from "./search";
 
 const NavBar = () => {
   const router = useRouter();
@@ -20,16 +21,7 @@ const NavBar = () => {
         <div className="my-1 aspect-[147/122]" onClick={() => router.push("/")}>
           <Image src={logo} alt="RelaxZeal" />
         </div>
-        <div className="my-3 hidden border-2 border-primary sm:flex lg:min-w-[500px]">
-          <input
-            type="text"
-            placeholder="Search Products..."
-            className="flex-1 px-4 py-1 focus:outline-none"
-          />
-          <button className="flex w-10 items-center justify-center bg-primary">
-            <SearchIcon width="20" height="18" color="white" />
-          </button>
-        </div>
+        <Search />
         <div className="item-center my-3 flex space-x-3 sm:space-x-6">
           {!isLoggedIn && (
             <button
@@ -39,9 +31,6 @@ const NavBar = () => {
               Login
             </button>
           )}
-          <button className="sm:hidden">
-            <SearchIcon width="20" height="18" color="black" />
-          </button>
           <button
             onClick={() =>
               isLoggedIn ? router.push("/cart") : setModalVisibilty(true)
