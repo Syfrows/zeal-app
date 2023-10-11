@@ -30,9 +30,13 @@ const Footer = () => {
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700">
               <FacebookIcon width="7" height="11" color="white" />
             </button>
-            <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700">
+            <a
+              href="https://instagram.com/zeal__wear?igshid=MWZjMTM2ODFkZg=="
+              target="_blank"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700"
+            >
               <InstagramIcon width="10" height="10" color="white" />
-            </button>
+            </a>
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700">
               <TwitterIcon width="12" height="10" color="white" />
             </button>
@@ -53,13 +57,24 @@ const Footer = () => {
           <Link href={""}>FAQ</Link>
           <Link href={""}>How it Works</Link>
           <Link href={""}>Features</Link>
-          <Link href={""}>Contact</Link>
+          <Link href={"/terms-and-conditions.html"}>Terms & Conditions</Link>
+          <Link href={"/privacy-policy.html"}>Privacy Policy</Link>
+          <Link href={"/cancellation-and-refund-policy.html"}>
+            Cancellation and Refund Policy
+          </Link>
+          <Link href={"/return-policy.html"}>Return Policy</Link>
+          <Link href={"/shipping-and-delivery.html"}>
+            Shipping and Delivery
+          </Link>
         </div>
         <div className="flex flex-col">
-          <p className=" mb-4 text-xl font-semibold">Support</p>
-          <Link href={"tel:9923088128"}>+91 9923088128</Link>
-          <Link href={"mailto:info@relaxzeal.com"}>info@relaxzeal.com</Link>
-          <p>37/1 Aleraza Market</p>
+          <p className=" mb-4 text-xl font-semibold">Contact US</p>
+          <Link href={"tel:9923088128"}>+91 7057923102</Link>
+          <Link href={"mailto:info@relaxzeal.com"}>zeal@relaxzeal.com</Link>
+          <address>
+            344/345,Narhari Enclave,
+            <br />N 1, Cidco, Maharashtra 431003
+          </address>
         </div>
       </div>
       <div className="flex items-center justify-between p-6 max-sm:flex-col">

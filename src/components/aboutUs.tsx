@@ -25,10 +25,16 @@ const AboutUs = () => {
           className="ml-10 hidden h-[320] w-[530] lg:flex"
         />
       </div>
-      <Image src={instaIcon} alt="instagram" />
-      <p className="text-2xl font-semibold">
-        Follow us in instagram @relax_zeal
-      </p>
+      <a
+        href="https://instagram.com/zeal__wear?igshid=MWZjMTM2ODFkZg=="
+        target="_blank"
+        className="flex flex-col"
+      >
+        <Image src={instaIcon} alt="instagram" className="self-center" />
+        <p className="text-2xl font-semibold">
+          Follow us in instagram @zeal__wear
+        </p>
+      </a>
     </div>
   );
 };
