@@ -31,9 +31,9 @@ export default function Home() {
           />
           <PlatformFeatures />
           <NewArrival />
-          <Testimonials />
+          {/* <Testimonials /> */}
         </div>
-        <div
+        {/* <div
           className="my-20 flex flex-col items-center justify-center px-4 py-28 text-center"
           style={{
             backgroundImage: `url('../images/newsletterBackground.png')`,
@@ -56,7 +56,7 @@ export default function Home() {
               Subscribe Now
             </button>
           </div>
-        </div>
+        </div> */}
         <div className="px-4 md:px-16 xl:px-32">
           <AboutUs />
         </div>

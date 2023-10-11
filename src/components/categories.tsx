@@ -30,7 +30,7 @@ const Categories = () => {
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {categories &&
           categories
-            .slice(0, showAll ? categories.length : 4)
+            .slice(0, showAll ? categories.length : 8)
             .map((category) => (
               <div
                 key={category.id}
