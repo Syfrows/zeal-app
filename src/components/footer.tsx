@@ -54,18 +54,14 @@ const Footer = () => {
         </div>
         <div className="flex flex-col">
           <p className=" mb-4 text-xl font-semibold">Support</p>
-          <Link href={""}>FAQ</Link>
-          <Link href={""}>How it Works</Link>
-          <Link href={""}>Features</Link>
-          <Link href={"/terms-and-conditions.html"}>Terms & Conditions</Link>
-          <Link href={"/privacy-policy.html"}>Privacy Policy</Link>
-          <Link href={"/cancellation-and-refund-policy.html"}>
+          <Link href={"/contact-us"}>Contact Us</Link>
+          <Link href={"/terms-and-conditions"}>Terms & Conditions</Link>
+          <Link href={"/privacy-and-policy"}>Privacy Policy</Link>
+          <Link href={"/cancellation-and-refund-policy"}>
             Cancellation and Refund Policy
           </Link>
-          <Link href={"/return-policy.html"}>Return Policy</Link>
-          <Link href={"/shipping-and-delivery.html"}>
-            Shipping and Delivery
-          </Link>
+          <Link href={"/return-policy"}>Return Policy</Link>
+          <Link href={"/shipping-and-delivery"}>Shipping and Delivery</Link>
         </div>
         <div className="flex flex-col">
           <p className=" mb-4 text-xl font-semibold">Contact US</p>

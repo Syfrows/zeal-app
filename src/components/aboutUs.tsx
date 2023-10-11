@@ -28,9 +28,9 @@ const AboutUs = () => {
       <a
         href="https://instagram.com/zeal__wear?igshid=MWZjMTM2ODFkZg=="
         target="_blank"
-        className="flex flex-col"
+        className="flex flex-col items-center text-center"
       >
-        <Image src={instaIcon} alt="instagram" className="self-center" />
+        <Image src={instaIcon} alt="instagram" />
         <p className="text-2xl font-semibold">
           Follow us in instagram @zeal__wear
         </p>
