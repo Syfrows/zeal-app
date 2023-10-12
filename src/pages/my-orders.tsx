@@ -24,9 +24,9 @@ const OrderItem = ({ order }: OrderItemProps) => {
       <Image
         src={orderline?.featuredAsset?.preview || placeHolder}
         alt={orderline?.featuredAsset?.name || ""}
-        height={280}
-        width={280}
-        className="aspect-square h-[205px] self-center"
+        height={220}
+        width={220}
+        className="aspect-square self-center"
       />
       <div className="w-full max-sm:mt-4 sm:px-6">
         <div className="flex justify-between">
@@ -83,11 +83,13 @@ const MyOrders = () => {
   const isReturns = searchParams.get("isReturns");
   const { data } = useQuery(GET_ORDERS);
   const ordersData = data?.activeCustomer?.orders.items;
-  const orders = ordersData?.filter((x) =>
-    isReturns
-      ? x.state === OrderState.Cancelled
-      : x.state !== OrderState.Cancelled && x.state !== OrderState.AddingItems
-  );
+  const orders = ordersData
+    ?.filter((x) =>
+      isReturns
+        ? x.state === OrderState.Cancelled
+        : x.state !== OrderState.Cancelled && x.state !== OrderState.AddingItems
+    )
+    .reverse();
 
   return (
     <Layout>
