@@ -28,7 +28,7 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
       />
       <div className="space-y-3 p-2 sm:p-6">
         <div className="flex justify-between max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
-          <p className="line-clamp-2 h-12	font-medium">{item.name}</p>
+          <p className="line-clamp-2 h-12	font-medium">{item.product.name}</p>
           {rating !== 0 && (
             <div className="flex space-x-2">
               <Rating

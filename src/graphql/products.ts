@@ -1,7 +1,7 @@
 import { gql } from "@/__generated__";
 
 export const PRODUCTS_BY_COLLECTION = gql(`#graphql
-  query getProductsByCollection($id: ID, $slug: String, $options: ProductVariantListOptions) {
+  query getProductsByCollectionCustom($id: ID, $slug: String, $options: ProductVariantListOptions) {
     collection(id: $id, slug: $slug) {
       productVariants(options: $options) {
         items {
@@ -14,6 +14,7 @@ export const PRODUCTS_BY_COLLECTION = gql(`#graphql
             preview
           }
           product {
+            name
             slug
             featuredAsset {
               preview

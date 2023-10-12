@@ -11,6 +11,7 @@ export const COLLECTIONS = gql(`#graphql
         }
         customFields {
           Category
+          OnlyFilter
         }
       }
     }

@@ -12,7 +12,7 @@ const Categories = () => {
     // variables: { options: { filter: { parentId: { eq: "1" } } } },
   });
   const categories = data?.collections.items.filter(
-    (x) => x.customFields?.Category
+    (x) => x.customFields?.Category && !x.customFields?.OnlyFilter
   );
 
   return (

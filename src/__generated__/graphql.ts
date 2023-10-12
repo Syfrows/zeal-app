@@ -226,10 +226,12 @@ export type CollectionBreadcrumb = {
 export type CollectionCustomFields = {
   __typename?: "CollectionCustomFields";
   Category?: Maybe<Scalars["Boolean"]["output"]>;
+  OnlyFilter?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type CollectionFilterParameter = {
   Category?: InputMaybe<BooleanOperators>;
+  OnlyFilter?: InputMaybe<BooleanOperators>;
   createdAt?: InputMaybe<DateOperators>;
   description?: InputMaybe<StringOperators>;
   id?: InputMaybe<IdOperators>;
@@ -273,6 +275,7 @@ export type CollectionResult = {
 
 export type CollectionSortParameter = {
   Category?: InputMaybe<SortOrder>;
+  OnlyFilter?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -2985,6 +2988,7 @@ export type Query = {
   product?: Maybe<Product>;
   /** Get a list of Products */
   products: ProductList;
+  productsByCollection?: Maybe<Collection>;
   /** Search Products based on the criteria set by the `SearchInput` */
   search: SearchResponse;
 };
@@ -3021,6 +3025,10 @@ export type QueryProductArgs = {
 
 export type QueryProductsArgs = {
   options?: InputMaybe<ProductListOptions>;
+};
+
+export type QueryProductsByCollectionArgs = {
+  slug?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type QuerySearchArgs = {
@@ -3744,6 +3752,7 @@ export type CollectionsQuery = {
       customFields?: {
         __typename?: "CollectionCustomFields";
         Category?: boolean | null;
+        OnlyFilter?: boolean | null;
       } | null;
     }>;
   };
@@ -4211,13 +4220,13 @@ export type ProductDetailsQuery = {
   } | null;
 };
 
-export type GetProductsByCollectionQueryVariables = Exact<{
+export type GetProductsByCollectionCustomQueryVariables = Exact<{
   id?: InputMaybe<Scalars["ID"]["input"]>;
   slug?: InputMaybe<Scalars["String"]["input"]>;
   options?: InputMaybe<ProductVariantListOptions>;
 }>;
 
-export type GetProductsByCollectionQuery = {
+export type GetProductsByCollectionCustomQuery = {
   __typename?: "Query";
   collection?: {
     __typename?: "Collection";
@@ -4235,6 +4244,7 @@ export type GetProductsByCollectionQuery = {
         featuredAsset?: { __typename?: "Asset"; preview: string } | null;
         product: {
           __typename?: "Product";
+          name: string;
           slug: string;
           featuredAsset?: { __typename?: "Asset"; preview: string } | null;
           customFields?: {
@@ -5209,6 +5219,10 @@ export const CollectionsDocument = {
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "Category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "OnlyFilter" },
                             },
                           ],
                         },
@@ -7610,13 +7624,13 @@ export const ProductDetailsDocument = {
     },
   ],
 } as unknown as DocumentNode<ProductDetailsQuery, ProductDetailsQueryVariables>;
-export const GetProductsByCollectionDocument = {
+export const GetProductsByCollectionCustomDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "getProductsByCollection" },
+      name: { kind: "Name", value: "getProductsByCollectionCustom" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -7731,6 +7745,10 @@ export const GetProductsByCollectionDocument = {
                                 selections: [
                                   {
                                     kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
                                     name: { kind: "Name", value: "slug" },
                                   },
                                   {
@@ -7792,8 +7810,8 @@ export const GetProductsByCollectionDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  GetProductsByCollectionQuery,
-  GetProductsByCollectionQueryVariables
+  GetProductsByCollectionCustomQuery,
+  GetProductsByCollectionCustomQueryVariables
 >;
 export const GetWishListDocument = {
   kind: "Document",
