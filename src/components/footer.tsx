@@ -45,13 +45,13 @@ const Footer = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <p className=" mb-4 text-xl font-semibold">Quick Link</p>
           <Link href={""}>Home</Link>
           <Link href={""}>Blog</Link>
           <Link href={""}>Carrer</Link>
           <Link href={""}>New Arrival</Link>
-        </div>
+        </div> */}
         <div className="flex flex-col">
           <p className=" mb-4 text-xl font-semibold">Support</p>
           <Link href={"/contact-us"}>Contact Us</Link>
@@ -62,6 +62,7 @@ const Footer = () => {
           </Link>
           <Link href={"/return-policy"}>Return Policy</Link>
           <Link href={"/shipping-and-delivery"}>Shipping and Delivery</Link>
+          <Link href={"/pricing-policy"}>Pricing Policy</Link>
         </div>
         <div className="flex flex-col">
           <p className=" mb-4 text-xl font-semibold">Contact US</p>
