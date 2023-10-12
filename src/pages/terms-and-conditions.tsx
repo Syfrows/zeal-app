@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import Link from "next/link";
 
 const TermsConditions = () => {
   return (
@@ -61,9 +62,9 @@ const TermsConditions = () => {
           <h2 className="mb-2 text-xl font-bold">5. Return Policy:</h2>
           <p>
             Our return policy is available{" "}
-            <a href="/return-policy" className="text-blue-500">
+            <Link href="/return-policy" className="text-blue-500">
               here
-            </a>
+            </Link>
             . Please review it for information on returns, exchanges, and
             refunds.
           </p>
@@ -82,9 +83,9 @@ const TermsConditions = () => {
           <p>
             User data is collected in accordance with our Privacy Policy, which
             can be found{" "}
-            <a href="/privacy-and-policy" className="text-blue-500">
+            <Link href="/privacy-and-policy" className="text-blue-500">
               here
-            </a>
+            </Link>
             .
           </p>
         </div>

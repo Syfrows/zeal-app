@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import Link from "next/link";
 import React from "react";
 
 const CancellationRefundPolicy = () => {
@@ -30,9 +31,9 @@ const CancellationRefundPolicy = () => {
           <p>
             Refunds will be processed according to our Return Policy. Please
             review it{" "}
-            <a href="/return-policy" className="text-blue-500">
+            <Link href="/return-policy" className="text-blue-500">
               here
-            </a>
+            </Link>
             .
           </p>
         </div>
