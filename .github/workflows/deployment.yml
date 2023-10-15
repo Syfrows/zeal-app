@@ -30,35 +30,34 @@ jobs:
       - name: Check for Changes in package.json
         id: check-package-json
         run: |
-          git log -n 1 --name-only --format=format: | grep package.json
+          echo "PACKAGE_CHANGED=$(git log -n 1 --name-only --format=format: | grep package.json)" >> "$GITHUB_OUTPUT"
 
       - name: Run NPM Script
         run: |
-          if [[ "${{ steps.check-package-json.outputs.stdout }}" == "package.json" ]]; then
+          if [[ "${{ steps.check-package-json.outputs.PACKAGE_CHANGED}}" == "package.json" ]]; then
             npm run prod-nm
           else
             npm run prod
           fi
-          pwd
-          ls
 
-      - name: Upload to Server via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: sg1-ts106.a2hosting.com
-          username: relaxzea
-          password: ${{ secrets.PASSWORD }}
-          local-dir: /archive/
-          server-dir: /home/relaxzea/app.relaxzeal.com/
-
-      - name: Run Command on Server via SSH
-        uses: appleboy/ssh-action@v1.0.0
+      - name:  Upload archive to Server
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: sg1-ts106.a2hosting.com
           username: relaxzea
           password: ${{ secrets.PASSWORD }}
           port: 7822
-          script: |
-            cd app.relaxzeal.com
-            tar -xvf zeal-app.tar.gz
-            pkill -u relaxzea
+          source: "zeal-app.tar.gz"
+          target: /home/relaxzea/app.relaxzeal.com/
+
+        - name: Run Command on Server via SSH
+          uses: appleboy/ssh-action@v1.0.0
+          with:
+            host: sg1-ts106.a2hosting.com
+            username: relaxzea
+            password: ${{ secrets.PASSWORD }}
+            port: 7822
+            script: |
+              cd app.relaxzeal.com
+              tar -xvf zeal-app.tar.gz
+              pkill -u relaxzea
