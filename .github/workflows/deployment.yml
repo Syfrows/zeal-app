@@ -27,25 +27,16 @@ jobs:
           echo "NEXT_PUBLIC_API_URL=https://api.relaxzeal.com/shop-api" >> .env
           echo "NEXT_PUBLIC_RAZORPAY_ID=rzp_test_9hxZ5fXHRRjg0Y" >> .env
 
-      - name: Check for Changes in package.json
-        id: check-package-json
-        run: |
-          echo "PACKAGE_CHANGED=$(git log -n 1 --name-only --format=format: | grep package.json)" >> "$GITHUB_OUTPUT"
-
       - name: Run NPM Script
         run: |
-          if [[ "${{ steps.check-package-json.outputs.PACKAGE_CHANGED}}" == "package.json" ]]; then
-            npm run prod-nm
-          else
-            npm run prod
-          fi
+          npm run prod
 
       - name:  Upload archive to Server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: sg1-ts106.a2hosting.com
           username: relaxzea
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           port: 7822
           source: "zeal-app.tar.gz"
           target: /home/relaxzea/app.relaxzeal.com/
@@ -55,10 +46,9 @@ jobs:
         with:
           host: sg1-ts106.a2hosting.com
           username: relaxzea
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           port: 7822
           script: |
             cd app.relaxzeal.com
             tar -xvf zeal-app.tar.gz
             pkill -u relaxzea
-            
