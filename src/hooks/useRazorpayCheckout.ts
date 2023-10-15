@@ -36,7 +36,7 @@ const useRazorpayCheckout = (checkout: CheckoutOptions) => {
       key: process.env.NEXT_PUBLIC_RAZORPAY_ID || "",
       amount: checkout.amount,
       currency: "INR",
-      name: "Zeal",
+      name: "ZealWear",
       order_id: orderId,
       handler: checkout.onSucess,
       modal: {

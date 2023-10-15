@@ -1,0 +1,63 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Check for Changes in package.json
+        id: check-package-json
+        run: |
+          echo "::set-output name=changed::$(git diff --name-only HEAD^ HEAD | grep package.json)"
+
+      - name: Modify .env Variable
+        run: |
+          rm .env
+          echo "NEXT_PUBLIC_API_URL=https://api.relaxzeal.com/shop-api" >> .env
+          echo "NEXT_PUBLIC_RAZORPAY_ID=rzp_test_9hxZ5fXHRRjg0Y" >> .env
+
+      - name: Run NPM Script
+        run: |
+          if [[ "${{ steps.check-package-json.outputs.changed }}" == "package.json" ]]; then
+            npm run prod-nm
+          else
+            npm run prod
+          fi
+
+      - name: Upload to Server via FTP
+        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+        with:
+          server: sg1-ts106.a2hosting.com
+          username: relaxzea
+          password: ${{ secrets.PASSWORD }}
+          local-dir: ./zeal-app.tar.gz
+          remote-dir: /home/relaxzea/app.relaxzeal.com/
+
+      - name: Run Command on Server via SSH
+        uses: appleboy/ssh-action@v0.2.4
+        with:
+          host: sg1-ts106.a2hosting.com
+          username: relaxzea
+          password: ${{ secrets.PASSWORD }}
+          port: 7822
+          script: |
+            !/bin/bash
+            cd app.relaxzeal.com
+            tar -xvf zeal-app.tar.gz
+            pkill -u relaxzea
