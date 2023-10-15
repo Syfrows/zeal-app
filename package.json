@@ -10,8 +10,8 @@
     "prepare": "husky install",
     "compile": "graphql-codegen",
     "watch": "graphql-codegen -w",
-    "prod": "npm run build && tar -czvf zeal-app.tar.gz .next server.js public next.config.js",
-    "prod-nm": "rm -r node_modules && npm i && npm run build && tar -czvf zeal-app.tar.gz .next server.js public next.config.js node_modules"
+    "prod": "npm run build && mkdir archive && tar -czvf archive/zeal-app.tar.gz .next server.js public next.config.js",
+    "prod-nm": "npm run build && mkdir archive && tar -czvf zeal-app.tar.gz .next server.js public next.config.js node_modules"
   },
   "dependencies": {
     "@apollo/client": "^3.7.15",

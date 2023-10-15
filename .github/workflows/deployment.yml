@@ -48,7 +48,7 @@ jobs:
           server: sg1-ts106.a2hosting.com
           username: relaxzea
           password: ${{ secrets.PASSWORD }}
-          local-dir: /zeal-app.tar.gz
+          local-dir: /archive/
           server-dir: /home/relaxzea/app.relaxzeal.com/
 
       - name: Run Command on Server via SSH
