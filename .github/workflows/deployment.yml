@@ -36,7 +36,6 @@ jobs:
         with:
           host: sg1-ts106.a2hosting.com
           username: relaxzea
-          passphrase: ""
           key: ${{ secrets.KEY }}
           port: 7822
           source: "zeal-app.tar.gz"
@@ -47,7 +46,6 @@ jobs:
         with:
           host: sg1-ts106.a2hosting.com
           username: relaxzea
-          passphrase: ""
           key: ${{ secrets.KEY }}
           port: 7822
           script: |
