@@ -50,14 +50,15 @@ jobs:
           source: "zeal-app.tar.gz"
           target: /home/relaxzea/app.relaxzeal.com/
 
-        - name: Run Command on Server via SSH
-          uses: appleboy/ssh-action@v1.0.0
-          with:
-            host: sg1-ts106.a2hosting.com
-            username: relaxzea
-            password: ${{ secrets.PASSWORD }}
-            port: 7822
-            script: |
-              cd app.relaxzeal.com
-              tar -xvf zeal-app.tar.gz
-              pkill -u relaxzea
+      - name: Run Command on Server via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: sg1-ts106.a2hosting.com
+          username: relaxzea
+          password: ${{ secrets.PASSWORD }}
+          port: 7822
+          script: |
+            cd app.relaxzeal.com
+            tar -xvf zeal-app.tar.gz
+            pkill -u relaxzea
+            
