@@ -34,13 +34,11 @@ jobs:
 
       - name: Run NPM Script
         run: |
-          if [[ "${{ steps.check-package-json.outputs.stdout }}" == "package.json" ]]; then
+          if [[ steps.check-package-json.outputs.stdout == "package.json" ]]; then
             npm run prod-nm
           else
             npm run prod
           fi
-          pwd
-          ls
 
       - name: Upload to Server via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -48,7 +46,7 @@ jobs:
           server: sg1-ts106.a2hosting.com
           username: relaxzea
           password: ${{ secrets.PASSWORD }}
-          local-dir: /archive/
+          local-dir: archive/
           server-dir: /home/relaxzea/app.relaxzeal.com/
 
       - name: Run Command on Server via SSH
