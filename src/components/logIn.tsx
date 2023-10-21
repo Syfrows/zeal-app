@@ -2,7 +2,10 @@ import { CurrentUser, InvalidCredentialsError } from "@/__generated__/graphql";
 import { useAuth } from "@/context/AuthContext";
 import { LOG_IN } from "@/graphql/accounts";
 import { useMutation } from "@apollo/client";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 
@@ -22,6 +25,7 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
   const [inputs, setInputs] = useState(intialState);
   const [errors, setErrors] = useState(intialState);
   const [loginError, setLoginError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { setIsLoggedIn } = useAuth();
 
   const [logIn, { data, loading, error }] = useMutation(LOG_IN, {
@@ -79,11 +83,24 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
         id="outlined-basic"
         label="Password"
         variant="outlined"
-        type="password"
+        type={showPassword ? "text" : "password"}
         value={inputs.password}
         onChange={(event) =>
           setInputs({ ...inputs, password: event.target.value })
         }
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                edge="end"
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
       <p className=" text-end text-slate-500">Forgot Password?</p>
       <button

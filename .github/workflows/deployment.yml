@@ -7,6 +7,7 @@ on:
 
 jobs:
   deploy:
+    name: Build & Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -21,17 +22,26 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Modify .env Variable
+      - name: Replace Enviroment variables
         run: |
           rm .env
           echo "NEXT_PUBLIC_API_URL=https://api.relaxzeal.com/shop-api" >> .env
           echo "NEXT_PUBLIC_RAZORPAY_ID=rzp_test_9hxZ5fXHRRjg0Y" >> .env
 
-      - name: Run NPM Script
+      - name: Check For New Node Module
+        id: check-new-node-module
         run: |
-          npm run prod
+          echo "NEW_NODE_MODULE=$(git diff --name-only $GITHUB_SHA^ $GITHUB_SHA | grep 'package-lock.json')" >> "$GITHUB_OUTPUT"
 
-      - name:  Upload archive to Server
+      - name: Build & Package
+        run: |
+          if [[ "${{ steps.check-new-node-module.outputs.NEW_NODE_MODULE}}" == "package-lock.json" ]]; then
+            npm run prod-nm
+          else
+            npm run prod
+          fi
+
+      - name: Upload Package To Server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: sg1-ts106.a2hosting.com
@@ -41,7 +51,7 @@ jobs:
           source: "zeal-app.tar.gz"
           target: /home/relaxzea/app.relaxzeal.com/
 
-      - name: Run Command on Server via SSH
+      - name: Extract & Start Application
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: sg1-ts106.a2hosting.com
@@ -52,3 +62,4 @@ jobs:
             cd app.relaxzeal.com
             tar -xvf zeal-app.tar.gz
             pkill -u relaxzea
+            curl --max-time 1 https://api.relaxzeal.com/worker/

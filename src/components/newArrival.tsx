@@ -51,6 +51,10 @@ const NewArrival = () => {
 
   const middleIndex = screenSize.width < 640 ? 1 : 2;
 
+  if (products?.length <= 0) {
+    return <></>;
+  }
+
   return (
     <div className="flex flex-col items-center text-center sm:mb-16">
       <p className=" mb-5 text-4xl font-semibold">New Arrival</p>

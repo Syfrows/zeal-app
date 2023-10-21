@@ -66,7 +66,7 @@ const Footer = () => {
         </div>
         <div className="flex flex-col">
           <p className=" mb-4 text-xl font-semibold">Contact US</p>
-          <Link href={"tel:9923088128"}>+91 7057923102</Link>
+          <Link href={"tel:+91 9823144128"}>+91 9823144128</Link>
           <Link href={"mailto:info@relaxzeal.com"}>zeal@relaxzeal.com</Link>
           <address>
             344/345,Narhari Enclave,
