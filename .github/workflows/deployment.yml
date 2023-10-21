@@ -51,7 +51,7 @@ jobs:
           source: "zeal-app.tar.gz"
           target: /home/relaxzea/app.relaxzeal.com/
 
-      - name: Extract & Start Application
+      - name: Extract Application
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: sg1-ts106.a2hosting.com
@@ -62,4 +62,13 @@ jobs:
             cd app.relaxzeal.com
             tar -xvf zeal-app.tar.gz
             pkill -u relaxzea
-            curl --max-time 1 https://api.relaxzeal.com/worker/ &> /dev/null
+
+      - name: Start Application
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: sg1-ts106.a2hosting.com
+          username: relaxzea
+          key: ${{ secrets.KEY }}
+          port: 7822
+          script: |
+            curl --max-time 1 https://api.relaxzeal.com/worker/
