@@ -32,16 +32,21 @@ const NavBar = () => {
             </button>
           )}
           <button
+            className={isLoggedIn ? "" : "max-sm:hidden"}
             onClick={() =>
               isLoggedIn ? router.push("/cart") : setModalVisibilty(true)
             }
           >
             <CartIcon width="23" height="19" color="black" />
           </button>
-          <button onClick={() => router.push("/wishlist")}>
+          <button
+            className={isLoggedIn ? "" : "max-sm:hidden"}
+            onClick={() => router.push("/wishlist")}
+          >
             <WishListIcon width="25" height="19" color="black" />
           </button>
           <button
+            className={isLoggedIn ? "" : "max-sm:hidden"}
             onClick={() =>
               isLoggedIn ? router.push("/my-orders") : setModalVisibilty(true)
             }

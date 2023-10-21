@@ -32,7 +32,6 @@ const Search = () => {
               borderColor: "#023047",
             },
         }}
-        slotProps={{ popupIndicator: { className: "hidden" } }}
         getOptionLabel={(option) => option.productVariantName}
         filterOptions={(x) => x}
         options={options}

@@ -1,7 +1,10 @@
 import { PasswordValidationError, Success } from "@/__generated__/graphql";
 import { SIGN_UP } from "@/graphql/accounts";
 import { useMutation } from "@apollo/client";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 
@@ -27,6 +30,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const SignUp = ({ setSelectedTab }: any) => {
   const [inputs, setInputs] = useState(intialState);
   const [errors, setErrors] = useState(intialState);
+  const [showPassword, setShowPassword] = useState(false);
   const [signUpError, setSignUpError] = useState("");
 
   const [signUp, { data, loading, error }] = useMutation(SIGN_UP, {
@@ -143,13 +147,26 @@ const SignUp = ({ setSelectedTab }: any) => {
         id="outlined-basic"
         label="Password"
         variant="outlined"
-        type="password"
+        type={showPassword ? "text" : "password"}
         value={inputs.password}
         error={!!errors.password}
         helperText={errors.password}
         onChange={(event) =>
           setInputs({ ...inputs, password: event.target.value })
         }
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                edge="end"
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
       <p className=" text-end text-slate-500"></p>
       <button
