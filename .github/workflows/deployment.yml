@@ -71,4 +71,4 @@ jobs:
           key: ${{ secrets.KEY }}
           port: 7822
           script: |
-            curl --max-time 1 https://api.relaxzeal.com/worker/
+            curl --max-time 1 https://api.relaxzeal.com/worker/ &> /dev/null
