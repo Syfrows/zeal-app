@@ -62,4 +62,4 @@ jobs:
             cd app.relaxzeal.com
             tar -xvf zeal-app.tar.gz
             pkill -u relaxzea
-            curl --max-time 1 https://api.relaxzeal.com/worker/
+            curl --max-time 1 https://api.relaxzeal.com/worker/ &> /dev/null
