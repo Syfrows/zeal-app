@@ -137,9 +137,7 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
         CREATE AN ACCOUNT
       </button>
 
-      <div id="otpless" custom="true">
-        OTPLESS
-      </div>
+      <div id="otpless">OTPLESS</div>
     </div>
   );
 };
