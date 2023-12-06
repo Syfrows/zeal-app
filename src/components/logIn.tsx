@@ -62,6 +62,22 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
     logIn();
   };
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://otpless.com/auth.js";
+    script.id = "otplessIdScript";
+    document.body.appendChild(script);
+
+    window.otpless = (otplessUser) => {
+      alert(JSON.stringify(otplessUser));
+    };
+    return () => {
+      console.log("home is unmounting");
+      const divid = document.getElementById("otplessIdScript");
+      document.body.removeChild(divid);
+    };
+  }, []);
+
   const enabledLogin =
     Object.values(errors).every((x) => !x) &&
     Object.values(inputs).every((x) => x);
@@ -120,6 +136,10 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
       >
         CREATE AN ACCOUNT
       </button>
+
+      <div id="otpless" custom="true">
+        OTPLESS
+      </div>
     </div>
   );
 };
