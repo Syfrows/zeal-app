@@ -68,12 +68,12 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
     script.id = "otplessIdScript";
     document.body.appendChild(script);
 
-    window.otpless = (otplessUser) => {
+    (window as any).otpless = (otplessUser: any) => {
       alert(JSON.stringify(otplessUser));
     };
     return () => {
       console.log("home is unmounting");
-      const divid = document.getElementById("otplessIdScript");
+      const divid: any = document.getElementById("otplessIdScript");
       document.body.removeChild(divid);
     };
   }, []);
