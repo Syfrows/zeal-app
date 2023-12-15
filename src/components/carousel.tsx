@@ -47,7 +47,7 @@ const Carousel = () => {
           className={`absolute h-full w-full ${
             currentSlide === index ? "z-10 opacity-100" : "opacity-0"
           } transition-opacity duration-1000`}
-          onClick={() => router.push(`/products?filter=${slide.id}`)}
+          onClick={() => router.push(`/products`)}
         >
           <Image
             src={slide.featuredAsset?.preview || ""}

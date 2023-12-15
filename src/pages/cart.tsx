@@ -98,7 +98,12 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
                 <Remove />
               </button>
               <span className="border-2 border-slate-300 px-2 py-1">
-                {item.quantity}
+                <input
+                  onChange={(e) => updateOrder(Number(e.currentTarget.value))}
+                  value={item.quantity}
+                  type="number"
+                  className="w-12 text-center [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                />{" "}
               </span>
               <button onClick={() => updateOrder(item.quantity + 1)}>
                 <Add />

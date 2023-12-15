@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useSearchParams } from "next/navigation";
-import { discount, formatPrice } from "@/helpers/helper";
+import { StockLevel, discount, formatPrice } from "@/helpers/helper";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { ProductVariant } from "@/__generated__/graphql";
 import placeHolder from "../assets/placeHolder.png";
@@ -17,6 +17,7 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
     placeHolder;
   const rating = item.product.customFields?.reviewRating || 0;
   const mrp = item.customFields?.MRP || 0;
+  const isItemOutOfStock = item.stockLevel === StockLevel.OutOfStock;
   return (
     <div className="max-w-[360px] overflow-hidden rounded-lg shadow-lg">
       <Image
@@ -57,7 +58,15 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
               )}
             </span>
           </p>
-          <button className="text-orange-600 underline">Buy Now</button>
+          <button
+            className={
+              isItemOutOfStock
+                ? "text-sm text-gray-600"
+                : "text-orange-600 underline"
+            }
+          >
+            {isItemOutOfStock ? "Out of Stock" : "Buy Now"}
+          </button>
         </div>
       </div>
     </div>

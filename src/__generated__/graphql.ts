@@ -4237,6 +4237,7 @@ export type GetProductsByCollectionCustomQuery = {
         __typename?: "ProductVariant";
         name: string;
         priceWithTax: any;
+        stockLevel: string;
         customFields?: {
           __typename?: "ProductVariantCustomFields";
           MRP?: number | null;
@@ -7710,6 +7711,10 @@ export const GetProductsByCollectionCustomDocument = {
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "priceWithTax" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "stockLevel" },
                             },
                             {
                               kind: "Field",

@@ -158,8 +158,8 @@ const ProductDetails = () => {
   };
 
   const mrp = selectedVariant.customFields?.MRP || 0;
-  const disableAddtoCart =
-    addToCartLoading || selectedVariant.stockLevel === StockLevel.OutOfStock;
+  const isItemOutOfStock = selectedVariant.stockLevel === StockLevel.OutOfStock;
+  const disableAddtoCart = addToCartLoading || isItemOutOfStock;
   const rating = product.customFields?.reviewRating || 0;
   return (
     <Layout>
@@ -252,7 +252,12 @@ const ProductDetails = () => {
                   <Remove />
                 </button>
                 <span className="border-2 border-slate-300 px-2 py-1">
-                  {quantity}
+                  <input
+                    onChange={(e) => setQuantity(Number(e.currentTarget.value))}
+                    value={quantity}
+                    type="number"
+                    className="w-12 text-center [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  />
                 </span>
                 <button onClick={() => setQuantity(quantity + 1)}>
                   <Add />
@@ -266,12 +271,17 @@ const ProductDetails = () => {
               onClick={onAddToCart}
               disabled={disableAddtoCart}
             >
-              {addToCartLoading ? (
-                <CircularProgress color="inherit" size={16} className="me-2" />
-              ) : (
-                <Add />
-              )}
-              Add to Cart
+              {!isItemOutOfStock &&
+                (addToCartLoading ? (
+                  <CircularProgress
+                    color="inherit"
+                    size={16}
+                    className="me-2"
+                  />
+                ) : (
+                  <Add />
+                ))}
+              {isItemOutOfStock ? "Out of Stock" : "Add to Cart"}
             </button>
           </div>
           {productOptions?.map((optionGroup, index) => {
@@ -348,10 +358,6 @@ const ProductDetails = () => {
             <div className="flex">
               <p className="w-1/4 text-gray-500">Stock:</p>
               <p className="w-3/4">{selectedVariant.stockLevel}</p>
-            </div>
-            <div className="flex">
-              <p className="w-1/4 text-gray-500">Material:</p>
-              <p className="w-3/4">100% Cotton</p>
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ export const PRODUCTS_BY_COLLECTION = gql(`#graphql
         items {
           name
           priceWithTax
+          stockLevel
           customFields {
             MRP
           }
