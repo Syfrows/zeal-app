@@ -3824,11 +3824,7 @@ export type HeroSectionQuery = {
       __typename?: "Collection";
       id: string;
       name: string;
-      featuredAsset?: {
-        __typename?: "Asset";
-        name: string;
-        preview: string;
-      } | null;
+      assets: Array<{ __typename?: "Asset"; name: string; preview: string }>;
     }> | null;
   } | null;
 };
@@ -5509,7 +5505,7 @@ export const HeroSectionDocument = {
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "featuredAsset" },
+                        name: { kind: "Name", value: "assets" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [

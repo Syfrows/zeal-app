@@ -61,7 +61,7 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
           <button
             className={
               isItemOutOfStock
-                ? "text-sm text-gray-600"
+                ? "text-sm text-red-600 underline"
                 : "text-orange-600 underline"
             }
           >

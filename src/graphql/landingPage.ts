@@ -71,7 +71,7 @@ export const HERO_SECTION = gql(`#graphql
       children {
         id
         name
-        featuredAsset {
+        assets {
           name
           preview
         }
