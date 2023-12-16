@@ -29,6 +29,7 @@ jobs:
           rm .env
           echo "NEXT_PUBLIC_API_URL=https://api.relaxzeal.com/shop-api" >> .env
           echo "NEXT_PUBLIC_RAZORPAY_ID=rzp_test_9hxZ5fXHRRjg0Y" >> .env
+          echo "NEXT_PUBLIC_GOOGLE_CLIENT_ID=128471393617-btvsrj3jc6me2dujj1on1c99spgmr02h.apps.googleusercontent.com" >> .env
 
       - name: Check For New Node Module
         id: check-new-node-module

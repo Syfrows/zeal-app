@@ -37,11 +37,11 @@ const SignUp = ({ setSelectedTab }: any) => {
     variables: {
       input: {
         emailAddress: inputs.emailAddress,
-        title: inputs.title,
+        title: "",
         phoneNumber: inputs.phoneNumber,
         password: inputs.password,
         firstName: inputs.title.split(" ")[0],
-        lastName: inputs.title.split(" ")[1],
+        lastName: inputs.title.split(" ")[1] || "",
       },
     },
   });

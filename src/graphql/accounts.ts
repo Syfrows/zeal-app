@@ -77,6 +77,28 @@ export const LOG_IN = gql(`#graphql
   }
 `);
 
+export const AUTHENTICATE = gql(`#graphql
+  mutation Authenticate($token: String!) {
+      authenticate(input: {
+        google: { token: $token }
+      }) {
+      ...on CurrentUser {
+          id
+          identifier
+      }
+      ...on InvalidCredentialsError{
+        errorCode
+        message
+        authenticationError
+      }
+      ...on NotVerifiedError{
+        errorCode
+        message
+      }
+    }
+  }
+`);
+
 export const LOG_OUT = gql(`#graphql
   mutation logOut{
     logout {

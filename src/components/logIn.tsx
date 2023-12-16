@@ -1,12 +1,13 @@
 import { CurrentUser, InvalidCredentialsError } from "@/__generated__/graphql";
 import { useAuth } from "@/context/AuthContext";
-import { LOG_IN } from "@/graphql/accounts";
+import { AUTHENTICATE, LOG_IN } from "@/graphql/accounts";
 import { useMutation } from "@apollo/client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
+import { GoogleLogin } from "@react-oauth/google";
 import { useEffect, useState } from "react";
 
 interface Data {
@@ -35,6 +36,8 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
     },
   });
 
+  const [googleLogIn, googleLogInData] = useMutation(AUTHENTICATE);
+
   useEffect(() => {
     setErrors((prevErrors) => {
       return {
@@ -48,15 +51,16 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
   }, [inputs]);
 
   useEffect(() => {
-    if ((data?.login as CurrentUser)?.id) {
+    const logInData = data?.login || googleLogInData?.data?.authenticate;
+    if ((logInData as CurrentUser)?.id) {
       setIsLoggedIn(true);
       setVisibilty(false);
     }
-    if (data?.login.__typename !== "CurrentUser") {
-      const error = data?.login as InvalidCredentialsError;
+    if (logInData?.__typename !== "CurrentUser") {
+      const error = logInData as InvalidCredentialsError;
       setLoginError(error?.message);
     }
-  }, [data?.login, setIsLoggedIn, setVisibilty]);
+  }, [data, setIsLoggedIn, setVisibilty, googleLogInData]);
 
   const onLogIn = () => {
     logIn();
@@ -120,6 +124,15 @@ const LogIn = ({ setSelectedTab, setVisibilty }: any) => {
       >
         CREATE AN ACCOUNT
       </button>
+      <div className=" self-center">
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            googleLogIn({
+              variables: { token: credentialResponse?.credential || "" },
+            });
+          }}
+        />
+      </div>
     </div>
   );
 };

@@ -126,6 +126,7 @@ export enum AssetType {
 }
 
 export type AuthenticationInput = {
+  google?: InputMaybe<GoogleAuthInput>;
   native?: InputMaybe<NativeAuthInput>;
 };
 
@@ -1153,6 +1154,10 @@ export enum GlobalFlag {
   Inherit = "INHERIT",
   True = "TRUE",
 }
+
+export type GoogleAuthInput = {
+  token: Scalars["String"]["input"];
+};
 
 /** Returned when attempting to set the Customer on a guest checkout when the configured GuestCheckoutStrategy does not allow it. */
 export type GuestCheckoutError = ErrorResult & {
@@ -3650,6 +3655,27 @@ export type LogInMutation = {
       };
 };
 
+export type AuthenticateMutationVariables = Exact<{
+  token: Scalars["String"]["input"];
+}>;
+
+export type AuthenticateMutation = {
+  __typename?: "Mutation";
+  authenticate:
+    | { __typename?: "CurrentUser"; id: string; identifier: string }
+    | {
+        __typename?: "InvalidCredentialsError";
+        errorCode: ErrorCode;
+        message: string;
+        authenticationError: string;
+      }
+    | {
+        __typename?: "NotVerifiedError";
+        errorCode: ErrorCode;
+        message: string;
+      };
+};
+
 export type LogOutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogOutMutation = {
@@ -4860,6 +4886,138 @@ export const LogInDocument = {
     },
   ],
 } as unknown as DocumentNode<LogInMutation, LogInMutationVariables>;
+export const AuthenticateDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "Authenticate" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "token" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "authenticate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "google" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "token" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "token" },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "CurrentUser" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "identifier" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "InvalidCredentialsError" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "authenticationError" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "NotVerifiedError" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AuthenticateMutation,
+  AuthenticateMutationVariables
+>;
 export const LogOutDocument = {
   kind: "Document",
   definitions: [

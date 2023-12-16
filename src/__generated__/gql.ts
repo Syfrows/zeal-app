@@ -19,6 +19,8 @@ const documents = {
     types.VerifyAccountDocument,
   "#graphql\n  mutation logIn($username: String!, $password: String! ) {\n    login(username: $username, password: $password){\n      ...on CurrentUser{\n        id\n        identifier\n      }\n      ...on InvalidCredentialsError{\n        errorCode\n        message\n        authenticationError\n      }\n      ...on NativeAuthStrategyError{\n        errorCode\n        message\n      }\n      ...on NotVerifiedError{\n        errorCode\n        message\n      }\n\n    }\n  }\n":
     types.LogInDocument,
+  "#graphql\n  mutation Authenticate($token: String!) {\n      authenticate(input: {\n        google: { token: $token }\n      }) {\n      ...on CurrentUser {\n          id\n          identifier\n      }\n      ...on InvalidCredentialsError{\n        errorCode\n        message\n        authenticationError\n      }\n      ...on NotVerifiedError{\n        errorCode\n        message\n      }\n    }\n  }\n":
+    types.AuthenticateDocument,
   "#graphql\n  mutation logOut{\n    logout {\n      success\n    }\n  }\n":
     types.LogOutDocument,
   "#graphql\n  query getAccountInfo{\n    activeCustomer {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n":
@@ -109,6 +111,12 @@ export function gql(
 export function gql(
   source: "#graphql\n  mutation logIn($username: String!, $password: String! ) {\n    login(username: $username, password: $password){\n      ...on CurrentUser{\n        id\n        identifier\n      }\n      ...on InvalidCredentialsError{\n        errorCode\n        message\n        authenticationError\n      }\n      ...on NativeAuthStrategyError{\n        errorCode\n        message\n      }\n      ...on NotVerifiedError{\n        errorCode\n        message\n      }\n\n    }\n  }\n"
 ): (typeof documents)["#graphql\n  mutation logIn($username: String!, $password: String! ) {\n    login(username: $username, password: $password){\n      ...on CurrentUser{\n        id\n        identifier\n      }\n      ...on InvalidCredentialsError{\n        errorCode\n        message\n        authenticationError\n      }\n      ...on NativeAuthStrategyError{\n        errorCode\n        message\n      }\n      ...on NotVerifiedError{\n        errorCode\n        message\n      }\n\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "#graphql\n  mutation Authenticate($token: String!) {\n      authenticate(input: {\n        google: { token: $token }\n      }) {\n      ...on CurrentUser {\n          id\n          identifier\n      }\n      ...on InvalidCredentialsError{\n        errorCode\n        message\n        authenticationError\n      }\n      ...on NotVerifiedError{\n        errorCode\n        message\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  mutation Authenticate($token: String!) {\n      authenticate(input: {\n        google: { token: $token }\n      }) {\n      ...on CurrentUser {\n          id\n          identifier\n      }\n      ...on InvalidCredentialsError{\n        errorCode\n        message\n        authenticationError\n      }\n      ...on NotVerifiedError{\n        errorCode\n        message\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
