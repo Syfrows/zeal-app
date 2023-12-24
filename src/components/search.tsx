@@ -16,6 +16,7 @@ const Search = () => {
   const router = useRouter();
   const [searchProducts] = useLazyQuery(SEARCH);
   const [options, setOptions] = useState<Product[]>([]);
+  const [searchText, setSearchText] = useState("");
 
   const onSearchCompleted = (data: SearchQuery) => {
     setOptions(data.search.items);
@@ -35,13 +36,14 @@ const Search = () => {
         getOptionLabel={(option) => option.productVariantName}
         filterOptions={(x) => x}
         options={options}
-        noOptionsText="No products"
+        noOptionsText={searchText ? "Product not found." : "Type to search..."}
         onChange={(_event: any, product: Product | null) => {
           router.push(
             `/product-details?name=${product?.slug}&variant=${product?.productVariantName}`
           );
         }}
         onInputChange={(_event, newInputValue) => {
+          setSearchText(newInputValue);
           newInputValue
             ? searchProducts({
                 variables: { input: { term: newInputValue } },
