@@ -29,6 +29,7 @@ import placeHolder from "../assets/placeHolder.png";
 import useRazorpayCheckout from "@/hooks/useRazorpayCheckout";
 import { OrderState } from "@/helpers/order";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 interface ProductProps {
   product: OrderLine;
@@ -177,7 +178,7 @@ const OrderConfirmation = () => {
       <div className="space-y-4 xl:px-32 xl:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <ArrowBack />
+            <ArrowBack onClick={() => router.back()} />
             <p className="ms-4 text-2xl font-semibold">CONFIRM YOUR ORDER</p>
           </div>
           {/* <button
@@ -266,8 +267,23 @@ const OrderConfirmation = () => {
           </button>
           <p className="my-4 text-center font-semibold">
             By placing order you’re agreeing to our
-            <span className="text-red-400"> Terms and Conditions</span> and
-            <span className="text-red-400"> Privacy Policy</span>
+            <Link
+              className="text-red-400"
+              href={"/terms-and-conditions"}
+              target="_blank"
+            >
+              {" "}
+              Terms and Conditions
+            </Link>{" "}
+            and
+            <Link
+              className="text-red-400"
+              href={"/privacy-and-policy"}
+              target="_blank"
+            >
+              {" "}
+              Privacy Policy
+            </Link>
           </p>
         </div>
       </div>

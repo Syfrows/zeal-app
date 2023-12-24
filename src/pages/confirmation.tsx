@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import placeHolder from "../assets/placeHolder.png";
+import Link from "next/link";
 
 interface ProductProps {
   item: OrderLine;
@@ -104,8 +105,23 @@ const Confirmation = () => {
           </button>
           <p className="my-4 text-center font-semibold">
             By placing order you’re agreeing to our
-            <span className="text-red-400"> Terms and Conditions</span> and
-            <span className="text-red-400"> Privacy Policy</span>
+            <Link
+              className="text-red-400"
+              href={"/terms-and-conditions"}
+              target="_blank"
+            >
+              {" "}
+              Terms and Conditions
+            </Link>{" "}
+            and
+            <Link
+              className="text-red-400"
+              href={"/privacy-and-policy"}
+              target="_blank"
+            >
+              {" "}
+              Privacy Policy
+            </Link>
           </p>
         </div>
       </div>
