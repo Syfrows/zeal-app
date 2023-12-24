@@ -152,7 +152,7 @@ const Address = () => {
       <div className="space-y-4 xl:px-32 xl:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <ArrowBack />
+            <ArrowBack onClick={() => router.back()} />
             <p className="ms-4 text-2xl font-semibold">ADDRESS DETAILS</p>
           </div>
           <ContinueButton />

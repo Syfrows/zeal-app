@@ -14,7 +14,6 @@ interface Address {
   firstName: string;
   lastName: string;
   line1: string;
-  line2: string;
   postCode: string;
   city: string;
   state: string;
@@ -26,7 +25,6 @@ const intialState: Address = {
   firstName: "",
   lastName: "",
   line1: "",
-  line2: "",
   postCode: "",
   city: "",
   state: "",
@@ -60,7 +58,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
     setAddress((prev) => {
       return { ...prev, countryCode: value?.code || "" };
     });
-  }, [countries]);
+  }, [data]);
 
   useEffect(() => {
     if (createAddressData?.data) {
@@ -75,7 +73,6 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
         input: {
           fullName: address.firstName + " " + address.lastName,
           streetLine1: address.line1,
-          streetLine2: address.line2,
           postalCode: address.postCode,
           city: address.city,
           province: address.state,
@@ -128,22 +125,12 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
             </div>
             <TextField
               id="outlined-basic"
-              label="Address 1"
+              label="Address"
               variant="outlined"
-              placeholder="Address 1"
+              placeholder="Address"
               required
               onChange={(event) =>
                 setAddress({ ...address, line1: event.target.value })
-              }
-            />
-            <TextField
-              id="outlined-basic"
-              label="Address 2"
-              variant="outlined"
-              placeholder="Address 2"
-              required
-              onChange={(event) =>
-                setAddress({ ...address, line2: event.target.value })
               }
             />
             <div className="flex space-x-4">
@@ -182,7 +169,8 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
                   setSelectedCountry(value);
                   setAddress({ ...address, countryCode: value?.code || "" });
                 }}
-                value={selectedCountry}
+                value={selectedCountry?.label || ""}
+                isOptionEqualToValue={(option, value) => option.label === value}
                 className="w-1/2"
               />
               <TextField
