@@ -2,7 +2,7 @@ import { gql } from "@/__generated__/gql";
 
 export const GET_WISHLIST = gql(`#graphql
   query getWishList{
-    activeCustomer {
+    authenticatedUser {
       favorites {
         items {
           id

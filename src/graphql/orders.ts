@@ -2,7 +2,7 @@ import { gql } from "@/__generated__/gql";
 
 export const GET_ORDERS = gql(`#graphql
   query getOrders{
-    activeCustomer {
+    authenticatedUser {
       orders {
         items {
           id

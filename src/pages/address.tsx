@@ -84,7 +84,7 @@ const Address = () => {
   const isOrderWorkFlow = !!useSearchParams().get("order");
   const router = useRouter();
   const { loading, data, error, refetch } = useQuery(GET_ADDRESS);
-  const addresses = data?.activeCustomer?.addresses;
+  const addresses = data?.authenticatedUser?.addresses;
   const [selectedAddress, setSelectedAddress] = useState(
     addresses && addresses[0]
   );

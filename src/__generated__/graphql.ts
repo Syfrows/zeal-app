@@ -2959,6 +2959,8 @@ export type Query = {
    * query will once again return `null`.
    */
   activeOrder?: Maybe<Order>;
+  activeOrderCustom?: Maybe<Order>;
+  authenticatedUser?: Maybe<Customer>;
   /** An array of supported Countries */
   availableCountries: Array<Country>;
   /** Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is specified, an error will result. */
@@ -3687,7 +3689,7 @@ export type GetAccountInfoQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAccountInfoQuery = {
   __typename?: "Query";
-  activeCustomer?: {
+  authenticatedUser?: {
     __typename?: "Customer";
     title?: string | null;
     firstName: string;
@@ -3726,7 +3728,7 @@ export type GetAddressQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAddressQuery = {
   __typename?: "Query";
-  activeCustomer?: {
+  authenticatedUser?: {
     __typename?: "Customer";
     addresses?: Array<{
       __typename?: "Address";
@@ -3956,7 +3958,7 @@ export type ActiveOrderQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ActiveOrderQuery = {
   __typename?: "Query";
-  activeOrder?:
+  activeOrderCustom?:
     | ({ __typename?: "Order" } & {
         " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment };
       })
@@ -4128,7 +4130,7 @@ export type GetOrdersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetOrdersQuery = {
   __typename?: "Query";
-  activeCustomer?: {
+  authenticatedUser?: {
     __typename?: "Customer";
     orders: {
       __typename?: "OrderList";
@@ -4284,7 +4286,7 @@ export type GetWishListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetWishListQuery = {
   __typename?: "Query";
-  activeCustomer?: {
+  authenticatedUser?: {
     __typename?: "Customer";
     favorites: {
       __typename?: "FavoriteList";
@@ -5055,7 +5057,7 @@ export const GetAccountInfoDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "activeCustomer" },
+            name: { kind: "Name", value: "authenticatedUser" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -5202,7 +5204,7 @@ export const GetAddressDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "activeCustomer" },
+            name: { kind: "Name", value: "authenticatedUser" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -6097,7 +6099,7 @@ export const ActiveOrderDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "activeOrder" },
+            name: { kind: "Name", value: "activeOrderCustom" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -7278,7 +7280,7 @@ export const GetOrdersDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "activeCustomer" },
+            name: { kind: "Name", value: "authenticatedUser" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -7984,7 +7986,7 @@ export const GetWishListDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "activeCustomer" },
+            name: { kind: "Name", value: "authenticatedUser" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [

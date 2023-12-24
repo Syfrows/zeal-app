@@ -83,7 +83,7 @@ const OrderConfirmation = () => {
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("");
   const { data } = useQuery(ACTIVE_ORDER);
-  const activeOrders = data?.activeOrder as ActiveOrderFragment;
+  const activeOrders = data?.activeOrderCustom as ActiveOrderFragment;
   const products = activeOrders?.lines;
   const paymentMethodsData = useQuery(GET_PAYMENT_METHODS);
   const paymentMethods = paymentMethodsData.data?.eligiblePaymentMethods;

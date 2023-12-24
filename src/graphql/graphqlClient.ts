@@ -21,6 +21,14 @@ const afterwareLink = new ApolloLink((operation, forward) => {
       // server, we store it in localStorage
       localStorage.setItem(AUTH_TOKEN_KEY, authHeader);
     }
+    if (
+      response.errors &&
+      response.errors[0]?.extensions.code === "FORBIDDEN"
+    ) {
+      localStorage.clear();
+      localStorage.setItem("isSessionExpired", "true");
+      window.location.replace(window.location.origin);
+    }
     return response;
   });
 });

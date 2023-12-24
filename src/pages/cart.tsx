@@ -134,12 +134,12 @@ const Cart = () => {
   const router = useRouter();
   const { loading, error, data } = useQuery(ACTIVE_ORDER);
   const [activeOrder, setActiveOrder] = useState(
-    data?.activeOrder as ActiveOrderFragment
+    data?.activeOrderCustom as ActiveOrderFragment
   );
   const products = activeOrder?.lines;
 
   useEffect(
-    () => setActiveOrder(data?.activeOrder as ActiveOrderFragment),
+    () => setActiveOrder(data?.activeOrderCustom as ActiveOrderFragment),
     [data]
   );
 

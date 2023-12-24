@@ -82,7 +82,7 @@ const MyOrders = () => {
   const searchParams = useSearchParams();
   const isReturns = searchParams.get("isReturns");
   const { data } = useQuery(GET_ORDERS);
-  const ordersData = data?.activeCustomer?.orders.items;
+  const ordersData = data?.authenticatedUser?.orders.items;
   const orders = ordersData?.filter((x) =>
     isReturns
       ? x.state === OrderState.Cancelled

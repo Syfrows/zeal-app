@@ -100,7 +100,7 @@ const WishList = () => {
   const [isModalVisible, setModalVisibilty] = useState(false);
   const router = useRouter();
   const { data, error, loading, refetch } = useQuery(GET_WISHLIST);
-  const products = data?.activeCustomer?.favorites.items || [];
+  const products = data?.authenticatedUser?.favorites.items || [];
 
   return (
     <Layout>

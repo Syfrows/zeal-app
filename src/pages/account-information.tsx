@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 const AccountInformation = () => {
   const [value, setValue] = useState("yes");
   const { data } = useQuery(ACCOUNT_INFO);
-  const details = data?.activeCustomer;
+  const details = data?.authenticatedUser;
   const [inputs, setInputs] = useState<any>(details);
   const [updateAccountInfo, { loading }] = useMutation(UPDATE_ACCOUNT_INFO);
 

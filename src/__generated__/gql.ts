@@ -23,13 +23,13 @@ const documents = {
     types.AuthenticateDocument,
   "#graphql\n  mutation logOut{\n    logout {\n      success\n    }\n  }\n":
     types.LogOutDocument,
-  "#graphql\n  query getAccountInfo{\n    activeCustomer {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n":
+  "#graphql\n  query getAccountInfo{\n    authenticatedUser {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n":
     types.GetAccountInfoDocument,
   "#graphql\n  mutation updateAccountInfo($input: UpdateCustomerInput!){\n    updateCustomer(input: $input){\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n":
     types.UpdateAccountInfoDocument,
   "#graphql\n  mutation createCustomerAddress($input: CreateAddressInput!){\n    createCustomerAddress(input: $input) {\n        id\n    }\n  }\n":
     types.CreateCustomerAddressDocument,
-  "#graphql\n  query getAddress{\n    activeCustomer {\n      addresses {\n        id\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n":
+  "#graphql\n  query getAddress{\n    authenticatedUser {\n      addresses {\n        id\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n":
     types.GetAddressDocument,
   "#graphql\n  query availableCountries{\n    availableCountries {\n      id\n      name\n      code\n      enabled\n    }\n  }\n":
     types.AvailableCountriesDocument,
@@ -47,7 +47,7 @@ const documents = {
     types.AddItemToOrderDocument,
   "#graphql\n  mutation AdjustOrderLine($orderLineId: ID! $quantity: Int!){\n    adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {\n      ... ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
     types.AdjustOrderLineDocument,
-  "#graphql\n  query ActiveOrder {\n    activeOrder {\n      ... ActiveOrder\n    }  \n  }\n":
+  "#graphql\n  query ActiveOrder {\n    activeOrderCustom {\n      ... ActiveOrder\n    }  \n  }\n":
     types.ActiveOrderDocument,
   "#graphql\n  mutation SetShippingAddress($input: CreateAddressInput!){\n    setOrderShippingAddress(input: $input) {\n      ... ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
     types.SetShippingAddressDocument,
@@ -65,7 +65,7 @@ const documents = {
     types.OrderByCodeDocument,
   "#graphql\n  mutation generateRazorpayOrderId($vendureOrderId: ID!) {\n    generateRazorpayOrderId(orderId: $vendureOrderId) {\n      __typename\n      ... on RazorpayOrderIdSuccess {\n        razorpayOrderId\n      }\n      ... on RazorpayOrderIdGenerationError {\n        errorCode\n        message\n      }\n    }\n  }\n  ":
     types.GenerateRazorpayOrderIdDocument,
-  "#graphql\n  query getOrders{\n    activeCustomer {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n":
+  "#graphql\n  query getOrders{\n    authenticatedUser {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n":
     types.GetOrdersDocument,
   "#graphql\n  query OrderById($id: ID!) {\n    order(id: $id) {\n      ...ActiveOrder,\n      shippingAddress {\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country\n        phoneNumber\n      }\n      orderPlacedAt\n      payments {\n        method\n      }\n      shippingLines {\n        shippingMethod {\n          name\n        }\n      }\n    }\n  }\n":
     types.OrderByIdDocument,
@@ -73,7 +73,7 @@ const documents = {
     types.ProductDetailsDocument,
   "#graphql\n  query getProductsByCollectionCustom($id: ID, $slug: String, $options: ProductVariantListOptions) {\n    collection(id: $id, slug: $slug) {\n      productVariants(options: $options) {\n        items {\n          name\n          priceWithTax\n          stockLevel\n          customFields {\n            MRP\n          }\n          featuredAsset {\n            preview\n          }\n          product {\n            name\n            slug\n            featuredAsset {\n              preview\n            }\n            customFields {\n              reviewRating\n            }\n          }\n        }\n        totalItems\n      }\n    }\n  }\n":
     types.GetProductsByCollectionCustomDocument,
-  "#graphql\n  query getWishList{\n    activeCustomer {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n":
+  "#graphql\n  query getWishList{\n    authenticatedUser {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n":
     types.GetWishListDocument,
   "#graphql\n  mutation toggleFavorite($productVariantId: ID!){\n    toggleFavorite(productVariantId: $productVariantId) {\n      items {\n        id\n      }\n      totalItems\n    }\n  }\n":
     types.ToggleFavoriteDocument,
@@ -127,8 +127,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "#graphql\n  query getAccountInfo{\n    activeCustomer {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n"
-): (typeof documents)["#graphql\n  query getAccountInfo{\n    activeCustomer {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n"];
+  source: "#graphql\n  query getAccountInfo{\n    authenticatedUser {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query getAccountInfo{\n    authenticatedUser {\n      title\n      firstName\n      lastName\n      phoneNumber\n      emailAddress\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -145,8 +145,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "#graphql\n  query getAddress{\n    activeCustomer {\n      addresses {\n        id\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n"
-): (typeof documents)["#graphql\n  query getAddress{\n    activeCustomer {\n      addresses {\n        id\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n"];
+  source: "#graphql\n  query getAddress{\n    authenticatedUser {\n      addresses {\n        id\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query getAddress{\n    authenticatedUser {\n      addresses {\n        id\n        fullName\n        streetLine1\n        streetLine2\n        postalCode\n        city\n        province\n        country {\n          id\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -199,8 +199,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "#graphql\n  query ActiveOrder {\n    activeOrder {\n      ... ActiveOrder\n    }  \n  }\n"
-): (typeof documents)["#graphql\n  query ActiveOrder {\n    activeOrder {\n      ... ActiveOrder\n    }  \n  }\n"];
+  source: "#graphql\n  query ActiveOrder {\n    activeOrderCustom {\n      ... ActiveOrder\n    }  \n  }\n"
+): (typeof documents)["#graphql\n  query ActiveOrder {\n    activeOrderCustom {\n      ... ActiveOrder\n    }  \n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -253,8 +253,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "#graphql\n  query getOrders{\n    activeCustomer {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n"
-): (typeof documents)["#graphql\n  query getOrders{\n    activeCustomer {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n"];
+  source: "#graphql\n  query getOrders{\n    authenticatedUser {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query getOrders{\n    authenticatedUser {\n      orders {\n        items {\n          id\n          totalQuantity\n          totalWithTax\n          orderPlacedAt\n          state\n          lines {\n            featuredAsset {\n              name\n              preview\n            }\n          }    \n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -277,8 +277,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "#graphql\n  query getWishList{\n    activeCustomer {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n"
-): (typeof documents)["#graphql\n  query getWishList{\n    activeCustomer {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n"];
+  source: "#graphql\n  query getWishList{\n    authenticatedUser {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["#graphql\n  query getWishList{\n    authenticatedUser {\n      favorites {\n        items {\n          id\n          productVariant {\n            id\n            name\n            priceWithTax\n            product {\n              featuredAsset {\n                name\n                preview\n              }\n            }\n            options {\n              name\n              group {\n                name\n              }\n            }\n            customFields {\n              MRP\n            }\n          }\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

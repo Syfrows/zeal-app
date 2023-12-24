@@ -18,7 +18,7 @@ const useRazorpayCheckout = (checkout: CheckoutOptions) => {
   const [Razorpay] = useRazorpay();
   const [generateRazorpayOrderId] = useMutation(GENERATE_RAZORPAY_ORDER_ID);
   const { data } = useQuery(ACCOUNT_INFO);
-  const details = data?.activeCustomer;
+  const details = data?.authenticatedUser;
 
   const handlePayment = () => {
     generateRazorpayOrderId({

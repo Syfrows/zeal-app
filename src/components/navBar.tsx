@@ -1,7 +1,7 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
-import { AccountIcon, CartIcon, SearchIcon, WishListIcon } from "./icons";
+import { AccountIcon, CartIcon, WishListIcon } from "./icons";
 import { useRouter } from "next/router";
 import LogInSignupModal from "./logInSignupModal";
 import { useAuth } from "@/context/AuthContext";
@@ -9,12 +9,23 @@ import Drawer from "@mui/material/Drawer";
 import SideNav from "./sideNav";
 import { Menu } from "@mui/icons-material";
 import Search from "./search";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const NavBar = () => {
   const router = useRouter();
   const [isModalVisible, setModalVisibilty] = useState(false);
   const { isLoggedIn } = useAuth();
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [info, setInfo] = useState("");
+
+  useEffect(() => {
+    const isSessionExpired = localStorage.getItem("isSessionExpired") == "true";
+    if (!isSessionExpired) return;
+    setInfo("Your session is expired please login again.");
+    localStorage.removeItem("isSessionExpired");
+  }, []);
+
   return (
     <>
       <div className="flex h-16 justify-between bg-white px-1 shadow sm:px-6">
@@ -74,6 +85,15 @@ const NavBar = () => {
       >
         <SideNav isDrawer={true} />
       </Drawer>
+      <Snackbar
+        open={!!info}
+        autoHideDuration={6000}
+        onClose={() => setInfo("")}
+      >
+        <Alert onClose={() => setInfo("")} severity="info">
+          {info}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

@@ -109,7 +109,7 @@ export const LOG_OUT = gql(`#graphql
 
 export const ACCOUNT_INFO = gql(`#graphql
   query getAccountInfo{
-    activeCustomer {
+    authenticatedUser {
       title
       firstName
       lastName

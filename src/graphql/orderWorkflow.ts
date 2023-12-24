@@ -63,7 +63,7 @@ export const ADJUST_ORDER_LINE = gql(`#graphql
 
 export const ACTIVE_ORDER = gql(`#graphql
   query ActiveOrder {
-    activeOrder {
+    activeOrderCustom {
       ... ActiveOrder
     }  
   }

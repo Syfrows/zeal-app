@@ -10,7 +10,7 @@ export const CREATE_CUSTOMER_ADDRESS = gql(`#graphql
 
 export const GET_ADDRESS = gql(`#graphql
   query getAddress{
-    activeCustomer {
+    authenticatedUser {
       addresses {
         id
         fullName
