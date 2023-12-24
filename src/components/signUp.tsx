@@ -1,11 +1,18 @@
-import { PasswordValidationError, Success } from "@/__generated__/graphql";
-import { SIGN_UP } from "@/graphql/accounts";
+import {
+  CurrentUser,
+  InvalidCredentialsError,
+  PasswordValidationError,
+  Success,
+} from "@/__generated__/graphql";
+import { useAuth } from "@/context/AuthContext";
+import { AUTHENTICATE, SIGN_UP } from "@/graphql/accounts";
 import { useMutation } from "@apollo/client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
+import { GoogleLogin } from "@react-oauth/google";
 import { useEffect, useState } from "react";
 
 interface Input {
@@ -27,11 +34,12 @@ const intialState: Input = {
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-const SignUp = ({ setSelectedTab }: any) => {
+const SignUp = ({ setSelectedTab, setVisibilty }: any) => {
   const [inputs, setInputs] = useState(intialState);
   const [errors, setErrors] = useState(intialState);
   const [showPassword, setShowPassword] = useState(false);
   const [signUpError, setSignUpError] = useState("");
+  const { setIsLoggedIn } = useAuth();
 
   const [signUp, { data, loading, error }] = useMutation(SIGN_UP, {
     variables: {
@@ -45,6 +53,20 @@ const SignUp = ({ setSelectedTab }: any) => {
       },
     },
   });
+
+  const [googleLogIn, googleLogInData] = useMutation(AUTHENTICATE);
+
+  useEffect(() => {
+    const logInData = googleLogInData?.data?.authenticate;
+    if ((logInData as CurrentUser)?.id) {
+      setIsLoggedIn(true);
+      setVisibilty(false);
+    }
+    if (logInData?.__typename !== "CurrentUser") {
+      const error = logInData as InvalidCredentialsError;
+      setSignUpError(error?.message);
+    }
+  }, [setIsLoggedIn, setVisibilty, googleLogInData]);
 
   useEffect(() => {
     setErrors((prevErrors) => {
@@ -193,6 +215,15 @@ const SignUp = ({ setSelectedTab }: any) => {
       >
         LOGIN
       </button>
+      <div className=" self-center">
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            googleLogIn({
+              variables: { token: credentialResponse?.credential || "" },
+            });
+          }}
+        />
+      </div>
     </div>
   );
 };

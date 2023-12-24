@@ -44,7 +44,10 @@ const LogInSignupModal = ({ isVisible, setVisibilty }: any) => {
                   setVisibilty={setVisibilty}
                 />
               ) : (
-                <SignUp setSelectedTab={setSelectedTab} />
+                <SignUp
+                  setSelectedTab={setSelectedTab}
+                  setVisibilty={setVisibilty}
+                />
               )}
             </div>
           </div>
