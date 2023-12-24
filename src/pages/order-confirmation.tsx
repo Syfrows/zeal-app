@@ -1,6 +1,7 @@
 import {
   ActiveOrderFragment,
   AddPaymentMutation,
+  GetShippingMethodsQuery,
   Order,
   OrderLine,
 } from "@/__generated__/graphql";
@@ -9,10 +10,13 @@ import {
   ACTIVE_ORDER,
   ADD_PAYMENT,
   GET_PAYMENT_METHODS,
+  GET_SHIPPING_METHODS,
+  SET_SHIPPING_ADDRESS,
+  SET_SHIPPING_METHOD,
   TRANSITION_ORDER,
 } from "@/graphql/orderWorkflow";
 import { formatPrice } from "@/helpers/helper";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { ArrowBack } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -20,10 +24,11 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import placeHolder from "../assets/placeHolder.png";
 import useRazorpayCheckout from "@/hooks/useRazorpayCheckout";
 import { OrderState } from "@/helpers/order";
+import { useSearchParams } from "next/navigation";
 
 interface ProductProps {
   product: OrderLine;
@@ -85,6 +90,36 @@ const OrderConfirmation = () => {
   const [addPayment] = useMutation(ADD_PAYMENT);
   const [isLoading, setIsLoading] = useState(false);
   const isConfirmOrderDisabled = !paymentMethod || isLoading;
+
+  const isEventPurchase =
+    !!useSearchParams().get("eventPurchase") &&
+    process.env.NEXT_PUBLIC_ENABLE_EVENT_PURCHASE == "true";
+  const [setShippingAddress] = useMutation(SET_SHIPPING_ADDRESS);
+  const [getShippingMethods] = useLazyQuery(GET_SHIPPING_METHODS);
+  const [setShippingMethods] = useMutation(SET_SHIPPING_METHOD);
+
+  useEffect(() => {
+    if (!isEventPurchase) return;
+    setShippingAddress({
+      variables: {
+        input: {
+          countryCode: "IN",
+          streetLine1: "Maha Marathon Event",
+        },
+      },
+      onCompleted: () => {
+        getShippingMethods({
+          onCompleted: (data: GetShippingMethodsQuery) => {
+            setShippingMethods({
+              variables: {
+                shippingMethodId: data.eligibleShippingMethods[0].id,
+              },
+            });
+          },
+        });
+      },
+    });
+  }, []);
 
   const onConfirmOrder = () => {
     setIsLoading(true);

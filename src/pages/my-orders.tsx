@@ -83,13 +83,16 @@ const MyOrders = () => {
   const isReturns = searchParams.get("isReturns");
   const { data } = useQuery(GET_ORDERS);
   const ordersData = data?.activeCustomer?.orders.items;
-  const orders = ordersData
-    ?.filter((x) =>
-      isReturns
-        ? x.state === OrderState.Cancelled
-        : x.state !== OrderState.Cancelled && x.state !== OrderState.AddingItems
-    )
-    .reverse();
+  const orders = ordersData?.filter((x) =>
+    isReturns
+      ? x.state === OrderState.Cancelled
+      : x.state !== OrderState.Cancelled && x.state !== OrderState.AddingItems
+  );
+  orders?.sort((a, b) =>
+    DateTime.fromISO(b.orderPlacedAt) < DateTime.fromISO(a.orderPlacedAt)
+      ? -1
+      : 1
+  );
 
   return (
     <Layout>

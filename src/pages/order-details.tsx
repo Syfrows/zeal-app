@@ -66,9 +66,11 @@ const OrderDetails = () => {
             <p>{address?.fullName}</p>
             <p>{address?.streetLine1}</p>
             <p>{address?.streetLine2}</p>
-            <p>{`${address?.city}, ${address?.postalCode}, ${address?.province}`}</p>
+            <p>{`${address?.city || ""}${address?.city ? "," : ""} ${
+              address?.postalCode || ""
+            }${address?.postalCode ? "," : ""} ${address?.province || ""}`}</p>
             <p>{address?.country}</p>
-            <p>Mobile: {address?.phoneNumber}</p>
+            {address?.phoneNumber && <p>Mobile: {address?.phoneNumber}</p>}{" "}
           </div>
           <div className="flex-grow">
             <div className="my-10 border-t-2 border-gray-300" />
@@ -79,9 +81,11 @@ const OrderDetails = () => {
             <p>{address?.fullName}</p>
             <p>{address?.streetLine1}</p>
             <p>{address?.streetLine2}</p>
-            <p>{`${address?.city}, ${address?.postalCode}, ${address?.province}`}</p>
+            <p>{`${address?.city || ""}${address?.city ? "," : ""} ${
+              address?.postalCode || ""
+            }${address?.postalCode ? "," : ""} ${address?.province || ""}`}</p>
             <p>{address?.country}</p>
-            <p>Mobile: {address?.phoneNumber}</p>
+            {address?.phoneNumber && <p>Mobile: {address?.phoneNumber}</p>}{" "}
           </div>
         </div>
         <div>

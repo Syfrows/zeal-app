@@ -96,6 +96,18 @@ const ProductAddedModal = ({
                 Proceed to Buy
               </button>
             </div>
+            {process.env.NEXT_PUBLIC_ENABLE_EVENT_PURCHASE == "true" && (
+              <div className="flex justify-center">
+                <button
+                  className="mt-4 rounded-xl  bg-primary px-4 py-3 font-semibold text-white"
+                  onClick={() =>
+                    router.push("/order-confirmation?eventPurchase=true")
+                  }
+                >
+                  Event Purchase
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

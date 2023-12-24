@@ -202,6 +202,16 @@ const Cart = () => {
                 >
                   Proceed to Buy
                 </button>
+                {process.env.NEXT_PUBLIC_ENABLE_EVENT_PURCHASE == "true" && (
+                  <button
+                    className="mt-4 w-72 bg-primary py-4 font-semibold text-white"
+                    onClick={() =>
+                      router.push("/order-confirmation?eventPurchase=true")
+                    }
+                  >
+                    Event Purchase
+                  </button>
+                )}
               </div>
             </div>
           </div>
