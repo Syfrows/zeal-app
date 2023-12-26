@@ -49,15 +49,15 @@ const WishlistItem = ({
   };
 
   return (
-    <div className="flex border-2 border-slate-400 p-4">
+    <div className="flex flex-col border-2 border-slate-400 p-4 sm:flex-row">
       <Image
         src={product?.product?.featuredAsset?.preview || placeHolder}
         alt={product?.name || ""}
-        height={260}
-        width={260}
-        className="aspect-square"
+        height={220}
+        width={220}
+        className="aspect-square self-center max-sm:mb-4"
       />
-      <div className="mx-8 space-y-4">
+      <div className="mx-2 space-y-4 sm:mx-8">
         <p className="text-2xl font-semibold">{product?.name}</p>
         <p>
           Size: <span className="font-bold">{findProductOption("size")}</span>
