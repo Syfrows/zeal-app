@@ -39,7 +39,7 @@ const WishlistItem = ({
 
   const onAddToCart = () => {
     addToCart({
-      variables: { productVariantId: product?.id || 0, quantity: 1 },
+      variables: { productVariantId: product?.id || "", quantity: 1 },
       onCompleted: onRemoveWishListItem,
     });
   };
