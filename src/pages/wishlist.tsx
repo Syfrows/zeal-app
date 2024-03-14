@@ -32,7 +32,7 @@ const WishlistItem = ({
 
   const onRemoveWishListItem = () => {
     removeFromWishlist({
-      variables: { productVariantId: product?.id || 0 },
+      variables: { productVariantId: product?.id || "" },
       onCompleted: onWishlistItemRemoved,
     });
   };
