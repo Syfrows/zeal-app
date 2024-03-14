@@ -45,6 +45,9 @@ export const ORDER_BY_ID = gql(`#graphql
           name
         }
       }
+      invoices {
+        downloadUrl
+      }
     }
   }
 `);

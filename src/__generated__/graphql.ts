@@ -22,7 +22,7 @@ export type Incremental<T> =
     };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string };
+  ID: { input: string; output: string };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
@@ -1317,6 +1317,15 @@ export type InvalidCredentialsError = ErrorResult & {
   message: Scalars["String"]["output"];
 };
 
+export type Invoice = {
+  __typename?: "Invoice";
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  downloadUrl: Scalars["String"]["output"];
+  id: Scalars["ID"]["output"];
+  invoiceNumber: Scalars["Int"]["output"];
+  isCreditInvoice: Scalars["Boolean"]["output"];
+};
+
 /**
  * @description
  * Languages in the form of a ISO 639-1 language code with optional
@@ -2004,6 +2013,7 @@ export type Order = Node & {
   fulfillments?: Maybe<Array<Fulfillment>>;
   history: HistoryEntryList;
   id: Scalars["ID"]["output"];
+  invoices: Array<Invoice>;
   lines: Array<OrderLine>;
   /**
    * The date & time that the Order was placed, i.e. the Customer
@@ -2393,6 +2403,8 @@ export type PaymentMethodTranslation = {
  * @docsCategory common
  */
 export enum Permission {
+  /** Allow this user to enable invoice generation */
+  AllowInvoicesPermission = "AllowInvoicesPermission",
   /** Authenticated means simply that the user is logged in */
   Authenticated = "Authenticated",
   /** Grants permission to create Administrator */
@@ -4180,6 +4192,7 @@ export type OrderByIdQuery = {
           __typename?: "ShippingLine";
           shippingMethod: { __typename?: "ShippingMethod"; name: string };
         }>;
+        invoices: Array<{ __typename?: "Invoice"; downloadUrl: string }>;
       } & { " $fragmentRefs"?: { ActiveOrderFragment: ActiveOrderFragment } })
     | null;
 };
@@ -7475,6 +7488,19 @@ export const OrderByIdDocument = {
                             },
                           ],
                         },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "invoices" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "downloadUrl" },
                       },
                     ],
                   },

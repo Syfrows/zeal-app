@@ -19,6 +19,7 @@ const OrderDetails = () => {
   const paymentMethod = order?.payments && order.payments[0].method;
   const shippingMethod =
     order?.shippingLines && order.shippingLines[0].shippingMethod.name;
+  const invoiceDownloadUrl = order?.invoices?.[0]?.downloadUrl;
   return (
     <Layout>
       <div className="flex flex-col space-y-8 py-12 xl:px-32">
@@ -158,6 +159,16 @@ const OrderDetails = () => {
             </p>
           </div>
         </div>
+        <button
+          className={`self-center rounded-lg border-2 bg-primary px-6 py-3 font-semibold text-white ${
+            !invoiceDownloadUrl && "opacity-60"
+          }`}
+          disabled={!invoiceDownloadUrl}
+        >
+          <a href={invoiceDownloadUrl} target="_blank">
+            Invoice
+          </a>
+        </button>
       </div>
     </Layout>
   );
