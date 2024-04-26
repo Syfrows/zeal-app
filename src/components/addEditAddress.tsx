@@ -7,6 +7,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import {
   AVAILABLE_COUNTRIES,
   CREATE_CUSTOMER_ADDRESS,
+  UPDATE_CUSTOMER_ADDRESS,
 } from "@/graphql/address";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -21,18 +22,12 @@ interface Address {
   phoneNumber: string;
 }
 
-const intialState: Address = {
-  firstName: "",
-  lastName: "",
-  line1: "",
-  postCode: "",
-  city: "",
-  state: "",
-  countryCode: "",
-  phoneNumber: "",
-};
-
-const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
+const AddEditAddress = ({
+  isVisible,
+  setVisibilty,
+  refetch,
+  editAddress,
+}: any) => {
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
   const { data } = useQuery(AVAILABLE_COUNTRIES);
   const countries = data?.availableCountries.map((x) => {
@@ -47,9 +42,22 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
   const countryCode = selectedCountry
     ? `${selectedCountry?.phoneCode} ${selectedCountry?.code}`
     : "";
+  const intialState: Address = {
+    firstName: editAddress?.fullName?.split(" ")[0] ?? "",
+    lastName: editAddress?.fullName?.split(" ")[1] ?? "",
+    line1: editAddress?.streetLine1 ?? "",
+    postCode: editAddress?.postalCode ?? "",
+    city: editAddress?.city ?? "",
+    state: editAddress?.province ?? "",
+    countryCode: editAddress?.phoneNumber?.split("-")[0] ?? "",
+    phoneNumber: editAddress?.phoneNumber?.split("-")[1] ?? "",
+  };
   const [address, setAddress] = useState(intialState);
   const [createAddress, createAddressData] = useMutation(
     CREATE_CUSTOMER_ADDRESS
+  );
+  const [updateAddress, updateAddressData] = useMutation(
+    UPDATE_CUSTOMER_ADDRESS
   );
 
   useEffect(() => {
@@ -61,26 +69,31 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
   }, [data]);
 
   useEffect(() => {
-    if (createAddressData?.data) {
+    if (createAddressData?.data || updateAddressData?.data) {
       setVisibilty(false);
       refetch();
     }
-  }, [createAddressData, setVisibilty, refetch]);
+  }, [createAddressData, updateAddressData, setVisibilty, refetch]);
 
   const onContinue = () => {
-    createAddress({
-      variables: {
-        input: {
-          fullName: address.firstName + " " + address.lastName,
-          streetLine1: address.line1,
-          postalCode: address.postCode,
-          city: address.city,
-          province: address.state,
-          countryCode: address.countryCode,
-          phoneNumber: selectedCountry?.phoneCode + "-" + address.phoneNumber,
+    const input = {
+      fullName: address.firstName + " " + address.lastName,
+      streetLine1: address.line1,
+      postalCode: address.postCode,
+      city: address.city,
+      province: address.state,
+      countryCode: address.countryCode,
+      phoneNumber: selectedCountry?.phoneCode + "-" + address.phoneNumber,
+    };
+    if (editAddress) {
+      updateAddress({ variables: { input: { id: editAddress.id, ...input } } });
+    } else {
+      createAddress({
+        variables: {
+          input: input,
         },
-      },
-    });
+      });
+    }
   };
   const disabledContinue =
     !Object.values(address).every((x) => x) || createAddressData.loading;
@@ -94,7 +107,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
         <div className="bg-white">
           <div className="flex items-center justify-between bg-primary px-8 py-4">
             <p className="mx-4 text-2xl font-semibold text-white">
-              NEW ADDRESS
+              {editAddress ? "EDIT" : "NEW"} ADDRESS
             </p>
             <button className="text-white" onClick={() => setVisibilty(false)}>
               <Close />
@@ -108,6 +121,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
                 variant="outlined"
                 placeholder="First Name"
                 required
+                value={address.firstName}
                 onChange={(event) =>
                   setAddress({ ...address, firstName: event.target.value })
                 }
@@ -118,6 +132,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
                 variant="outlined"
                 placeholder="Last Name"
                 required
+                value={address.lastName}
                 onChange={(event) =>
                   setAddress({ ...address, lastName: event.target.value })
                 }
@@ -129,6 +144,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
               variant="outlined"
               placeholder="Address"
               required
+              value={address.line1}
               onChange={(event) =>
                 setAddress({ ...address, line1: event.target.value })
               }
@@ -140,6 +156,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
                 variant="outlined"
                 placeholder="City"
                 required
+                value={address.city}
                 onChange={(event) =>
                   setAddress({ ...address, city: event.target.value })
                 }
@@ -151,6 +168,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
                 placeholder="Post Code"
                 inputProps={{ maxLength: 6 }}
                 required
+                value={address.postCode}
                 onChange={(event) =>
                   setAddress({
                     ...address,
@@ -179,6 +197,7 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
                 variant="outlined"
                 placeholder="State"
                 required
+                value={address.state}
                 onChange={(event) =>
                   setAddress({ ...address, state: event.target.value })
                 }
@@ -231,4 +250,4 @@ const NewAddress = ({ isVisible, setVisibilty, refetch }: any) => {
   );
 };
 
-export default NewAddress;
+export default AddEditAddress;

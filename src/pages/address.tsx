@@ -4,8 +4,8 @@ import {
   SetShippingAddressMutation,
 } from "@/__generated__/graphql";
 import Layout from "@/components/layout";
-import NewAddress from "@/components/newAddress";
-import { GET_ADDRESS } from "@/graphql/address";
+import AddEditAddress from "@/components/addEditAddress";
+import { DELETE_CUSTOMER_ADDRESS, GET_ADDRESS } from "@/graphql/address";
 import {
   GET_SHIPPING_METHODS,
   SET_SHIPPING_ADDRESS,
@@ -17,22 +17,28 @@ import {
   ArrowBack,
   RadioButtonChecked,
   RadioButtonUnchecked,
+  Edit,
+  Delete,
 } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface AddressDetailsProps {
   address: Address;
   isSelected: boolean;
   onContinue: () => void;
+  onEdit: (address: Address) => void;
+  onDelete: (id: string) => void;
 }
 
 const AddressDetails = ({
   address,
   isSelected,
   onContinue,
+  onEdit,
+  onDelete,
 }: AddressDetailsProps) => {
   const isOrderWorkFlow = !!useSearchParams().get("order");
   return (
@@ -67,6 +73,14 @@ const AddressDetails = ({
           </p>
         </div>
       </div>
+      <div className="space-x-4 self-end">
+        <button onClick={() => onEdit(address)}>
+          <Edit />
+        </button>
+        <button onClick={() => onDelete(address.id)}>
+          <Delete />
+        </button>
+      </div>
       {false && (
         <button
           className="mt-6 rounded-lg bg-primary p-2 font-semibold text-white"
@@ -93,6 +107,13 @@ const Address = () => {
   const [getShippingMethods] = useLazyQuery(GET_SHIPPING_METHODS);
   const [setShippingMethods] = useMutation(SET_SHIPPING_METHOD);
   const disabledContinue = !selectedAddress || isLoading;
+  const [editAddress, setEditAddress] = useState<Address | null>(null);
+  const [deleteAddress] = useMutation(DELETE_CUSTOMER_ADDRESS);
+
+  useEffect(() => {
+    setSelectedAddress(addresses && addresses[0]);
+  }, [addresses]);
+
   const onSetShippingAddress = (_data: SetShippingAddressMutation) => {
     getShippingMethods({
       onCompleted: onGetShippingMethods,
@@ -168,13 +189,26 @@ const Address = () => {
                   address={address as Address}
                   isSelected={address.id === selectedAddress?.id}
                   onContinue={onContinue}
+                  onEdit={(address) => {
+                    setEditAddress(address);
+                    setModalVisible(true);
+                  }}
+                  onDelete={(id) =>
+                    deleteAddress({
+                      variables: { id: id },
+                      onCompleted: () => refetch(),
+                    })
+                  }
                 />
               </div>
             ))}
-            <div className="mb-6 mr-6 flex h-60 w-96 flex-col items-center justify-center rounded-lg bg-gray-200 p-4 max-md:ml-6 md:w-96">
+            <div className="mb-6 mr-6 flex h-[268px] w-96 flex-col items-center justify-center rounded-lg bg-gray-200 p-4 max-md:ml-6 md:w-96">
               <button
                 className="text-6xl"
-                onClick={() => setModalVisible(true)}
+                onClick={() => {
+                  setEditAddress(null);
+                  setModalVisible(true);
+                }}
               >
                 <AddBox fontSize="inherit" />
               </button>
@@ -183,10 +217,11 @@ const Address = () => {
         </div>
         <ContinueButton />
         {isModalVisible && (
-          <NewAddress
+          <AddEditAddress
             isVisible={isModalVisible}
             setVisibilty={setModalVisible}
             refetch={refetch}
+            editAddress={editAddress}
           />
         )}
       </div>

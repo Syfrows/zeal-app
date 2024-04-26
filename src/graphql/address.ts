@@ -8,6 +8,22 @@ export const CREATE_CUSTOMER_ADDRESS = gql(`#graphql
   }
 `);
 
+export const UPDATE_CUSTOMER_ADDRESS = gql(`#graphql
+  mutation updateCustomerAddress($input: UpdateAddressInput!){
+    updateCustomerAddress(input: $input) {
+        id
+    }
+  }
+`);
+
+export const DELETE_CUSTOMER_ADDRESS = gql(`#graphql
+  mutation deleteCustomerAddress($id: ID!){
+    deleteCustomerAddress(id: $id) {
+        success
+    }
+  }
+`);
+
 export const GET_ADDRESS = gql(`#graphql
   query getAddress{
     authenticatedUser {

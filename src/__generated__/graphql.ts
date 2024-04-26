@@ -22,7 +22,7 @@ export type Incremental<T> =
     };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
+  ID: { input: string | number; output: string };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
@@ -3286,7 +3286,7 @@ export type ShippingMethod = Node & {
   checker: ConfigurableOperation;
   code: Scalars["String"]["output"];
   createdAt: Scalars["DateTime"]["output"];
-  customFields?: Maybe<Scalars["JSON"]["output"]>;
+  customFields?: Maybe<ShippingMethodCustomFields>;
   description: Scalars["String"]["output"];
   fulfillmentHandlerCode: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
@@ -3294,6 +3294,15 @@ export type ShippingMethod = Node & {
   name: Scalars["String"]["output"];
   translations: Array<ShippingMethodTranslation>;
   updatedAt: Scalars["DateTime"]["output"];
+};
+
+export type ShippingMethodCustomFields = {
+  __typename?: "ShippingMethodCustomFields";
+  breadth?: Maybe<Scalars["Float"]["output"]>;
+  height?: Maybe<Scalars["Float"]["output"]>;
+  length?: Maybe<Scalars["Float"]["output"]>;
+  pickupLocation?: Maybe<Scalars["String"]["output"]>;
+  weight?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type ShippingMethodList = PaginatedList & {
@@ -3305,7 +3314,7 @@ export type ShippingMethodList = PaginatedList & {
 export type ShippingMethodQuote = {
   __typename?: "ShippingMethodQuote";
   code: Scalars["String"]["output"];
-  customFields?: Maybe<Scalars["JSON"]["output"]>;
+  customFields?: Maybe<ShippingMethodCustomFields>;
   description: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   /** Any optional metadata returned by the ShippingCalculator in the ShippingCalculationResult */
@@ -3734,6 +3743,24 @@ export type CreateCustomerAddressMutationVariables = Exact<{
 export type CreateCustomerAddressMutation = {
   __typename?: "Mutation";
   createCustomerAddress: { __typename?: "Address"; id: string };
+};
+
+export type UpdateCustomerAddressMutationVariables = Exact<{
+  input: UpdateAddressInput;
+}>;
+
+export type UpdateCustomerAddressMutation = {
+  __typename?: "Mutation";
+  updateCustomerAddress: { __typename?: "Address"; id: string };
+};
+
+export type DeleteCustomerAddressMutationVariables = Exact<{
+  id: Scalars["ID"]["input"];
+}>;
+
+export type DeleteCustomerAddressMutation = {
+  __typename?: "Mutation";
+  deleteCustomerAddress: { __typename?: "Success"; success: boolean };
 };
 
 export type GetAddressQueryVariables = Exact<{ [key: string]: never }>;
@@ -5204,6 +5231,108 @@ export const CreateCustomerAddressDocument = {
 } as unknown as DocumentNode<
   CreateCustomerAddressMutation,
   CreateCustomerAddressMutationVariables
+>;
+export const UpdateCustomerAddressDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "updateCustomerAddress" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UpdateAddressInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateCustomerAddress" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdateCustomerAddressMutation,
+  UpdateCustomerAddressMutationVariables
+>;
+export const DeleteCustomerAddressDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "deleteCustomerAddress" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "deleteCustomerAddress" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "success" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteCustomerAddressMutation,
+  DeleteCustomerAddressMutationVariables
 >;
 export const GetAddressDocument = {
   kind: "Document",
