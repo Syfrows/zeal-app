@@ -9,6 +9,7 @@ import Layout from "@/components/layout";
 import {
   ACTIVE_ORDER,
   ADD_PAYMENT,
+  ADJUST_ORDER_LINE,
   GET_PAYMENT_METHODS,
   GET_SHIPPING_METHODS,
   SET_SHIPPING_ADDRESS,
@@ -17,7 +18,7 @@ import {
 } from "@/graphql/orderWorkflow";
 import { formatPrice } from "@/helpers/helper";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { ArrowBack } from "@mui/icons-material";
+import { Add, ArrowBack, Remove } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
@@ -33,15 +34,34 @@ import Link from "next/link";
 
 interface ProductProps {
   product: OrderLine;
+  setActiveOrders: (activeOrders: ActiveOrderFragment) => void;
 }
 
-const Product = ({ product }: ProductProps) => {
+const Product = ({ product, setActiveOrders }: ProductProps) => {
+  const router = useRouter();
   const findProductOption = (optionType: string) => {
     return (
       product.productVariant.options.find(
         (x) => x.group.name.toLowerCase() === optionType
       )?.name || "NA"
     );
+  };
+  const [adjustOrder] = useMutation(ADJUST_ORDER_LINE);
+  const updateOrder = (quantity: number) => {
+    adjustOrder({
+      variables: {
+        orderLineId: product.id,
+        quantity: quantity,
+      },
+      onCompleted: (data, _clientOptions) => {
+        const activeOrders =
+          data?.adjustOrderLine.__typename === "Order"
+            ? (data?.adjustOrderLine as ActiveOrderFragment)
+            : null;
+        if (!activeOrders || activeOrders?.totalQuantity <= 0) router.push("/");
+        activeOrders && setActiveOrders(activeOrders);
+      },
+    });
   };
   return (
     <div className="flex border-2 border-t-0 border-gray-300">
@@ -66,8 +86,24 @@ const Product = ({ product }: ProductProps) => {
           </p>
         </div>
       </div>
-      <p className="w-[15%] border-e-2 border-gray-300 p-3 text-center max-sm:text-sm sm:w-[10%]">
-        {product.quantity}
+      <p className="w-[15%] border-e-2 border-gray-300 px-1 py-3 text-center max-sm:text-sm sm:w-[10%]">
+        <button onClick={() => updateOrder(product.quantity - 1)}>
+          <Remove />
+        </button>
+        <span className="border-2 border-slate-300 px-2 py-1">
+          <input
+            onChange={(e) => updateOrder(Number(e.currentTarget.value))}
+            value={product.quantity}
+            type="number"
+            className="w-4 text-center [appearance:textfield] focus:outline-none sm:w-6 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          />{" "}
+        </span>
+        <button
+          className="max-sm:mt-1"
+          onClick={() => updateOrder(product.quantity + 1)}
+        >
+          <Add />
+        </button>
       </p>
       <p className="w-[28%] border-e-2 border-gray-300 p-3 text-center max-sm:text-sm sm:w-[10%]">
         {formatPrice(product.unitPriceWithTax)}
@@ -83,7 +119,9 @@ const OrderConfirmation = () => {
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("");
   const { data } = useQuery(ACTIVE_ORDER);
-  const activeOrders = data?.activeOrderCustom as ActiveOrderFragment;
+  const [activeOrders, setActiveOrders] = useState(
+    data?.activeOrderCustom as ActiveOrderFragment
+  );
   const products = activeOrders?.lines;
   const paymentMethodsData = useQuery(GET_PAYMENT_METHODS);
   const paymentMethods = paymentMethodsData.data?.eligiblePaymentMethods;
@@ -91,6 +129,11 @@ const OrderConfirmation = () => {
   const [addPayment] = useMutation(ADD_PAYMENT);
   const [isLoading, setIsLoading] = useState(false);
   const isConfirmOrderDisabled = !paymentMethod || isLoading;
+
+  useEffect(
+    () => setActiveOrders(data?.activeOrderCustom as ActiveOrderFragment),
+    [data]
+  );
 
   const isEventPurchase =
     !!useSearchParams().get("eventPurchase") &&
@@ -207,7 +250,10 @@ const OrderConfirmation = () => {
           </div>
           {products?.map((product, index) => (
             <div key={index}>
-              <Product product={product as OrderLine} />
+              <Product
+                product={product as OrderLine}
+                setActiveOrders={setActiveOrders}
+              />
             </div>
           ))}
           <div className="flex border-2 border-t-0 border-gray-300">
