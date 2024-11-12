@@ -46,26 +46,32 @@ jobs:
             npm run prod
           fi
 
-      - name: Upload Package To Server
-        uses: appleboy/scp-action@v0.1.4
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          host: sg1-ts106.a2hosting.com
-          username: relaxzea
-          key: ${{ secrets.KEY }}
-          port: 7822
-          source: "zeal-app.tar.gz"
-          target: /home/relaxzea/app.relaxzeal.com/
+          name: zeal-app
+          path: zeal-app.tar.gz
 
-      - name: Extract Application
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: sg1-ts106.a2hosting.com
-          username: relaxzea
-          key: ${{ secrets.KEY }}
-          port: 7822
-          script: |
-            cd app.relaxzeal.com
-            tar -xvf zeal-app.tar.gz
-            pkill lsnode
-            wget --timeout=1 --tries=1 https://api.relaxzeal.com/worker || true
+      # - name: Upload Package To Server
+      #   uses: appleboy/scp-action@v0.1.4
+      #   with:
+      #     host: sg1-ts106.a2hosting.com
+      #     username: relaxzea
+      #     key: ${{ secrets.KEY }}
+      #     port: 7822
+      #     source: "zeal-app.tar.gz"
+      #     target: /home/relaxzea/app.relaxzeal.com/
+
+      # - name: Extract Application
+      #   uses: appleboy/ssh-action@v1.0.0
+      #   with:
+      #     host: sg1-ts106.a2hosting.com
+      #     username: relaxzea
+      #     key: ${{ secrets.KEY }}
+      #     port: 7822
+      #     script: |
+      #       cd app.relaxzeal.com
+      #       tar -xvf zeal-app.tar.gz
+      #       pkill lsnode
+      #       wget --timeout=1 --tries=1 https://api.relaxzeal.com/worker || true
             
