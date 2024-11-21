@@ -6,20 +6,22 @@ import Pagination from "@mui/material/Pagination";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+const NUMBER_OF_ITEMS = 80;
+
 const Products = () => {
   const selectedfilterId = useSearchParams().get("filter");
   const { data, refetch } = useQuery(PRODUCTS_BY_COLLECTION, {
     variables: {
       id: selectedfilterId,
       slug: selectedfilterId ? "" : "all",
-      options: { skip: 0, take: 12 },
+      options: { skip: 0, take: NUMBER_OF_ITEMS },
     },
   });
   const products = data?.collection
     ? data.collection.productVariants.items
     : [];
   const totalCount = data?.collection
-    ? Math.ceil(data.collection.productVariants.totalItems / 12)
+    ? Math.ceil(data.collection.productVariants.totalItems / NUMBER_OF_ITEMS)
     : 1;
   const [currentPage, setCurrentPage] = useState(1);
   const [filterId, setFilterId] = useState(
@@ -46,8 +48,8 @@ const Products = () => {
               refetch({
                 id: filterId,
                 options: {
-                  skip: (value - 1) * 12,
-                  take: 12,
+                  skip: (value - 1) * NUMBER_OF_ITEMS,
+                  take: NUMBER_OF_ITEMS,
                 },
               });
             }}
