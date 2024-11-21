@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { HERO_SECTION } from "@/graphql/landingPage";
 import MuiCarousel from "react-material-ui-carousel";
+import Shimmer from "./Shimmer";
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -27,6 +28,14 @@ const Carousel = () => {
     ...slides,
     assets: x.assets.filter((x) => x.name.includes("mobile")),
   }));
+
+  if (!data) {
+    return (
+      <MuiCarousel animation="slide" className="-m-4">
+        <Shimmer height={384} width={1536} />
+      </MuiCarousel>
+    );
+  }
 
   return (
     <>

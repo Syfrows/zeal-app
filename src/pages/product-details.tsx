@@ -4,7 +4,12 @@ import ProductAddedModal, { Product } from "@/components/productAddedModal";
 import { useAuth } from "@/context/AuthContext";
 import { ADD_ITEM_TO_ORDER } from "@/graphql/orderWorkflow";
 import { PRODUCT_DETAILS } from "@/graphql/productDetails";
-import { StockLevel, discount, formatPrice } from "@/helpers/helper";
+import {
+  StockLevel,
+  discount,
+  formatPrice,
+  shimmerDataUrl,
+} from "@/helpers/helper";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   Add,
@@ -24,6 +29,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import placeHolder from "../assets/placeHolder.png";
 import SizeChartModal from "@/components/sizeChartModal";
+import Shimmer from "@/components/Shimmer";
 
 const ProductDetails = () => {
   const router = useRouter();
@@ -87,6 +93,30 @@ const ProductDetails = () => {
       ? setModalVisiblity(true)
       : setInfo((addToCartData?.addItemToOrder as ErrorResult).message);
   }, [addToCartData]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex flex-col sm:flex-row sm:space-x-4">
+          <div className="flex flex-col items-center sm:w-1/2">
+            <Shimmer width={500} height={500} />
+          </div>
+          <div className="flex flex-col space-y-4 sm:w-1/2">
+            <Shimmer width={1000} height={200} />
+            <Shimmer width={1000} height={300} />
+            <Shimmer width={1000} height={200} />
+            <div>
+              <div className="my-4 border-t-2 border-gray-300" />
+              <Shimmer width={1000} height={400} />
+            </div>
+            <div className="space-y-4 py-4">
+              <Shimmer width={1000} height={300} />
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (!product || !selectedVariant) {
     return (
@@ -166,6 +196,8 @@ const ProductDetails = () => {
       <div className="flex flex-col sm:flex-row sm:space-x-4">
         <div className="flex flex-col items-center sm:w-1/2">
           <Image
+            placeholder="blur"
+            blurDataURL={shimmerDataUrl}
             src={productAssest?.[selectedImage]?.source ?? placeHolder}
             alt={productAssest?.[selectedImage]?.name ?? ""}
             height={500}

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useQuery } from "@apollo/client";
 import placeHolder from "../assets/placeHolder.png";
+import Shimmer from "./Shimmer";
 
 const Categories = () => {
   const [showAll, setShowAll] = useState(false);
@@ -28,27 +29,34 @@ const Categories = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {categories &&
-          categories
-            .slice(0, showAll ? categories.length : 8)
-            .map((category) => (
-              <div
-                key={category.id}
-                className="m-4"
-                onClick={() => router.push(`/products?filter=${category.id}`)}
-              >
-                <Image
-                  src={category.featuredAsset?.source || placeHolder}
-                  alt={category.name}
-                  className="aspect-square rounded-l"
-                  width={240}
-                  height={240}
-                />
-                <p className="mt-2 text-center text-lg font-medium">
-                  {category.name}
-                </p>
-              </div>
-            ))}
+        {categories
+          ? categories
+              ?.slice(0, showAll ? categories.length : 8)
+              .map((category) => (
+                <div
+                  key={category.id}
+                  className="m-4"
+                  onClick={() => router.push(`/products?filter=${category.id}`)}
+                >
+                  <Image
+                    src={category.featuredAsset?.source || placeHolder}
+                    alt={category.name}
+                    className="aspect-square rounded-l"
+                    width={240}
+                    height={240}
+                  />
+                  <p className="mt-2 text-center text-lg font-medium">
+                    {category.name}
+                  </p>
+                </div>
+              ))
+          : Array(4)
+              .fill("")
+              .map((_i, index) => (
+                <div key={index} className="m-4">
+                  <Shimmer height={240} width={240} />
+                </div>
+              ))}
       </div>
     </div>
   );

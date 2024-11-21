@@ -5,10 +5,16 @@ import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useSearchParams } from "next/navigation";
-import { StockLevel, discount, formatPrice } from "@/helpers/helper";
+import {
+  StockLevel,
+  discount,
+  formatPrice,
+  shimmerDataUrl,
+} from "@/helpers/helper";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { ProductVariant } from "@/__generated__/graphql";
 import placeHolder from "../assets/placeHolder.png";
+import Shimmer from "./Shimmer";
 
 const ProductCard = ({ item }: { item: ProductVariant }) => {
   const productImage =
@@ -21,6 +27,8 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
   return (
     <div className="max-w-[360px] overflow-hidden rounded-lg shadow-lg">
       <Image
+        placeholder="blur"
+        blurDataURL={shimmerDataUrl}
         src={productImage}
         alt={item.name}
         height={360}
@@ -158,18 +166,26 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
         )}
       </div>
       <div className="my-14 grid grid-cols-2 place-items-center gap-8 lg:grid-cols-3">
-        {products.map((item: ProductVariant, index: number) => (
-          <div
-            key={index}
-            onClick={() =>
-              router.push(
-                `/product-details?name=${item.product.slug}&variant=${item.name}`
-              )
-            }
-          >
-            <ProductCard item={item} />
-          </div>
-        ))}
+        {products.length !== 0
+          ? products.map((item: ProductVariant, index: number) => (
+              <div
+                key={index}
+                onClick={() =>
+                  router.push(
+                    `/product-details?name=${item.product.slug}&variant=${item.name}`
+                  )
+                }
+              >
+                <ProductCard item={item} />
+              </div>
+            ))
+          : Array(6)
+              .fill("")
+              .map((_i, index) => (
+                <div key={index}>
+                  <Shimmer height={360} width={360} />
+                </div>
+              ))}
       </div>
     </div>
   );
