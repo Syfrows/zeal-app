@@ -27,11 +27,15 @@ const PlatformFeatures = () => {
       {features.map((feature, index) => (
         <div
           key={index}
-          className="m-6 flex w-80 flex-col items-center rounded-lg p-8 text-center shadow-lg"
+          className="m-4 flex w-80 flex-col items-center rounded-xl2 bg-white p-8 text-center shadow-card transition-all duration-300 ease-smooth hover:-translate-y-1 hover:shadow-card-hover"
         >
-          <div className="mb-5 rounded-lg bg-blue-100 p-4">{feature.icon}</div>
-          <p className=" mb-3 w-60 text-xl font-semibold">{feature.title}</p>
-          <p>{feature.subTitle}</p>
+          <div className="mb-5 rounded-full bg-primary-50 p-5 text-primary-600">
+            {feature.icon}
+          </div>
+          <p className="mb-3 w-60 text-xl font-semibold text-primary-800">
+            {feature.title}
+          </p>
+          <p className="text-slate-500">{feature.subTitle}</p>
         </div>
       ))}
     </div>

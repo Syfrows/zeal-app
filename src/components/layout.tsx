@@ -4,7 +4,7 @@ import Footer from "./footer";
 
 const Layout = (Props: PropsWithChildren) => {
   return (
-    <div className="mx-auto min-h-screen max-w-screen-2xl">
+    <div className="mx-auto min-h-screen max-w-screen-2xl bg-white">
       <div className="sticky top-0 z-50">
         <NavBar />
       </div>

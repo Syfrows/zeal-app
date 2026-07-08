@@ -25,19 +25,21 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
   const mrp = item.customFields?.MRP || 0;
   const isItemOutOfStock = item.stockLevel === StockLevel.OutOfStock;
   return (
-    <div className="max-w-[360px] overflow-hidden rounded-lg shadow-lg">
-      <Image
-        placeholder="blur"
-        blurDataURL={shimmerDataUrl}
-        src={productImage}
-        alt={item.name}
-        height={360}
-        width={360}
-        className="aspect-square"
-      />
-      <div className="space-y-3 p-2 sm:p-6">
+    <div className="group max-w-[360px] overflow-hidden rounded-xl2 bg-white shadow-card transition-all duration-300 ease-smooth hover:-translate-y-1 hover:shadow-card-hover">
+      <div className="overflow-hidden">
+        <Image
+          placeholder="blur"
+          blurDataURL={shimmerDataUrl}
+          src={productImage}
+          alt={item.name}
+          height={360}
+          width={360}
+          className="aspect-square transition-transform duration-500 ease-smooth group-hover:scale-105"
+        />
+      </div>
+      <div className="space-y-3 p-4 sm:p-6">
         <div className="flex justify-between max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
-          <p className="line-clamp-2 h-12	font-medium">{item.product.name}</p>
+          <p className="line-clamp-2 h-12 font-medium text-primary-800">{item.product.name}</p>
           {rating !== 0 && (
             <div className="flex space-x-2">
               <Rating
@@ -50,15 +52,15 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
             </div>
           )}
         </div>
-        <div className="flex justify-between  max-sm:flex-col max-sm:space-y-2 sm:space-x-2">
-          <p className="text-orange-600">
+        <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:space-y-2 sm:space-x-2">
+          <p className="font-semibold text-accent">
             {formatPrice(item.priceWithTax)}
             <br className="min-[400px]:hidden" />
-            <span className="text-slate-400 line-through decoration-slate-400 min-[400px]:mx-3">
+            <span className="ml-2 text-sm font-normal text-slate-400 line-through decoration-slate-400 min-[400px]:mx-3">
               {formatPrice(mrp)}
             </span>
             <br className="min-[400px]:hidden" />
-            <span className="text-red-400">
+            <span className="text-sm text-red-400">
               {discount(mrp, item.priceWithTax) > 0 ? (
                 `${discount(mrp, item.priceWithTax)} % off! `
               ) : (
@@ -69,8 +71,8 @@ const ProductCard = ({ item }: { item: ProductVariant }) => {
           <button
             className={
               isItemOutOfStock
-                ? "text-sm text-red-600 underline"
-                : "text-orange-600 underline"
+                ? "rounded-full border border-red-200 px-4 py-1.5 text-sm font-medium text-red-600"
+                : "rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-white transition-colors duration-200 ease-smooth hover:bg-primary-700"
             }
           >
             {isItemOutOfStock ? "Out of Stock" : "Buy Now"}
@@ -116,12 +118,14 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
   };
 
   return (
-    <div className="py-8">
-      <div className="mb-10 flex items-center justify-between">
-        <h2 className="grow text-3xl font-bold md:text-center">Our Product</h2>
+    <div className="py-10">
+      <div className="mb-8 flex items-center justify-between">
+        <h2 className="grow text-2xl font-bold text-primary-800 md:text-center md:text-3xl">
+          Our Products
+        </h2>
         {products.length <= 6 && (
           <button
-            className="text-lg font-medium text-orange-600"
+            className="text-sm font-semibold tracking-wide text-accent transition-colors duration-150 hover:text-accent-dark sm:text-lg"
             onClick={() => router.push("/products")}
           >
             {"View All"}
@@ -136,14 +140,16 @@ const ProductsLayout = ({ products, refetch, setFilterId }: any) => {
         )}
         <div
           ref={scrollRef}
-          className="flex space-x-4 overflow-x-auto [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden"
+          className="flex space-x-3 overflow-x-auto [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden"
         >
           {filters &&
             filters.map((filter, index) => (
               <button
                 key={index}
-                className={`whitespace-nowrap rounded-md border-2 px-4 py-2 ${
-                  filter.id === selectFilterIndex && "bg-orange-600 text-white"
+                className={`whitespace-nowrap rounded-full border px-5 py-2 text-sm font-medium transition-all duration-200 ease-smooth ${
+                  filter.id === selectFilterIndex
+                    ? "border-primary bg-primary text-white shadow-card"
+                    : "border-primary-200 text-primary-700 hover:border-primary-400"
                 }`}
                 onClick={() => {
                   setSelectedFilterIndex(filter.id);

@@ -28,22 +28,25 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="flex h-16 justify-between bg-white px-1 shadow sm:px-6">
-        <div className="my-1 aspect-[147/122]" onClick={() => router.push("/")}>
+      <div className="flex h-18 items-center justify-between border-b border-primary-100/60 bg-white/90 px-4 py-2 backdrop-blur-md sm:px-8">
+        <div
+          className="my-1 aspect-[147/122] w-16 cursor-pointer transition-transform duration-200 ease-smooth hover:scale-105 sm:w-20"
+          onClick={() => router.push("/")}
+        >
           <Image src={logo} alt="RelaxZeal" />
         </div>
         <Search />
-        <div className="item-center my-3 flex space-x-3 sm:space-x-6">
+        <div className="item-center my-3 flex items-center space-x-4 sm:space-x-7">
           {!isLoggedIn && (
             <button
-              className="rounded-md bg-primary px-6 text-white "
+              className="rounded-full bg-primary px-7 py-2 text-sm font-medium tracking-wide text-white shadow-card transition-all duration-200 ease-smooth hover:bg-primary-700 hover:shadow-card-hover"
               onClick={() => setModalVisibilty(true)}
             >
               Login
             </button>
           )}
           <button
-            className={isLoggedIn ? "" : "max-sm:hidden"}
+            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${isLoggedIn ? "" : "max-sm:hidden"}`}
             onClick={() =>
               isLoggedIn ? router.push("/cart") : setModalVisibilty(true)
             }
@@ -51,13 +54,13 @@ const NavBar = () => {
             <CartIcon width="23" height="19" color="black" />
           </button>
           <button
-            className={isLoggedIn ? "" : "max-sm:hidden"}
+            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${isLoggedIn ? "" : "max-sm:hidden"}`}
             onClick={() => router.push("/wishlist")}
           >
             <WishListIcon width="25" height="19" color="black" />
           </button>
           <button
-            className={isLoggedIn ? "" : "max-sm:hidden"}
+            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${isLoggedIn ? "" : "max-sm:hidden"}`}
             onClick={() =>
               isLoggedIn ? router.push("/my-orders") : setModalVisibilty(true)
             }

@@ -15,24 +15,28 @@ const AboutUs = () => {
   support you every step of the way.`;
 
   return (
-    <div className="flex flex-col items-center sm:p-14">
-      <p className="mb-12 text-3xl font-semibold">About Us</p>
-      <div className="mb-28 flex">
-        <p className="text-justify sm:text-2xl">{text}</p>
+    <div className="flex flex-col items-center rounded-xl2 bg-surface sm:p-14">
+      <p className="mb-12 text-2xl font-bold text-primary-800 sm:text-3xl">
+        About Us
+      </p>
+      <div className="mb-20 flex items-center">
+        <p className="text-justify leading-relaxed text-slate-600 sm:text-xl">
+          {text}
+        </p>
         <Image
           src={aboutus}
           alt="aboutus"
-          className="ml-10 hidden h-[320] w-[530] lg:flex"
+          className="ml-10 hidden h-[320] w-[530] rounded-xl2 shadow-card lg:flex"
         />
       </div>
       <a
         href="https://instagram.com/zeal__wear?igshid=MWZjMTM2ODFkZg=="
         target="_blank"
-        className="flex flex-col items-center text-center"
+        className="group flex flex-col items-center text-center transition-transform duration-200 ease-smooth hover:-translate-y-0.5"
       >
         <Image src={instaIcon} alt="instagram" />
-        <p className="text-2xl font-semibold">
-          Follow us in instagram @zeal__wear
+        <p className="text-xl font-semibold text-primary-800 group-hover:text-accent sm:text-2xl">
+          Follow us on Instagram @zeal__wear
         </p>
       </a>
     </div>

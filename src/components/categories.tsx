@@ -17,35 +17,37 @@ const Categories = () => {
   );
 
   return (
-    <div className="py-8">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-3xl font-bold">Categories</h2>
+    <div className="py-10">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-primary-800 sm:text-3xl">
+          Shop by Category
+        </h2>
         <button
-          className="text-lg font-medium text-orange-600"
+          className="text-sm font-semibold tracking-wide text-accent transition-colors duration-150 hover:text-accent-dark sm:text-lg"
           onClick={() => setShowAll(!showAll)}
         >
           {showAll ? "Show Less" : "View All"}
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
         {categories
           ? categories
               ?.slice(0, showAll ? categories.length : 8)
               .map((category) => (
                 <div
                   key={category.id}
-                  className="m-4"
+                  className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl2 shadow-card transition-all duration-300 ease-smooth hover:shadow-card-hover"
                   onClick={() => router.push(`/products?filter=${category.id}`)}
                 >
                   <Image
                     src={category.featuredAsset?.source || placeHolder}
                     alt={category.name}
-                    className="aspect-square rounded-l"
-                    width={240}
-                    height={240}
+                    fill
+                    className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-110"
                   />
-                  <p className="mt-2 text-center text-lg font-medium">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <p className="absolute bottom-4 left-0 right-0 text-center text-base font-semibold text-white sm:text-lg">
                     {category.name}
                   </p>
                 </div>
@@ -53,7 +55,7 @@ const Categories = () => {
           : Array(4)
               .fill("")
               .map((_i, index) => (
-                <div key={index} className="m-4">
+                <div key={index} className="aspect-square">
                   <Shimmer height={240} width={240} />
                 </div>
               ))}
