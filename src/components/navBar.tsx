@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import { AccountIcon, CartIcon, WishListIcon } from "./icons";
@@ -28,15 +29,17 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="flex h-18 items-center justify-between border-b border-primary-100/60 bg-white/90 px-4 py-2 backdrop-blur-md sm:px-8">
-        <div
-          className="my-1 aspect-[147/122] w-16 cursor-pointer transition-transform duration-200 ease-smooth hover:scale-105 sm:w-20"
-          onClick={() => router.push("/")}
-        >
-          <Image src={logo} alt="RelaxZeal" />
-        </div>
+      <div className="zeal-nav">
+        <Link href="/" className="zeal-nav-logo" aria-label="Zeal Wear home">
+          <Image src={logo} alt="" />
+        </Link>
+        <nav className="zeal-nav-links" aria-label="Shop navigation">
+          <Link href="/products">Shop</Link>
+          <Link href="/#categories">Categories</Link>
+          <Link href="/#about">Our story</Link>
+        </nav>
         <Search />
-        <div className="item-center my-3 flex items-center space-x-4 sm:space-x-7">
+        <div className="zeal-nav-actions">
           {!isLoggedIn && (
             <button
               className="rounded-full bg-primary px-7 py-2 text-sm font-medium tracking-wide text-white shadow-card transition-all duration-200 ease-smooth hover:bg-primary-700 hover:shadow-card-hover"
@@ -46,7 +49,10 @@ const NavBar = () => {
             </button>
           )}
           <button
-            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${isLoggedIn ? "" : "max-sm:hidden"}`}
+            aria-label="Shopping bag"
+            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${
+              isLoggedIn ? "" : "max-sm:hidden"
+            }`}
             onClick={() =>
               isLoggedIn ? router.push("/cart") : setModalVisibilty(true)
             }
@@ -54,13 +60,19 @@ const NavBar = () => {
             <CartIcon width="23" height="19" color="black" />
           </button>
           <button
-            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${isLoggedIn ? "" : "max-sm:hidden"}`}
+            aria-label="Wishlist"
+            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${
+              isLoggedIn ? "" : "max-sm:hidden"
+            }`}
             onClick={() => router.push("/wishlist")}
           >
             <WishListIcon width="25" height="19" color="black" />
           </button>
           <button
-            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${isLoggedIn ? "" : "max-sm:hidden"}`}
+            aria-label="My orders"
+            className={`transition-transform duration-150 ease-smooth hover:scale-110 hover:text-accent ${
+              isLoggedIn ? "" : "max-sm:hidden"
+            }`}
             onClick={() =>
               isLoggedIn ? router.push("/my-orders") : setModalVisibilty(true)
             }
@@ -69,6 +81,7 @@ const NavBar = () => {
           </button>
           {isLoggedIn && (
             <button
+              aria-label="Account menu"
               onClick={() => setOpenDrawer(!openDrawer)}
               className="sm:hidden"
             >

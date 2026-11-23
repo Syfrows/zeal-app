@@ -39,3 +39,424 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #7fa8c6;
 }
+
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("/zeal/barlow-condensed-normal-900.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("/zeal/barlow-condensed-italic-900.woff2") format("woff2");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+:root {
+  --zeal-ink: #141619;
+  --zeal-lime: #d8ff3f;
+  --zeal-display: "Barlow Condensed", Impact, "Arial Narrow", sans-serif;
+}
+:focus-visible {
+  outline: 2px solid #647b10;
+  outline-offset: 4px;
+}
+.zeal-skip {
+  position: fixed;
+  top: 0;
+  left: 1rem;
+  z-index: 60;
+  transform: translateY(-120%);
+  background: var(--zeal-lime);
+  padding: 0.8rem 1rem;
+}
+.zeal-skip:focus {
+  transform: translateY(0);
+}
+.zeal-shell {
+  width: min(80rem, calc(100% - 7rem));
+  margin-inline: auto;
+}
+.zeal-section {
+  padding-block: 3.5rem;
+  scroll-margin-top: 9rem;
+}
+.zeal-nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(12rem, 24rem) auto;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 2.4rem);
+  border-bottom: 1px solid #e4e5e2;
+  background: white;
+  min-height: 4.5rem;
+  padding: 0.4rem max(1rem, calc((100% - 80rem) / 2));
+}
+.zeal-nav-logo {
+  width: 3.9rem;
+}
+.zeal-nav-links,
+.zeal-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.6rem, 1.6vw, 1.7rem);
+}
+.zeal-nav-links {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.zeal-nav-links a:hover,
+.zeal-text-link:hover {
+  text-decoration-thickness: 2px;
+  text-decoration-line: underline;
+}
+.zeal-nav-actions {
+  justify-content: flex-end;
+}
+.zeal-nav-actions button {
+  min-height: 2.5rem;
+  min-width: 2rem;
+}
+.zeal-search {
+  width: 100%;
+  min-width: 0;
+}
+.zeal-hero {
+  position: relative;
+  isolation: isolate;
+  background: #21272d;
+  color: white;
+}
+.zeal-hero > img {
+  z-index: -2;
+  object-fit: cover;
+  object-position: 64% center;
+}
+.zeal-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, #111317 0%, #111317cf 35%, #11131710 78%);
+}
+.zeal-hero-content {
+  min-height: clamp(31rem, 44vw, 43rem);
+  padding-block: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.zeal-eyebrow {
+  font-size: 0.77rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.zeal-eyebrow::before {
+  content: "";
+  width: 1.4rem;
+  height: 2px;
+  background: var(--zeal-lime);
+}
+.zeal-hero h1 {
+  font: 900 clamp(5rem, 9.4vw, 9.5rem) / 0.82 var(--zeal-display);
+  text-transform: uppercase;
+  margin-block: 0.7rem 1.5rem;
+}
+.zeal-hero em {
+  color: var(--zeal-lime);
+}
+.zeal-hero-description {
+  max-width: 24rem;
+  color: #f0f1f1;
+  line-height: 1.6;
+}
+.zeal-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+.zeal-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+.zeal-button-lime {
+  background: var(--zeal-lime);
+  color: var(--zeal-ink);
+}
+.zeal-button-lime:hover {
+  background: #c7ed35;
+}
+.zeal-button-dark {
+  background: var(--zeal-ink);
+  color: white;
+}
+.zeal-button-dark:hover {
+  background: #34373d;
+}
+.zeal-button-outline {
+  border-color: #b2b3b3;
+}
+.zeal-button-outline:hover {
+  background: #ffffff20;
+}
+.zeal-hero :focus-visible {
+  outline-color: var(--zeal-lime);
+}
+.zeal-activities {
+  background: #202326;
+  color: white;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 0.9rem max(1rem, calc((100% - 80rem) / 2));
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.zeal-activities span + span {
+  border-left: 1px solid #57595b;
+}
+.zeal-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.zeal-heading {
+  color: var(--zeal-ink);
+  font: 900 clamp(2.8rem, 5vw, 4.8rem) / 0.9 var(--zeal-display);
+  text-transform: uppercase;
+}
+.zeal-text-link {
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.zeal-collection {
+  background: #f2f3ee;
+}
+.zeal-category-grid,
+.zeal-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.zeal-category {
+  aspect-ratio: 1.28;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.9rem;
+  overflow: hidden;
+  color: white;
+  background: #33373d;
+  border-radius: 4px;
+}
+.zeal-category::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(0deg, #111317, transparent 76%);
+}
+.zeal-category img {
+  object-fit: cover;
+  z-index: -2;
+  transition: transform 0.24s ease;
+}
+.zeal-category:hover img {
+  transform: scale(1.05);
+}
+.zeal-category span {
+  font: 900 clamp(1.6rem, 3vw, 2.8rem) / 0.95 var(--zeal-display);
+  text-transform: uppercase;
+}
+.zeal-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.zeal-filters button,
+.zeal-sort select {
+  border: 1px solid #a9aca3;
+  background: white;
+  border-radius: 3px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.875rem;
+}
+.zeal-filters button[aria-pressed="true"] {
+  border-color: var(--zeal-ink);
+  background: var(--zeal-ink);
+  color: white;
+}
+.zeal-sort {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+.zeal-card {
+  background: #fff;
+  border: 1px solid #e4e5df;
+  border-radius: 4px;
+  min-width: 0;
+}
+.zeal-card-link {
+  display: block;
+}
+.zeal-card-image {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #e9e9e4;
+}
+.zeal-card-image img {
+  object-fit: cover;
+  transition: transform 0.24s ease;
+}
+.zeal-card-link:hover img {
+  transform: scale(1.04);
+}
+.zeal-card-body {
+  padding: 0.75rem;
+}
+.zeal-card-body h3 {
+  font-weight: 700;
+}
+.zeal-card-body p,
+.zeal-card-price del {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: #53565a;
+}
+.zeal-card-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin-top: 0.3rem;
+}
+.zeal-card-rating {
+  padding: 0 0.75rem 0.75rem;
+}
+.zeal-stock {
+  position: absolute;
+  inset: 0.65rem auto auto 0.65rem;
+  background: white;
+  padding: 0.2rem 0.4rem;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.zeal-status {
+  min-height: 7rem;
+  border: 1px solid #dedfd9;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+  justify-content: center;
+  background: #fafaf8;
+}
+.zeal-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 960px) {
+  .zeal-shell {
+    width: calc(100% - 3rem);
+  }
+  .zeal-nav {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  .zeal-nav-links {
+    display: none;
+  }
+  .zeal-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .zeal-shell {
+    width: calc(100% - 2rem);
+  }
+  .zeal-section {
+    padding-block: 2.4rem;
+  }
+  .zeal-nav {
+    grid-template-columns: auto 1fr;
+    padding: 0.4rem 1rem 0.6rem;
+  }
+  .zeal-nav-logo {
+    width: 2.9rem;
+  }
+  .zeal-search {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .zeal-hero-content {
+    justify-content: flex-end;
+    min-height: 34rem;
+    padding-block: 11rem 2.2rem;
+  }
+  .zeal-hero > img {
+    object-position: 66% center;
+  }
+  .zeal-hero::after {
+    background: linear-gradient(
+      0deg,
+      #111317 0%,
+      #111317bc 45%,
+      #11131712 100%
+    );
+  }
+  .zeal-hero h1 {
+    font-size: clamp(4.3rem, 15vw, 6.6rem);
+    margin-bottom: 1rem;
+  }
+  .zeal-activities {
+    font-size: 0.62rem;
+    letter-spacing: 0.03em;
+  }
+  .zeal-category-grid,
+  .zeal-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+  .zeal-shop-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .zeal-category img,
+  .zeal-card-image img {
+    transition: none;
+  }
+}
