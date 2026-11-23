@@ -4,8 +4,6 @@ const ReturnPolicy = () => {
   return (
     <Layout>
       <div className="mx-auto max-w-3xl p-4">
-        <h1 className="mb-4 text-3xl font-bold">Return Policy</h1>
-
         <p className="mb-6">
           At ZealWear, we want you to be completely satisfied with your
           purchase. If you are not happy with your purchase for any reason, you

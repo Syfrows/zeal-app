@@ -1,62 +1,99 @@
-import Layout from "@/components/layout";
-import ProductsLayout from "@/components/productsLayout";
-import { PRODUCTS_BY_COLLECTION } from "@/graphql/products";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import Pagination from "@mui/material/Pagination";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import Layout from "@/components/layout";
+import ProductsLayout from "@/components/productsLayout";
+import { SortOrder } from "@/__generated__/graphql";
+import { PRODUCTS_BY_COLLECTION } from "@/graphql/products";
 
-const NUMBER_OF_ITEMS = 80;
+const PAGE_SIZE = 24;
+const sorting = {
+  featured: undefined,
+  "price-low": { priceWithTax: SortOrder.Asc },
+  "price-high": { priceWithTax: SortOrder.Desc },
+} as const;
 
 const Products = () => {
-  const selectedfilterId = useSearchParams().get("filter");
-  const { data, refetch } = useQuery(PRODUCTS_BY_COLLECTION, {
+  const router = useRouter();
+  const { filter, page, sort } = router.query;
+  const filterId = typeof filter === "string" ? filter : "";
+  const parsedPage = typeof page === "string" ? Number(page) : 1;
+  const currentPage =
+    Number.isInteger(parsedPage) && parsedPage > 0 && parsedPage <= 100000
+      ? parsedPage
+      : 1;
+  const currentSort =
+    sort === "price-low" || sort === "price-high" ? sort : "featured";
+  const { data, loading, error, refetch } = useQuery(PRODUCTS_BY_COLLECTION, {
+    skip: !router.isReady,
     variables: {
-      id: selectedfilterId,
-      slug: selectedfilterId ? "" : "all",
-      options: { skip: 0, take: NUMBER_OF_ITEMS },
+      id: filterId || undefined,
+      slug: filterId ? undefined : "all",
+      options: {
+        skip: (currentPage - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+        sort: sorting[currentSort],
+      },
     },
+    notifyOnNetworkStatusChange: true,
   });
-  const products = data?.collection
-    ? data.collection.productVariants.items
-    : [];
-  const totalCount = data?.collection
-    ? Math.ceil(data.collection.productVariants.totalItems / NUMBER_OF_ITEMS)
-    : 1;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filterId, setFilterId] = useState(
-    selectedfilterId ? selectedfilterId : ""
+  const total = Math.ceil(
+    (data?.collection?.productVariants.totalItems ?? 0) / PAGE_SIZE
   );
-  useEffect(() => setCurrentPage(1), [filterId]);
+
+  function navigate(nextFilter: string, nextPage: number, nextSort: string) {
+    const query: Record<string, string> = {};
+    if (nextFilter) query.filter = nextFilter;
+    if (nextPage > 1) query.page = String(nextPage);
+    if (nextSort !== "featured") query.sort = nextSort;
+    void router.push({ pathname: "/products", query }, undefined, {
+      shallow: true,
+    });
+  }
+
   return (
-    <Layout>
-      <div className="flex flex-col px-4 py-12 lg:px-48">
-        <div className="grow">
-          <ProductsLayout
-            products={products}
-            refetch={refetch}
-            setFilterId={setFilterId}
-          />
+    <Layout flush>
+      <Head>
+        <title>Shop activewear | Zeal Wear</title>
+        <meta
+          name="description"
+          content="Browse the Zeal Wear collection of sportswear and activewear by RelaxZeal."
+        />
+      </Head>
+      <section className="zeal-shell zeal-section">
+        <div className="zeal-section-heading zeal-shop-heading">
+          <h1 className="zeal-heading">Shop activewear</h1>
+          <label className="zeal-sort">
+            Sort by
+            <select
+              value={currentSort}
+              onChange={(event) => navigate(filterId, 1, event.target.value)}
+            >
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: low to high</option>
+              <option value="price-high">Price: high to low</option>
+            </select>
+          </label>
         </div>
-        <div className="self-center rounded-lg border-2 border-gray-200 p-3">
-          <Pagination
-            count={totalCount}
-            shape="rounded"
-            size="large"
-            onChange={(_event, value) => {
-              setCurrentPage(value);
-              refetch({
-                id: filterId,
-                options: {
-                  skip: (value - 1) * NUMBER_OF_ITEMS,
-                  take: NUMBER_OF_ITEMS,
-                },
-              });
-            }}
-            page={currentPage}
-          />
-        </div>
-      </div>
+        <ProductsLayout
+          products={data?.collection?.productVariants.items ?? []}
+          filter={filterId}
+          onFilter={(id) => navigate(id, 1, currentSort)}
+          loading={!router.isReady || loading}
+          unavailable={!!error}
+          retry={refetch}
+        />
+        {total > 1 && !loading && !error && (
+          <div className="zeal-pagination">
+            <Pagination
+              count={total}
+              page={currentPage}
+              onChange={(_event, next) => navigate(filterId, next, currentSort)}
+            />
+          </div>
+        )}
+      </section>
     </Layout>
   );
 };

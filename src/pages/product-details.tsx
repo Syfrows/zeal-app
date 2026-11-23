@@ -30,6 +30,7 @@ import Alert from "@mui/material/Alert";
 import placeHolder from "../assets/placeHolder.png";
 import SizeChartModal from "@/components/sizeChartModal";
 import Shimmer from "@/components/Shimmer";
+import CatalogStatus from "@/components/catalogStatus";
 
 const ProductDetails = () => {
   const router = useRouter();
@@ -44,7 +45,9 @@ const ProductDetails = () => {
   const [info, setInfo] = useState("");
   const [moreDescription, setMoreDescription] = useState(false);
 
-  const { loading, error, data } = useQuery(PRODUCT_DETAILS, {
+  const { loading, error, data, refetch } = useQuery(PRODUCT_DETAILS, {
+    skip: !router.isReady || !productName,
+    notifyOnNetworkStatusChange: true,
     variables: { slug: productName },
   });
 
@@ -94,7 +97,7 @@ const ProductDetails = () => {
       : setInfo((addToCartData?.addItemToOrder as ErrorResult).message);
   }, [addToCartData]);
 
-  if (loading) {
+  if (!router.isReady || loading) {
     return (
       <Layout>
         <div className="flex flex-col sm:flex-row sm:space-x-4">
@@ -114,6 +117,14 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <CatalogStatus unavailable empty="" retry={refetch} />
       </Layout>
     );
   }

@@ -14,7 +14,7 @@ const Footer = () => {
   const addressText = `Relax-Zeal, a complete fitness mantra of the 21st century gives fitness a holistic view with its all encompassing approach in giving a healthy body and peaceful mind.`;
   return (
     <div>
-      <div className="flex justify-center gap-x-16 bg-gradient-to-b from-primary-800 to-primary-900 px-4 py-16 text-primary-100 max-sm:flex-col max-sm:gap-y-10 sm:max-lg:gap-x-16 lg:gap-x-24">
+      <div className="flex justify-center gap-x-16 bg-[#191c20] px-4 py-16 text-primary-100 max-sm:flex-col max-sm:gap-y-10 sm:max-lg:gap-x-16 lg:gap-x-24">
         <div className="w-64">
           <div className="mb-5 flex">
             <Image
@@ -25,44 +25,80 @@ const Footer = () => {
               height={75}
             />
           </div>
-          <address className="text-sm leading-relaxed not-italic text-primary-200">
+          <address className="text-sm not-italic leading-relaxed text-primary-200">
             {addressText}
           </address>
           <div className="mt-5 flex space-x-3">
-            <button className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 ease-smooth hover:bg-accent">
-              <FacebookIcon width="7" height="11" color="white" />
-            </button>
             <a
               href="https://instagram.com/zeal__wear?igshid=MWZjMTM2ODFkZg=="
               target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Zeal Wear on Instagram"
               className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 ease-smooth hover:bg-accent"
             >
               <InstagramIcon width="10" height="10" color="white" />
             </a>
-            <button className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 ease-smooth hover:bg-accent">
-              <TwitterIcon width="12" height="10" color="white" />
-            </button>
-            <button className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 ease-smooth hover:bg-accent">
-              <LinkedInIcon width="12" height="12" color="white" />
-            </button>
           </div>
         </div>
         <div className="flex flex-col space-y-2.5">
           <p className="mb-2 text-xl font-semibold text-white">Support</p>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"/contact-us"}>Contact Us</Link>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"/terms-and-conditions"}>Terms & Conditions</Link>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"/privacy-and-policy"}>Privacy Policy</Link>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"/cancellation-and-refund-policy"}>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"/contact-us"}
+          >
+            Contact Us
+          </Link>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"/terms-and-conditions"}
+          >
+            Terms & Conditions
+          </Link>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"/privacy-and-policy"}
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"/cancellation-and-refund-policy"}
+          >
             Cancellation and Refund Policy
           </Link>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"/return-policy"}>Return Policy</Link>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"/shipping-and-delivery"}>Shipping and Delivery</Link>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"/pricing-policy"}>Pricing Policy</Link>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"/return-policy"}
+          >
+            Return Policy
+          </Link>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"/shipping-and-delivery"}
+          >
+            Shipping and Delivery
+          </Link>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"/pricing-policy"}
+          >
+            Pricing Policy
+          </Link>
         </div>
         <div className="flex flex-col space-y-2.5">
           <p className="mb-2 text-xl font-semibold text-white">Contact Us</p>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"tel:+91 9823144128"}>+91 9823144128</Link>
-          <Link className="w-fit text-primary-200 transition-colors duration-150 hover:text-white" href={"mailto:info@relaxzeal.com"}>zeal@relaxzeal.com</Link>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"tel:+919823144128"}
+          >
+            +91 9823144128
+          </Link>
+          <Link
+            className="w-fit text-primary-200 transition-colors duration-150 hover:text-white"
+            href={"mailto:zeal@relaxzeal.com"}
+          >
+            zeal@relaxzeal.com
+          </Link>
           <address className="not-italic text-primary-200">
             344/345,Narhari Enclave,
             <br />N 1, Cidco, Maharashtra 431003

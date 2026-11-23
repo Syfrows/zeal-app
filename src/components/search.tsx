@@ -1,75 +1,73 @@
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SEARCH } from "@/graphql/landingPage";
-import { useLazyQuery } from "@apollo/client";
-import { SearchQuery } from "@/__generated__/graphql";
+import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
-interface Product {
-  slug: string;
-  productVariantName: string;
-}
-
-const Search = () => {
+export default function Search() {
   const router = useRouter();
-  const [searchProducts] = useLazyQuery(SEARCH);
-  const [options, setOptions] = useState<Product[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [term, setTerm] = useState("");
 
-  const onSearchCompleted = (data: SearchQuery) => {
-    setOptions(data.search.items);
-  };
+  useEffect(() => {
+    const timer = window.setTimeout(() => setTerm(searchText.trim()), 250);
+    return () => window.clearTimeout(timer);
+  }, [searchText]);
+
+  const { data, loading, error } = useQuery(SEARCH, {
+    variables: { input: { term } },
+    skip: !term,
+  });
+  const waiting = term !== searchText.trim();
+  const options = term && !waiting && !error ? data?.search.items ?? [] : [];
 
   return (
-    <div className="m-3 w-full max-w-lg">
+    <div className="zeal-search">
       <Autocomplete
         id="search"
         size="small"
-        sx={{
-          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-            {
-              borderColor: "#023047",
-            },
-        }}
-        getOptionLabel={(option) => option.productVariantName}
-        filterOptions={(x) => x}
+        inputValue={searchText}
         options={options}
-        noOptionsText={searchText ? "Product not found." : "Type to search..."}
-        onChange={(_event: any, product: Product | null) => {
-          router.push(
-            `/product-details?name=${product?.slug}&variant=${product?.productVariantName}`
-          );
+        loading={!!searchText.trim() && (waiting || loading)}
+        filterOptions={(items) => items}
+        getOptionLabel={(product) => product.productVariantName}
+        isOptionEqualToValue={(first, second) =>
+          first.slug === second.slug &&
+          first.productVariantName === second.productVariantName
+        }
+        noOptionsText={
+          error && term && !waiting
+            ? "Search is temporarily unavailable."
+            : searchText.trim()
+            ? "No matching products."
+            : "Type to search."
+        }
+        onChange={(_event, product) => {
+          if (!product) return;
+          void router.push({
+            pathname: "/product-details",
+            query: { name: product.slug, variant: product.productVariantName },
+          });
         }}
-        onInputChange={(_event, newInputValue) => {
-          setSearchText(newInputValue);
-          newInputValue
-            ? searchProducts({
-                variables: { input: { term: newInputValue } },
-                onCompleted: onSearchCompleted,
-              })
-            : setOptions([]);
-        }}
+        onInputChange={(_event, value) => setSearchText(value)}
         renderInput={(params) => (
           <TextField
             {...params}
             fullWidth
-            placeholder="Search Products"
+            placeholder="Search products"
+            inputProps={{
+              ...params.inputProps,
+              "aria-label": "Search products",
+            }}
             InputProps={{
               ...params.InputProps,
-              startAdornment: (
-                <>
-                  <SearchIcon color="action" />
-                  {params.InputProps.startAdornment}
-                </>
-              ),
+              startAdornment: <SearchIcon color="action" fontSize="small" />,
             }}
           />
         )}
       />
     </div>
   );
-};
-
-export default Search;
+}

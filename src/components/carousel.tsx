@@ -1,72 +1,57 @@
-import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { HERO_SECTION } from "@/graphql/landingPage";
 import MuiCarousel from "react-material-ui-carousel";
-import Shimmer from "./Shimmer";
 
-const Carousel = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const router = useRouter();
-  const { data, error, loading } = useQuery(HERO_SECTION, {
-    variables: {
-      slug: "hero-section",
-    },
+export default function Carousel() {
+  const { data } = useQuery(HERO_SECTION, {
+    variables: { slug: "hero-section" },
+  });
+  const slides = (data?.collection?.children ?? []).flatMap((item) => {
+    const wide = item.assets.find((asset) => !asset.name.includes("mobile"));
+    const narrow = item.assets.find((asset) => asset.name.includes("mobile"));
+    const primary = wide ?? narrow;
+    return primary
+      ? [
+          {
+            id: item.id,
+            name: item.name,
+            wide: primary,
+            narrow: narrow ?? primary,
+          },
+        ]
+      : [];
   });
 
-  const slides = useMemo(
-    () => data?.collection?.children || [],
-    [data?.collection?.children]
-  );
-
-  const web = slides.map((x) => ({
-    ...slides,
-    assets: x.assets.filter((x) => !x.name.includes("mobile")),
-  }));
-  const mobile = slides.map((x) => ({
-    ...slides,
-    assets: x.assets.filter((x) => x.name.includes("mobile")),
-  }));
-
-  if (!data) {
-    return (
-      <MuiCarousel animation="slide" className="-m-4">
-        <Shimmer height={384} width={1536} />
-      </MuiCarousel>
-    );
-  }
+  if (!slides.length) return null;
 
   return (
-    <>
-      <MuiCarousel animation="slide" className="-m-4 hidden sm:block">
-        {web.map((slide, index) => (
-          <div key={index} onClick={() => router.push(`/products`)}>
+    <section className="zeal-section" aria-label="Featured collections">
+      <MuiCarousel
+        animation="slide"
+        autoPlay={false}
+        navButtonsAlwaysVisible={slides.length > 1}
+      >
+        {slides.map((slide) => (
+          <Link href="/products" className="block" key={slide.id}>
             <Image
-              src={slide.assets[0]?.preview || ""}
-              alt="RelaxZeal"
-              className="aspect-[3/1]"
+              src={slide.wide.preview}
+              alt={slide.name}
+              className="hidden w-full rounded sm:block"
               width={1536}
-              height={384}
+              height={512}
             />
-          </div>
+            <Image
+              src={slide.narrow.preview}
+              alt={slide.name}
+              className="w-full rounded sm:hidden"
+              width={768}
+              height={512}
+            />
+          </Link>
         ))}
       </MuiCarousel>
-      <MuiCarousel animation="slide" className="-m-4 sm:hidden">
-        {mobile.map((slide, index) => (
-          <div key={index} onClick={() => router.push(`/products`)}>
-            <Image
-              src={slide.assets[0]?.preview || ""}
-              alt="RelaxZeal"
-              className="aspect-[3/2]"
-              width={1536}
-              height={384}
-            />
-          </div>
-        ))}
-      </MuiCarousel>
-    </>
+    </section>
   );
-};
-
-export default Carousel;
+}

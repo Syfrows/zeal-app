@@ -1,3 +1,4 @@
+import ServiceNotice from "@/components/serviceNotice";
 import { Order, OrderLine } from "@/__generated__/graphql";
 import Layout from "@/components/layout";
 import { ORDER_BY_CODE } from "@/graphql/orderWorkflow";
@@ -73,11 +74,45 @@ const Confirmation = () => {
   const isReturn = searchParams.get("isReturn");
   const orderCode = searchParams.get("orderCode");
   const router = useRouter();
-  const { data } = useQuery(ORDER_BY_CODE, {
+  const {
+    data,
+    error,
+    loading: queryLoading,
+  } = useQuery(ORDER_BY_CODE, {
     variables: { code: orderCode || "" },
+    skip: !orderCode || !!isReturn,
   });
   const orders = data?.orderByCode as Order;
   const products = orders?.lines;
+  if (error)
+    return (
+      <Layout>
+        <ServiceNotice message="We could not verify this order. If you made a payment, check your order history or contact support before trying again." />
+      </Layout>
+    );
+  if (queryLoading)
+    return (
+      <Layout>
+        <p role="status">Loading…</p>
+      </Layout>
+    );
+  if (
+    isReturn ||
+    !orders ||
+    ![
+      "PaymentAuthorized",
+      "PaymentSettled",
+      "Shipped",
+      "PartiallyShipped",
+      "Delivered",
+      "PartiallyDelivered",
+    ].includes(orders.state)
+  )
+    return (
+      <Layout>
+        <ServiceNotice message="No confirmed order is available for this link. Check your order history or contact support." />
+      </Layout>
+    );
   return (
     <Layout>
       <div className="flex flex-col py-12 lg:px-32">

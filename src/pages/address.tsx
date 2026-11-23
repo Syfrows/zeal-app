@@ -1,3 +1,4 @@
+import ServiceNotice from "@/components/serviceNotice";
 import {
   Address,
   GetShippingMethodsQuery,
@@ -102,6 +103,13 @@ const Address = () => {
   const [selectedAddress, setSelectedAddress] = useState(
     addresses && addresses[0]
   );
+  const [shippingError, setShippingError] = useState("");
+  const shippingFailed = () => {
+    setIsLoading(false);
+    setShippingError(
+      "Shipping could not be confirmed. Check the address and try again."
+    );
+  };
   const [isLoading, setIsLoading] = useState(false);
   const [setShippingAddress] = useMutation(SET_SHIPPING_ADDRESS);
   const [getShippingMethods] = useLazyQuery(GET_SHIPPING_METHODS);
@@ -116,19 +124,29 @@ const Address = () => {
 
   const onSetShippingAddress = (_data: SetShippingAddressMutation) => {
     getShippingMethods({
+      onError: shippingFailed,
       onCompleted: onGetShippingMethods,
     });
   };
 
   const onGetShippingMethods = (data: GetShippingMethodsQuery) => {
+    if (!data.eligibleShippingMethods.length) {
+      shippingFailed();
+      return;
+    }
     setShippingMethods({
       variables: { shippingMethodId: data.eligibleShippingMethods[0].id },
-      onCompleted: () => router.push("/order-confirmation"),
+      onError: shippingFailed,
+      onCompleted: (result) =>
+        result.setOrderShippingMethod.__typename === "Order"
+          ? router.push("/order-confirmation")
+          : shippingFailed(),
     });
   };
 
   const onContinue = () => {
     if (!selectedAddress) return;
+    setShippingError("");
     setIsLoading(true);
     setShippingAddress({
       variables: {
@@ -143,6 +161,7 @@ const Address = () => {
           phoneNumber: selectedAddress.phoneNumber,
         },
       },
+      onError: shippingFailed,
       onCompleted: onSetShippingAddress,
     });
   };
@@ -168,8 +187,15 @@ const Address = () => {
     );
   };
 
+  if (error)
+    return (
+      <Layout>
+        <ServiceNotice message="Your addresses are temporarily unavailable." />
+      </Layout>
+    );
   return (
     <Layout>
+      {shippingError && <p role="alert">{shippingError}</p>}
       <div className="space-y-4 xl:px-32 xl:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
