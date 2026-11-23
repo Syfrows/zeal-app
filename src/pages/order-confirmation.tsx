@@ -1,3 +1,4 @@
+import ServiceNotice from "@/components/serviceNotice";
 import {
   ActiveOrderFragment,
   AddPaymentMutation,
@@ -118,7 +119,7 @@ const Product = ({ product, setActiveOrders }: ProductProps) => {
 const OrderConfirmation = () => {
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("");
-  const { data } = useQuery(ACTIVE_ORDER);
+  const { data, error, loading: queryLoading } = useQuery(ACTIVE_ORDER);
   const [activeOrders, setActiveOrders] = useState(
     data?.activeOrderCustom as ActiveOrderFragment
   );
@@ -216,6 +217,24 @@ const OrderConfirmation = () => {
     router.push(`/confirmation?orderCode=${order.code}`);
   };
 
+  if (error)
+    return (
+      <Layout>
+        <ServiceNotice message="Checkout is temporarily unavailable." />
+      </Layout>
+    );
+  if (queryLoading)
+    return (
+      <Layout>
+        <p role="status">Loading…</p>
+      </Layout>
+    );
+  if (!activeOrders?.totalQuantity || paymentMethodsData.error)
+    return (
+      <Layout>
+        <ServiceNotice message="Checkout requires an active bag and an available payment method." />
+      </Layout>
+    );
   return (
     <Layout>
       <div className="space-y-4 xl:px-32 xl:py-4">

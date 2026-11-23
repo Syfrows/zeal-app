@@ -1,3 +1,4 @@
+import ServiceNotice from "@/components/serviceNotice";
 import Layout from "@/components/layout";
 import SideNav from "@/components/sideNav";
 import { ACCOUNT_INFO, UPDATE_ACCOUNT_INFO } from "@/graphql/accounts";
@@ -11,7 +12,7 @@ import { useEffect, useState } from "react";
 
 const AccountInformation = () => {
   const [value, setValue] = useState("yes");
-  const { data } = useQuery(ACCOUNT_INFO);
+  const { data, error, loading: queryLoading } = useQuery(ACCOUNT_INFO);
   const details = data?.authenticatedUser;
   const [inputs, setInputs] = useState<any>(details);
   const [updateAccountInfo, { loading }] = useMutation(UPDATE_ACCOUNT_INFO);
@@ -22,7 +23,7 @@ const AccountInformation = () => {
     updateAccountInfo({
       variables: {
         input: {
-          title: inputs.firstname + " " + inputs.lastName,
+          title: inputs.firstName + " " + inputs.lastName,
           firstName: inputs.firstName,
           lastName: inputs.lastName,
           phoneNumber: inputs.phoneNumber,
@@ -32,7 +33,24 @@ const AccountInformation = () => {
     });
   };
 
-  if (!details) return <Layout></Layout>;
+  if (error)
+    return (
+      <Layout>
+        <ServiceNotice message="Your account details are temporarily unavailable." />
+      </Layout>
+    );
+  if (queryLoading)
+    return (
+      <Layout>
+        <p role="status">Loading…</p>
+      </Layout>
+    );
+  if (!details)
+    return (
+      <Layout>
+        <ServiceNotice message="Sign in to view your account." />
+      </Layout>
+    );
   return (
     <Layout>
       <div className="flex justify-center py-12 xl:px-32">

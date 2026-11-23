@@ -6,10 +6,6 @@ const CancellationRefundPolicy = () => {
   return (
     <Layout>
       <div className="mx-auto max-w-3xl p-4">
-        <h1 className="mb-4 text-3xl font-bold">
-          Cancellation and Refund Policy
-        </h1>
-
         <div className="mb-6">
           <h2 className="mb-2 text-xl font-bold">1. Cancellation Policy:</h2>
           <p>

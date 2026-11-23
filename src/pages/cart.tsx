@@ -1,3 +1,4 @@
+import ServiceNotice from "@/components/serviceNotice";
 import Layout from "@/components/layout";
 import Image from "next/image";
 import { Add, Remove } from "@mui/icons-material";
@@ -143,6 +144,12 @@ const Cart = () => {
     [data]
   );
 
+  if (error)
+    return (
+      <Layout>
+        <ServiceNotice message="Your bag is temporarily unavailable. Please try again later." />
+      </Layout>
+    );
   return (
     <Layout>
       <div className="flex flex-col items-center justify-items-center p-12">

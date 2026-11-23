@@ -4,8 +4,6 @@ const ContactUS = () => {
   return (
     <Layout>
       <div className="mx-auto max-w-3xl p-4">
-        <h1 className="mb-4 text-3xl font-bold">Contact Us</h1>
-
         <p>
           We are here to assist you. If you have any questions or concerns,
           please do not hesitate to reach out to us:
@@ -20,7 +18,9 @@ const ContactUS = () => {
                 zeal@relaxzeal.com
               </a>
             </li>
-            <li>Phone: +91 7057923102</li>
+            <li>
+              Phone: <a href="tel:+917057923102">+91 70579 23102</a>
+            </li>
           </ul>
         </div>
 

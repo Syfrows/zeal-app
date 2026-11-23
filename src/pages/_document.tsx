@@ -4,7 +4,6 @@ import Script from "next/script";
 export default function Document() {
   return (
     <Html lang="en">
-      <title>Zeal</title>
       <Head />
       <Script
         async

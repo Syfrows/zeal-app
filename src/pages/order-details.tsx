@@ -1,3 +1,4 @@
+import ServiceNotice from "@/components/serviceNotice";
 import { Order } from "@/__generated__/graphql";
 import Layout from "@/components/layout";
 import { ORDER_BY_ID } from "@/graphql/orders";
@@ -12,14 +13,35 @@ import placeHolder from "../assets/placeHolder.png";
 const OrderDetails = () => {
   const router = useRouter();
   const orderId = useSearchParams().get("orderId") || "";
-  const { data } = useQuery(ORDER_BY_ID, { variables: { id: orderId } });
+  const {
+    data,
+    error,
+    loading: queryLoading,
+  } = useQuery(ORDER_BY_ID, { variables: { id: orderId }, skip: !orderId });
   const order = data?.order as Order;
   const products = order?.lines;
   const address = order?.shippingAddress;
-  const paymentMethod = order?.payments && order.payments[0].method;
-  const shippingMethod =
-    order?.shippingLines && order.shippingLines[0].shippingMethod.name;
+  const paymentMethod = order?.payments?.[0]?.method;
+  const shippingMethod = order?.shippingLines?.[0]?.shippingMethod?.name;
   const invoiceDownloadUrl = order?.invoices?.[0]?.downloadUrl;
+  if (error)
+    return (
+      <Layout>
+        <ServiceNotice message="Order details are temporarily unavailable." />
+      </Layout>
+    );
+  if (queryLoading)
+    return (
+      <Layout>
+        <p role="status">Loading…</p>
+      </Layout>
+    );
+  if (!order)
+    return (
+      <Layout>
+        <ServiceNotice message="Select an order from your order history to see its details." />
+      </Layout>
+    );
   return (
     <Layout>
       <div className="flex flex-col space-y-8 py-12 xl:px-32">

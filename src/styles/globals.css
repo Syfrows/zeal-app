@@ -460,3 +460,64 @@ body {
     transition: none;
   }
 }
+.zeal-mast {
+  background: #171a1d url("/zeal/studio.webp") center 50% / cover;
+  color: white;
+  padding: clamp(2rem, 5vw, 5rem) 0;
+}
+.zeal-mast a {
+  font-size: 0.85rem;
+  color: #d8ff3f;
+  font-weight: 700;
+}
+.zeal-mast h1 {
+  margin-top: 0.5rem;
+  font: 900 clamp(2.8rem, 6vw, 6rem) / 0.95 var(--zeal-display);
+  text-transform: uppercase;
+  max-width: 20ch;
+}
+.zeal-interior {
+  min-height: 32vh;
+  padding-block: clamp(1.5rem, 4vw, 4rem);
+  overflow-wrap: anywhere;
+}
+.zeal-interior .bg-primary {
+  background: #191c20;
+  border-radius: 4px;
+}
+.zeal-interior .border-gray-400,
+.zeal-interior .border-gray-300,
+.zeal-interior .border-slate-400 {
+  border: 1px solid #dfe1db;
+  border-radius: 5px;
+}
+.zeal-interior .bg-gray-300 {
+  background: #eff1e9;
+}
+.zeal-support {
+  max-width: 51rem;
+  line-height: 1.75;
+}
+.zeal-support h2,
+.service-notice h2 {
+  font: 900 1.8rem/1.15 var(--zeal-display);
+  margin-block: 1.5rem 0.65rem;
+}
+.zeal-support a,
+.service-notice a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #324a17;
+}
+.service-notice {
+  padding: clamp(1.2rem, 4vw, 3rem);
+  border: 1px solid #dedfd8;
+  background: #f7f8f3;
+  border-radius: 4px;
+}
+.service-notice div {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}

@@ -4,8 +4,6 @@ const ShippingDelivery = () => {
   return (
     <Layout>
       <div className="mx-auto max-w-3xl p-4">
-        <h1 className="mb-4 text-3xl font-bold">Shipping and Delivery</h1>
-
         <div className="mb-6">
           <h2 className="mb-2 text-xl font-bold">1. Shipping Information:</h2>
           <ul className="list-disc pl-4">

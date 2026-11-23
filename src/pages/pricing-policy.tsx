@@ -5,8 +5,6 @@ const PricingPolicy = () => {
   return (
     <Layout>
       <div className="mx-auto max-w-3xl p-4">
-        <h1 className="mb-4 text-3xl font-bold">Pricing</h1>
-
         <div className="mb-6">
           <h2 className="mb-2 text-xl font-bold">1. Product Pricing:</h2>
           <ul className="list-disc pl-4">

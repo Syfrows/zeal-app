@@ -1,3 +1,4 @@
+import ServiceNotice from "@/components/serviceNotice";
 import Image from "next/image";
 import wishlist from "../assets/wishlist.png";
 import Layout from "@/components/layout";
@@ -102,6 +103,12 @@ const WishList = () => {
   const { data, error, loading, refetch } = useQuery(GET_WISHLIST);
   const products = data?.authenticatedUser?.favorites.items || [];
 
+  if (error)
+    return (
+      <Layout>
+        <ServiceNotice message="Your wishlist is temporarily unavailable." />
+      </Layout>
+    );
   return (
     <Layout>
       <div className="flex flex-col items-center justify-items-center space-y-8 py-4">

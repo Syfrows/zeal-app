@@ -1,3 +1,4 @@
+import ServiceNotice from "@/components/serviceNotice";
 import { Order } from "@/__generated__/graphql";
 import Layout from "@/components/layout";
 import SideNav from "@/components/sideNav";
@@ -81,7 +82,7 @@ const OrderItem = ({ order }: OrderItemProps) => {
 const MyOrders = () => {
   const searchParams = useSearchParams();
   const isReturns = searchParams.get("isReturns");
-  const { data } = useQuery(GET_ORDERS);
+  const { data, error, loading: queryLoading } = useQuery(GET_ORDERS);
   const ordersData = data?.authenticatedUser?.orders.items;
   const orders = ordersData?.filter((x) =>
     isReturns
@@ -94,6 +95,24 @@ const MyOrders = () => {
       : 1
   );
 
+  if (error)
+    return (
+      <Layout>
+        <ServiceNotice message="Your order history is temporarily unavailable." />
+      </Layout>
+    );
+  if (queryLoading)
+    return (
+      <Layout>
+        <p role="status">Loading…</p>
+      </Layout>
+    );
+  if (!orders?.length)
+    return (
+      <Layout>
+        <ServiceNotice message="There are no orders to display here." />
+      </Layout>
+    );
   return (
     <Layout>
       <div className="flex justify-center py-12 xl:px-32">

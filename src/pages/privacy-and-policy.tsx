@@ -4,8 +4,6 @@ const PrivacyPolicy = () => {
   return (
     <Layout>
       <div className="mx-auto max-w-3xl p-4">
-        <h1 className="mb-4 text-3xl font-bold">Privacy Policy</h1>
-
         <p className="mb-4">
           At ZealWear, we value your privacy. This Privacy Policy explains how
           we collect, use, and protect your personal information. By using our
