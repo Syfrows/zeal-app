@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import AboutUs from "@/components/aboutUs";
-import Carousel from "@/components/carousel";
 import Categories from "@/components/categories";
 import Layout from "@/components/layout";
 import ProductsLayout from "@/components/productsLayout";
@@ -94,7 +93,6 @@ export default function Home() {
         </div>
       </section>
       <div className="zeal-shell">
-        <Carousel />
         <NewArrival />
       </div>
       <section
