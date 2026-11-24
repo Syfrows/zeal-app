@@ -3,8 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   async redirects() {
     return [{
+      source: "/admin/account",
+      destination: "https://api.relaxzeal.com/admin/settings/profile",
+      permanent: false,
+    }, {
       source: "/admin/:path*",
-      destination: "https://zeal-admin-zealrelaxzeal-6032s-projects.vercel.app/:path*",
+      destination: "https://api.relaxzeal.com/admin/:path*",
       permanent: false,
     }];
   },
