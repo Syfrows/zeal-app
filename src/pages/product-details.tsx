@@ -61,7 +61,7 @@ const ProductDetails = () => {
   const [selectedOptions, setSelectedOptions] = useState(
     selectedVariant?.options || []
   );
-  const productAssest = product?.assets?.concat(selectedVariant?.assets ?? []);
+  const productAssest = selectedVariant?.assets?.length ? selectedVariant.assets : product?.assets;
   const productOptions = product?.optionGroups;
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -153,7 +153,7 @@ const ProductDetails = () => {
       : null;
 
   const addedProduct: Product = {
-    image: product.assets[0]?.source,
+    image: productAssest?.[0]?.source || "",
     name: product.name,
     size: findSelectedOption("size"),
     colour: findSelectedOption("color"),

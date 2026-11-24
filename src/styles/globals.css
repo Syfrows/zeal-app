@@ -558,3 +558,23 @@ body {
   @media(hover:hover){.zeal-story-links a:hover,.zeal-card:hover{transform:translateY(-3px);box-shadow:0 6px 16px #16201116}}
   .zeal-interior button:active {transform:translateY(1px)}
 }
+
+.store-footer{background:#181d1b;color:#ecf0e8;padding-top:clamp(2rem,5vw,4rem)}
+.footer-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:clamp(1rem,4vw,4rem)}
+.footer-wordmark{font:900 2.9rem/1 var(--zeal-display);text-transform:uppercase}
+.store-footer address{font-style:normal;color:#c4cfc4;margin-top:1rem;font-size:.9rem;line-height:1.65}
+.store-footer nav h2{font-weight:700;margin-bottom:.6rem}
+.store-footer nav a,.store-footer address a{display:block;width:fit-content;padding:.35rem 0}
+.store-footer nav a{color:#d7ded4}
+.store-footer a:hover{text-decoration:underline;text-underline-offset:4px}
+.footer-base{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:2rem;border-top:1px solid #536055;padding:1.25rem 0}
+.zeal-nav-actions .store-menu-trigger{display:none}
+.store-menu{width:min(86vw,22rem);padding:1.35rem}
+.store-menu-heading{display:flex;align-items:center;justify-content:space-between;font:900 2.5rem/1 var(--zeal-display);text-transform:uppercase}
+.store-menu button,.store-menu nav a{min-height:44px}
+.store-menu nav{display:grid;padding:1rem 0}
+.store-menu nav a{display:flex;align-items:center;border-bottom:1px solid #ddd}
+.store-menu-login{background:#19221a;color:white;padding:.5rem 1rem;border-radius:4px}
+@media(max-width:1024px){.zeal-nav-actions .store-menu-trigger{display:inline-grid;place-items:center;min-width:44px}}
+@media(max-width:700px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.footer-grid>div{grid-column:1/-1}.store-footer nav a{min-height:44px}.footer-base{align-items:flex-start}.zeal-nav-actions{gap:.25rem}}
+@media(prefers-reduced-motion:no-preference){.store-footer nav a,.store-menu nav a{transition:color .15s,transform .18s}.store-menu nav a:hover,.store-footer nav a:hover{transform:translateX(3px)}}

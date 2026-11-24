@@ -8,7 +8,7 @@ import LogInSignupModal from "./logInSignupModal";
 import { useAuth } from "@/context/AuthContext";
 import Drawer from "@mui/material/Drawer";
 import SideNav from "./sideNav";
-import { Menu } from "@mui/icons-material";
+import { Close, Menu } from "@mui/icons-material";
 import Search from "./search";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -26,6 +26,8 @@ const NavBar = () => {
     setInfo("Your session is expired please login again.");
     localStorage.removeItem("isSessionExpired");
   }, []);
+
+  useEffect(() => { setOpenDrawer(false); }, [router.asPath]);
 
   return (
     <>
@@ -79,11 +81,10 @@ const NavBar = () => {
           >
             <AccountIcon width="20" height="19" color="black" />
           </button>
-          {isLoggedIn && (
-            <button
-              aria-label="Account menu"
+          {(<button
+              aria-label="Open navigation menu" aria-expanded={openDrawer} aria-controls="store-menu"
               onClick={() => setOpenDrawer(!openDrawer)}
-              className="sm:hidden"
+              className="store-menu-trigger"
             >
               <Menu />
             </button>
@@ -99,7 +100,13 @@ const NavBar = () => {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
       >
-        <SideNav isDrawer={true} />
+        <div className="store-menu" id="store-menu">
+          <div className="store-menu-heading">Menu<button aria-label="Close menu" onClick={() => setOpenDrawer(false)}><Close /></button></div>
+          <nav aria-label="Mobile shop navigation">
+            {[["Shop all", "/products"], ["Categories", "/#categories"], ["Our story", "/#about"], ["Contact us", "/contact-us"]].map(([label, href]) => <Link key={href} href={href} onClick={() => setOpenDrawer(false)}>{label}</Link>)}
+          </nav>
+          {isLoggedIn ? <SideNav isDrawer /> : <button className="store-menu-login" onClick={() => { setOpenDrawer(false); setModalVisibilty(true); }}>Sign in or create an account</button>}
+        </div>
       </Drawer>
       <Snackbar
         open={!!info}
