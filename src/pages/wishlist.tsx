@@ -100,7 +100,7 @@ const WishList = () => {
   const { isLoggedIn } = useAuth();
   const [isModalVisible, setModalVisibilty] = useState(false);
   const router = useRouter();
-  const { data, error, loading, refetch } = useQuery(GET_WISHLIST);
+  const { data, error, loading, refetch } = useQuery(GET_WISHLIST, {skip: !isLoggedIn});
   const products = data?.authenticatedUser?.favorites.items || [];
 
   if (error)

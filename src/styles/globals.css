@@ -521,3 +521,21 @@ body {
   flex-wrap: wrap;
   margin-top: 1rem;
 }
+
+.account-overlay {overflow-y:auto; padding:clamp(1rem,7vh,5rem) 1rem;}
+.account-sheet {position:relative;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr);max-width:54rem;margin:auto;background:white;color:#171a1d;border-radius:8px;overflow:hidden;box-shadow:0 16px 80px #0004}
+.account-body {padding:3.5rem clamp(1.25rem,4vw,3rem) 2rem;display:grid;gap:1rem;align-content:center;min-height:29rem}
+.account-body .zeal-heading {font-size:clamp(2.7rem,4.4vw,4.4rem)}
+.account-photo {background:#303439 url('/zeal/account.webp') center 35%/cover}
+.account-close {position:absolute;right:.55rem;top:.5rem;min-width:44px;min-height:44px}
+.account-fields,.account-fields label {display:grid;gap:.35rem}
+.account-fields {gap:.65rem}
+.account-fields label {font-weight:650;font-size:.94rem}
+.account-fields input {border:1px solid #92968a;width:100%;min-height:44px;padding:.6rem .8rem;border-radius:4px;color:#151619;background:white}
+.account-password {position:relative;margin-top:-.4rem}
+.account-password input {padding-right:3rem}
+.account-password button {position:absolute;right:0;top:0;height:100%;width:44px}
+.account-message {padding:.6rem .8rem;background:#f0f2eb}
+.account-switch,.account-help {text-decoration:underline;text-underline-offset:3px;text-align:left;font-size:.9rem}
+.account-fields button:disabled {opacity:.6}
+@media(max-width:640px){.account-sheet{grid-template-columns:1fr}.account-photo{height:7rem;background-position:center 30%}.account-close{background:white;border-radius:50%}.account-body{min-height:0;padding-top:1.3rem}}

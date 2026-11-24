@@ -20,7 +20,7 @@ const SideNav = ({ isDrawer }: any) => {
 
   useEffect(() => {
     if (data?.logout.success) {
-      localStorage.clear();
+      localStorage.removeItem("auth_token");
       setIsLoggedIn(false);
       router.push("/");
     }

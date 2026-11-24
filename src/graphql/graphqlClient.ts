@@ -15,19 +15,11 @@ const httpLink = new HttpLink({
 const afterwareLink = new ApolloLink((operation, forward) => {
   return forward(operation).map((response) => {
     const context = operation.getContext();
-    const authHeader = context.response.headers.get("vendure-auth-token");
-    if (authHeader) {
+    const authHeader = context.response?.headers.get("vendure-auth-token");
+    if (authHeader && typeof window !== "undefined") {
       // If the auth token has been returned by the Vendure
       // server, we store it in localStorage
       localStorage.setItem(AUTH_TOKEN_KEY, authHeader);
-    }
-    if (
-      response.errors &&
-      response.errors[0]?.extensions.code === "FORBIDDEN"
-    ) {
-      localStorage.clear();
-      localStorage.setItem("isSessionExpired", "true");
-      window.location.replace(window.location.origin);
     }
     return response;
   });
@@ -36,7 +28,8 @@ const afterwareLink = new ApolloLink((operation, forward) => {
 const client = new ApolloClient({
   link: ApolloLink.from([
     setContext((): any => {
-      const authToken = localStorage.getItem(AUTH_TOKEN_KEY);
+      const authToken =
+        typeof window !== "undefined" && localStorage.getItem(AUTH_TOKEN_KEY);
       if (authToken) {
         // If we have stored the authToken from a previous
         // response, we attach it to all subsequent requests.

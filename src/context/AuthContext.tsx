@@ -1,3 +1,4 @@
+import { gql, useApolloClient } from "@apollo/client";
 import React, {
   createContext,
   useState,
@@ -29,9 +30,31 @@ export const useAuth = (): AuthContextProps => {
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const client = useApolloClient();
   useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem("auth_token"));
-  }, []);
+    const token = localStorage.getItem("auth_token");
+    if (!token) return;
+    let mounted = true;
+    client
+      .query({
+        query: gql`
+          query RestoreCustomerSession {
+            activeCustomer {
+              id
+            }
+          }
+        `,
+        fetchPolicy: "no-cache",
+      })
+      .then(({ data }) => {
+        if (mounted && localStorage.getItem("auth_token") === token)
+          setIsLoggedIn(!!data?.activeCustomer);
+      })
+      .catch(() => undefined);
+    return () => {
+      mounted = false;
+    };
+  }, [client]);
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
