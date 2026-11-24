@@ -100,11 +100,11 @@ const ProductDetails = () => {
   if (!router.isReady || loading) {
     return (
       <Layout>
-        <div className="flex flex-col sm:flex-row sm:space-x-4">
-          <div className="flex flex-col items-center sm:w-1/2">
+        <div className="flex flex-col lg:flex-row lg:gap-4">
+          <div className="flex flex-col items-center min-w-0 lg:flex-1">
             <Shimmer width={500} height={500} />
           </div>
-          <div className="flex flex-col space-y-4 sm:w-1/2">
+          <div className="flex flex-col space-y-4 min-w-0 lg:flex-1">
             <Shimmer width={1000} height={200} />
             <Shimmer width={1000} height={300} />
             <Shimmer width={1000} height={200} />
@@ -191,8 +191,10 @@ const ProductDetails = () => {
       setInfo("Product variant not available.");
       return;
     }
-    router.replace(
-      `/product-details?name=${productName}&variant=${variant?.name}`
+    void router.replace(
+      { pathname: router.pathname, query: { ...router.query, variant: variant.name } },
+      undefined,
+      { shallow: true, scroll: false }
     );
     setSelectedOptions(newOptions);
     setSelectedImage(0);
@@ -204,8 +206,8 @@ const ProductDetails = () => {
   const rating = product.customFields?.reviewRating || 0;
   return (
     <Layout>
-      <div className="flex flex-col sm:flex-row sm:space-x-4">
-        <div className="flex flex-col items-center sm:w-1/2">
+      <div className="flex flex-col lg:flex-row lg:gap-4">
+        <div className="flex flex-col items-center min-w-0 lg:flex-1">
           <Image
             placeholder="blur"
             blurDataURL={shimmerDataUrl}
@@ -215,7 +217,7 @@ const ProductDetails = () => {
             width={500}
             className="aspect-square"
           />
-          <div className="flex space-x-3 py-2 sm:px-8">
+          <div className="flex max-w-full min-w-0 space-x-3 py-2 sm:px-8">
             {isContentScrollable && (
               <button onClick={scrollBackward}>
                 <ArrowBackIos />
@@ -248,7 +250,7 @@ const ProductDetails = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col space-y-4 sm:w-1/2">
+        <div className="flex flex-col space-y-4 min-w-0 lg:flex-1">
           <p className="text-3xl font-semibold">{selectedVariant.name}</p>
           {rating !== 0 && (
             <div className="flex items-center space-x-2">
@@ -271,7 +273,7 @@ const ProductDetails = () => {
           >
             {`View ${!moreDescription ? "more" : "less"} detail`}
           </button>
-          <div className="flex flex-col rounded-xl border-2 border-gray-200 p-6 max-sm:space-y-4 sm:flex-row sm:space-x-8 sm:self-start">
+          <div className="flex flex-col rounded-xl border-2 border-gray-200 p-6 max-sm:space-y-4 flex-wrap gap-3 xl:flex-row">
             <div>
               <p className="text-red-400">
                 {discount(mrp, selectedVariant.priceWithTax) > 0
@@ -290,13 +292,13 @@ const ProductDetails = () => {
                 Quantity:
                 <button
                   className="ms-2"
-                  onClick={() => quantity > 1 && setQuantity(quantity - 1)}
+                  onClick={() => quantity > 1 && setQuantity(Math.max(1, quantity - 1))}
                 >
                   <Remove />
                 </button>
                 <span className="border-2 border-slate-300 px-2 py-1">
                   <input
-                    onChange={(e) => setQuantity(Number(e.currentTarget.value))}
+                    min={1} step={1} onChange={(e) => setQuantity(Math.max(1, Math.floor(Number(e.currentTarget.value)) || 1))}
                     value={quantity}
                     type="number"
                     className="w-12 text-center [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"

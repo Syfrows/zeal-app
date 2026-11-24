@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Close, Visibility, VisibilityOff } from "@mui/icons-material";
@@ -194,14 +195,7 @@ function AccountForm({ close }: { close: () => void }) {
             ? "Already registered? Sign in"
             : "New to Zeal Wear? Create an account"}
         </button>
-        {!register && (
-          <a
-            className="account-help"
-            href="mailto:zeal@relaxzeal.com?subject=Account%20access%20help"
-          >
-            Get help accessing your account
-          </a>
-        )}
+        <Link className="account-help" href="/password-reset" onClick={close}>Forgot password?</Link>
         {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
           <GoogleLogin
             onError={() => setMessage("Google sign-in could not be completed.")}

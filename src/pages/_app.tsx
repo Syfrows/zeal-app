@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import PageProgress from "@/components/pageProgress";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/graphql/graphqlClient";
@@ -21,6 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ApolloProvider client={client}>
         <AuthProvider>
           <div className={`${poppins.variable} font-sans`}>
+            <PageProgress />
             <Component {...pageProps} />
           </div>
         </AuthProvider>

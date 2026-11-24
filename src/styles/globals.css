@@ -578,3 +578,18 @@ body {
 @media(max-width:1024px){.zeal-nav-actions .store-menu-trigger{display:inline-grid;place-items:center;min-width:44px}}
 @media(max-width:700px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.footer-grid>div{grid-column:1/-1}.store-footer nav a{min-height:44px}.footer-base{align-items:flex-start}.zeal-nav-actions{gap:.25rem}}
 @media(prefers-reduced-motion:no-preference){.store-footer nav a,.store-menu nav a{transition:color .15s,transform .18s}.store-menu nav a:hover,.store-footer nav a:hover{transform:translateX(3px)}}
+
+.hero-banner{background:#1c221e;color:white;max-width:100%}
+.hero-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.hero-track::-webkit-scrollbar{display:none}
+.hero-track .zeal-hero{flex:0 0 100%;min-width:0;scroll-snap-align:start}
+.hero-track .hero-title{font:900 clamp(3.75rem,9.4vw,9.5rem)/.86 var(--zeal-display);text-transform:uppercase;margin-block:.7rem 1.5rem}
+.hero-controls{display:flex;justify-content:center;align-items:center;gap:1.3rem;font-size:.85rem}
+.hero-controls button{width:48px;height:44px;font-size:1.5rem}
+.page-progress{position:fixed;z-index:1600;top:0;left:0;width:100%;height:4px;overflow:hidden;background:#252e24;pointer-events:none}
+.page-progress::after{content:"";display:block;width:45%;height:100%;background:#c5f25a;animation:route-loading 1s ease-in-out infinite}
+@keyframes route-loading{from{transform:translateX(-100%)}to{transform:translateX(225%)}}
+@media(prefers-reduced-motion:reduce){.page-progress::after{animation:none;width:100%}}
+@media(max-width:640px){.hero-track .zeal-hero-content{min-height:29rem;padding-block:5rem 2rem}.zeal-hero-actions{flex-wrap:wrap}.account-overlay{padding:.5rem}.account-sheet{max-width:100%}.account-body{min-width:0}}
+.recovery-panel{max-width:32rem;margin:clamp(1rem,5vw,4rem) auto;display:grid;gap:1.25rem;padding:clamp(1.2rem,4vw,2rem);border:1px solid #d6dbd4;border-radius:.65rem}
+.recovery-panel h1{font-size:clamp(2.3rem,5vw,3.5rem)}

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import Image from "next/image";
+import HeroBanner from "@/components/heroBanner";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import AboutUs from "@/components/aboutUs";
@@ -30,39 +30,7 @@ export default function Home() {
           content="Explore Zeal Wear activewear by RelaxZeal for training, running and everyday movement."
         />
       </Head>
-      <section className="zeal-hero" aria-labelledby="zeal-hero-heading">
-        <Image
-          src="/zeal/hero.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          unoptimized
-        />
-        <div className="zeal-shell zeal-hero-content">
-          <p className="zeal-eyebrow">Activewear by RelaxZeal</p>
-          <h1 id="zeal-hero-heading">
-            Built for
-            <br />
-            <em>the work.</em>
-          </h1>
-          <p className="zeal-hero-description">
-            Activewear for the early starts, the extra reps, and everything in
-            between.
-          </p>
-          <div className="zeal-hero-actions">
-            <Link className="zeal-button zeal-button-lime" href="/products">
-              Shop the collection
-            </Link>
-            <Link
-              className="zeal-button zeal-button-outline"
-              href="#categories"
-            >
-              Browse categories
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroBanner />
       <div className="zeal-activities">
         <span>Training</span>
         <span>Running</span>
