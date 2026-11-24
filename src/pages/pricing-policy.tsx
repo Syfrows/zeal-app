@@ -100,8 +100,8 @@ const PricingPolicy = () => {
               zeal@relaxzeal.com
             </a>{" "}
             or{" "}
-            <a href="tel:+917057923102" className="text-blue-500">
-              +91 7057923102
+            <a href="tel:+919823144128" className="text-blue-500">
+              +91 9823144128
             </a>
             .
           </p>

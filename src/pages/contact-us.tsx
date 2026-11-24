@@ -19,7 +19,7 @@ const ContactUS = () => {
               </a>
             </li>
             <li>
-              Phone: <a href="tel:+917057923102">+91 70579 23102</a>
+              Phone: <a href="tel:+919823144128">+91 9823144128</a>
             </li>
           </ul>
         </div>
