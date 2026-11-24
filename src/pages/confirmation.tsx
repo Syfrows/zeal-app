@@ -5,10 +5,10 @@ import { ORDER_BY_CODE } from "@/graphql/orderWorkflow";
 import { formatPrice } from "@/helpers/helper";
 import { useQuery } from "@apollo/client";
 import { CheckCircle } from "@mui/icons-material";
-import Image from "next/image";
+import Image from "@/components/catalogImage";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import placeHolder from "../assets/placeHolder.png";
+import placeHolder from "../assets/catalog-texture.webp";
 import Link from "next/link";
 
 interface ProductProps {

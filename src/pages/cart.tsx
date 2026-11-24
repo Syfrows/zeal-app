@@ -1,6 +1,6 @@
 import ServiceNotice from "@/components/serviceNotice";
 import Layout from "@/components/layout";
-import Image from "next/image";
+import Image from "@/components/catalogImage";
 import { Add, Remove } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { formatPrice } from "@/helpers/helper";
@@ -9,7 +9,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ActiveOrderFragment, OrderLine } from "@/__generated__/graphql";
 import { useEffect, useState } from "react";
 import { TOGGLE_WISHLIST } from "@/graphql/wishlist";
-import placeHolder from "../assets/placeHolder.png";
+import placeHolder from "../assets/catalog-texture.webp";
 
 interface CartItemProps {
   item: OrderLine;

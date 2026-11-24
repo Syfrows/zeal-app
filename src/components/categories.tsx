@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Image from "next/image";
+import Image from "@/components/catalogImage";
 import Link from "next/link";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useQuery } from "@apollo/client";
-import placeHolder from "../assets/placeHolder.png";
+import placeHolder from "../assets/catalog-texture.webp";
 import CatalogStatus from "./catalogStatus";
 
 export default function Categories() {

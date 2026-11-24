@@ -1,9 +1,9 @@
 import { formatPrice } from "@/helpers/helper";
 import { Close, CheckCircle } from "@mui/icons-material";
 import Modal from "@mui/material/Modal";
-import Image from "next/image";
+import Image from "@/components/catalogImage";
 import { useRouter } from "next/router";
-import placeHolder from "../assets/placeHolder.png";
+import placeHolder from "../assets/catalog-texture.webp";
 
 export interface Product {
   image: string;

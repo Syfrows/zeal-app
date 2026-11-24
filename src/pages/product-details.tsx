@@ -20,14 +20,14 @@ import {
 } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Rating from "@mui/material/Rating";
-import Image from "next/image";
+import Image from "@/components/catalogImage";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ActiveOrderFragment, ErrorResult } from "@/__generated__/graphql";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import placeHolder from "../assets/placeHolder.png";
+import placeHolder from "../assets/catalog-texture.webp";
 import SizeChartModal from "@/components/sizeChartModal";
 import Shimmer from "@/components/Shimmer";
 import CatalogStatus from "@/components/catalogStatus";

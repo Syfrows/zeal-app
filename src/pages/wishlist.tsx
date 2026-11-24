@@ -1,5 +1,5 @@
 import ServiceNotice from "@/components/serviceNotice";
-import Image from "next/image";
+import Image from "@/components/catalogImage";
 import wishlist from "../assets/wishlist.png";
 import Layout from "@/components/layout";
 import { useState } from "react";
@@ -11,7 +11,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_WISHLIST, TOGGLE_WISHLIST } from "@/graphql/wishlist";
 import { Favorite } from "@/__generated__/graphql";
 import { ADD_ITEM_TO_ORDER } from "@/graphql/orderWorkflow";
-import placeHolder from "../assets/placeHolder.png";
+import placeHolder from "../assets/catalog-texture.webp";
 
 const WishlistItem = ({
   item,

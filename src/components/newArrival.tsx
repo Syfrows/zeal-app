@@ -1,8 +1,8 @@
-import Image from "next/image";
+import Image from "@/components/catalogImage";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { NEW_ARRIVAL } from "@/graphql/landingPage";
-import placeHolder from "../assets/placeHolder.png";
+import placeHolder from "../assets/catalog-texture.webp";
 
 export default function NewArrival() {
   const { data } = useQuery(NEW_ARRIVAL, {

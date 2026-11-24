@@ -1,11 +1,11 @@
-import Image from "next/image";
+import Image from "@/components/catalogImage";
 import Link from "next/link";
 import Rating from "@mui/material/Rating";
 import { COLLECTIONS } from "@/graphql/landingPage";
 import { useQuery } from "@apollo/client";
 import { StockLevel, formatPrice } from "@/helpers/helper";
 import type { GetProductsByCollectionCustomQuery } from "@/__generated__/graphql";
-import placeHolder from "../assets/placeHolder.png";
+import placeHolder from "../assets/catalog-texture.webp";
 import CatalogStatus from "./catalogStatus";
 
 type Item = NonNullable<

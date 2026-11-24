@@ -539,3 +539,22 @@ body {
 .account-switch,.account-help {text-decoration:underline;text-underline-offset:3px;text-align:left;font-size:.9rem}
 .account-fields button:disabled {opacity:.6}
 @media(max-width:640px){.account-sheet{grid-template-columns:1fr}.account-photo{height:7rem;background-position:center 30%}.account-close{background:white;border-radius:50%}.account-body{min-height:0;padding-top:1.3rem}}
+
+.zeal-story {display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);background:#eaece0;color:#191d19}
+.zeal-story-photo {position:relative;min-height:26rem}
+.zeal-story-photo img {object-fit:cover}
+.zeal-story-copy {padding:clamp(1.5rem,4vw,4.5rem);align-self:center}
+.zeal-story-label {font-size:.78rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase}
+.zeal-story-copy h2 {font:900 clamp(3rem,5vw,6rem)/.94 var(--zeal-display);text-transform:uppercase;max-width:12ch;margin:1.1rem 0}
+.zeal-story-copy h2 + p {line-height:1.65;max-width:43ch}
+.zeal-story-links {display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.5rem;margin-top:1.5rem}
+.zeal-story-links a {display:inline-flex;align-items:center;min-height:44px;text-underline-offset:4px;text-decoration:underline}
+.zeal-story-links a:first-child {background:#20251e;color:white;gap:.75rem;padding:.65rem 1rem;text-decoration:none}
+@media(max-width:720px){.zeal-story{grid-template-columns:1fr}.zeal-story-photo{min-height:0;aspect-ratio:3/2}}
+@media(prefers-reduced-motion:no-preference){
+  @keyframes zeal-arrive {from{opacity:.4;transform:translateY(.55rem)}to{opacity:1;transform:none}}
+  .zeal-mast h1,.zeal-story-copy,.account-body,.zeal-interior {animation:zeal-arrive .35s ease-out both}
+  .zeal-story-links a,.zeal-card,.zeal-interior button {transition:transform .18s ease,box-shadow .18s ease}
+  @media(hover:hover){.zeal-story-links a:hover,.zeal-card:hover{transform:translateY(-3px);box-shadow:0 6px 16px #16201116}}
+  .zeal-interior button:active {transform:translateY(1px)}
+}
