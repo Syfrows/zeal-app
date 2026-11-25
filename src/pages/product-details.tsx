@@ -191,11 +191,14 @@ const ProductDetails = () => {
       setInfo("Product variant not available.");
       return;
     }
+    const scrollTop = window.scrollY;
     void router.replace(
       { pathname: router.pathname, query: { ...router.query, variant: variant.name } },
       undefined,
       { shallow: true, scroll: false }
-    );
+    ).then((changed) => {
+      if (changed) window.scrollTo({ top: scrollTop, behavior: "instant" as ScrollBehavior });
+    });
     setSelectedOptions(newOptions);
     setSelectedImage(0);
   };
