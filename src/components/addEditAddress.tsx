@@ -1,3 +1,4 @@
+import { validName, indianMobile } from "@/helpers/customerFields";
 import { Close } from "@mui/icons-material";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
@@ -30,8 +31,8 @@ const AddEditAddress = ({
 }: any) => {
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
   const { data } = useQuery(AVAILABLE_COUNTRIES);
-  const countries = data?.availableCountries.map((x) => {
-    if (!x.enabled) return;
+  const countries = data?.availableCountries.filter(x => x.enabled).map((x) => {
+
     return {
       id: x.id,
       label: x.name,
@@ -44,13 +45,13 @@ const AddEditAddress = ({
     : "";
   const intialState: Address = {
     firstName: editAddress?.fullName?.split(" ")[0] ?? "",
-    lastName: editAddress?.fullName?.split(" ")[1] ?? "",
+    lastName: editAddress?.fullName?.trim().split(/\s+/).slice(1).join(" ") ?? "",
     line1: editAddress?.streetLine1 ?? "",
     postCode: editAddress?.postalCode ?? "",
     city: editAddress?.city ?? "",
     state: editAddress?.province ?? "",
     countryCode: editAddress?.phoneNumber?.split("-")[0] ?? "",
-    phoneNumber: editAddress?.phoneNumber?.split("-")[1] ?? "",
+    phoneNumber: (editAddress?.phoneNumber || "").replace(/^\+91-/, "").replace(/^-/,""),
   };
   const [address, setAddress] = useState(intialState);
   const [createAddress, createAddressData] = useMutation(
@@ -61,12 +62,12 @@ const AddEditAddress = ({
   );
 
   useEffect(() => {
-    const value = countries?.find((X) => X?.code === "IN");
+    const value = countries?.find((X) => X?.code === (editAddress?.country?.code || "IN"));
     setSelectedCountry(value);
     setAddress((prev) => {
       return { ...prev, countryCode: value?.code || "" };
     });
-  }, [data]);
+  }, [data, editAddress]);
 
   useEffect(() => {
     if (createAddressData?.data || updateAddressData?.data) {
@@ -75,7 +76,11 @@ const AddEditAddress = ({
     }
   }, [createAddressData, updateAddressData, setVisibilty, refetch]);
 
-  const onContinue = () => {
+  const [message, setMessage] = useState("");
+  const onContinue = async () => {
+    if (!validName(address.firstName) || !validName(address.lastName)) { setMessage("Enter a valid first and last name."); return; }
+    if (address.countryCode === "IN" && (!/^[1-9]\d{5}$/.test(address.postCode) || !indianMobile(address.phoneNumber))) { setMessage("Enter a six-digit PIN code and a valid Indian mobile number."); return; }
+    setMessage("");
     const input = {
       fullName: address.firstName + " " + address.lastName,
       streetLine1: address.line1,
@@ -83,20 +88,21 @@ const AddEditAddress = ({
       city: address.city,
       province: address.state,
       countryCode: address.countryCode,
-      phoneNumber: selectedCountry?.phoneCode + "-" + address.phoneNumber,
+      phoneNumber: (selectedCountry?.phoneCode ? selectedCountry.phoneCode + "-" : "") + address.phoneNumber,
     };
-    if (editAddress) {
-      updateAddress({ variables: { input: { id: editAddress.id, ...input } } });
+    try { if (editAddress) {
+      await updateAddress({ variables: { input: { id: editAddress.id, ...input } } });
     } else {
-      createAddress({
+      await createAddress({
         variables: {
           input: input,
         },
       });
     }
+    } catch { setMessage("Address could not be saved. Please try again."); }
   };
   const disabledContinue =
-    !Object.values(address).every((x) => x) || createAddressData.loading;
+    !Object.values(address).every((x) => x.trim()) || createAddressData.loading || updateAddressData.loading;
   return (
     <Modal
       open={isVisible}
@@ -116,7 +122,7 @@ const AddEditAddress = ({
           <div className="flex flex-col space-y-4 px-8 py-4">
             <div className="flex space-x-4">
               <TextField
-                id="outlined-basic"
+                
                 label="First Name"
                 variant="outlined"
                 placeholder="First Name"
@@ -127,7 +133,7 @@ const AddEditAddress = ({
                 }
               />
               <TextField
-                id="outlined-basic"
+                
                 label="Last Name"
                 variant="outlined"
                 placeholder="Last Name"
@@ -139,7 +145,7 @@ const AddEditAddress = ({
               />
             </div>
             <TextField
-              id="outlined-basic"
+              
               label="Address"
               variant="outlined"
               placeholder="Address"
@@ -151,7 +157,7 @@ const AddEditAddress = ({
             />
             <div className="flex space-x-4">
               <TextField
-                id="outlined-basic"
+                
                 label="City"
                 variant="outlined"
                 placeholder="City"
@@ -162,17 +168,17 @@ const AddEditAddress = ({
                 }
               />
               <TextField
-                id="outlined-basic"
+                
                 label="Post Code"
                 variant="outlined"
                 placeholder="Post Code"
-                inputProps={{ maxLength: 6 }}
+                inputProps={{ maxLength: address.countryCode === "IN" ? 6 : 16 }}
                 required
                 value={address.postCode}
                 onChange={(event) =>
                   setAddress({
                     ...address,
-                    postCode: event.target.value.replace(/[^0-9]/g, ""),
+                    postCode: address.countryCode === "IN" ? event.target.value.replace(/[^0-9]/g, "") : event.target.value,
                   })
                 }
               />
@@ -187,12 +193,12 @@ const AddEditAddress = ({
                   setSelectedCountry(value);
                   setAddress({ ...address, countryCode: value?.code || "" });
                 }}
-                value={selectedCountry?.label || ""}
-                isOptionEqualToValue={(option, value) => option.label === value}
+                value={selectedCountry}
+                isOptionEqualToValue={(option, value) => option.code === value?.code}
                 className="w-1/2"
               />
               <TextField
-                id="outlined-basic"
+                
                 label="State"
                 variant="outlined"
                 placeholder="State"
@@ -205,7 +211,7 @@ const AddEditAddress = ({
             </div>
             <div className="flex space-x-4">
               <TextField
-                id="outlined-basic"
+                
                 variant="outlined"
                 placeholder="Country"
                 className="w-24"
@@ -214,14 +220,14 @@ const AddEditAddress = ({
                 required
               />
               <TextField
-                id="outlined-basic"
+                
                 label="Telephone"
                 variant="outlined"
                 placeholder="Telephone"
                 className="flex flex-grow"
                 type="tel"
                 value={address.phoneNumber}
-                inputProps={{ maxLength: 10 }}
+                inputProps={{ maxLength: address.countryCode === "IN" ? 10 : 15 }}
                 required
                 onChange={(event) =>
                   setAddress({
@@ -231,6 +237,7 @@ const AddEditAddress = ({
                 }
               />
             </div>
+            {message && <p role="alert">{message}</p>}
             <button
               className={`my-4 max-w-[160px] self-center bg-primary px-6 py-4 font-semibold text-white ${
                 disabledContinue && "opacity-50"

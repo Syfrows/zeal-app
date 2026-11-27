@@ -49,19 +49,19 @@ const Product = ({ item, isReturn }: ProductProps) => {
             </p>
             <p>
               Price:{" "}
-              <span className="font-bold text-slate-500 line-through">
+              {price > item.linePriceWithTax && <span className="font-bold text-slate-500 line-through">
                 {formatPrice(price)}
-              </span>{" "}
+              </span>}{" "}
               <br />
               <span className="ms-11 font-bold">
                 {formatPrice(item.linePriceWithTax)}
               </span>
               <br />
-              <span className="ms-11 text-green-500">
+              {price > item.linePriceWithTax && <span className="ms-11 text-green-500">
                 {`You saved ${formatPrice(price - item.linePriceWithTax)}`}
-              </span>
+              </span>}
             </p>
-            {isReturn && <p>Return till 14th May</p>}
+            
           </div>
         </div>
       </div>

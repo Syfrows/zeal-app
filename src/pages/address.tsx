@@ -122,7 +122,8 @@ const Address = () => {
     setSelectedAddress(addresses && addresses[0]);
   }, [addresses]);
 
-  const onSetShippingAddress = (_data: SetShippingAddressMutation) => {
+  const onSetShippingAddress = (result: SetShippingAddressMutation) => {
+    if (result.setOrderShippingAddress.__typename !== "Order") { shippingFailed(); return; }
     getShippingMethods({
       onError: shippingFailed,
       onCompleted: onGetShippingMethods,

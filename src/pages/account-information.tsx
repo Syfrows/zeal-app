@@ -1,17 +1,15 @@
+import { indianMobile, validName } from "@/helpers/customerFields";
 import ServiceNotice from "@/components/serviceNotice";
 import Layout from "@/components/layout";
 import SideNav from "@/components/sideNav";
 import { ACCOUNT_INFO, UPDATE_ACCOUNT_INFO } from "@/graphql/accounts";
 import { useMutation, useQuery } from "@apollo/client";
 import CircularProgress from "@mui/material/CircularProgress";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 
 const AccountInformation = () => {
-  const [value, setValue] = useState("yes");
+  const [message, setMessage] = useState("");
   const { data, error, loading: queryLoading } = useQuery(ACCOUNT_INFO);
   const details = data?.authenticatedUser;
   const [inputs, setInputs] = useState<any>(details);
@@ -20,16 +18,21 @@ const AccountInformation = () => {
   useEffect(() => setInputs(details), [details]);
 
   const onContinue = () => {
+    if (loading) return;
+    if (!validName(inputs?.firstName || "") || !validName(inputs?.lastName || "")) { setMessage("Enter a valid first and last name."); return; }
+    if (!indianMobile(inputs?.phoneNumber || "")) { setMessage("Enter a valid Indian mobile number."); return; }
+    setMessage("");
     updateAccountInfo({
       variables: {
         input: {
-          title: inputs.firstName + " " + inputs.lastName,
-          firstName: inputs.firstName,
-          lastName: inputs.lastName,
-          phoneNumber: inputs.phoneNumber,
+
+          firstName: inputs.firstName.trim(),
+          lastName: inputs.lastName.trim(),
+          phoneNumber: indianMobile(inputs.phoneNumber),
         },
       },
-      onCompleted: (data) => setInputs(data.updateCustomer),
+      onCompleted: (data) => { setInputs(data.updateCustomer); setMessage("Account details saved."); },
+      onError: () => setMessage("Your changes could not be saved. Please try again."),
     });
   };
 
@@ -102,30 +105,13 @@ const AccountInformation = () => {
               }
               required
             />
-            <div className="flex items-center">
-              <p className="me-4 font-bold">Subscribe to Newsletter</p>
-              <RadioGroup
-                row
-                value={value}
-                onChange={(event) => setValue(event.target.value)}
-              >
-                <FormControlLabel
-                  value="yes"
-                  control={<Radio color="default" />}
-                  label="Yes"
-                />
-                <FormControlLabel
-                  value="no"
-                  control={<Radio color="default" />}
-                  label="No"
-                />
-              </RadioGroup>
-            </div>
+            {message && <p role="status">{message}</p>}
           </div>
           <button
             className={`mt-8 self-end bg-primary px-6 py-3 font-semibold text-white ${
               loading && "opacity-50"
             }`}
+            disabled={loading}
             onClick={onContinue}
           >
             {loading && (

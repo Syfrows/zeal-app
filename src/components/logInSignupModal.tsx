@@ -1,3 +1,4 @@
+import { validName, indianMobile, validEmail } from "@/helpers/customerFields";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import Modal from "@mui/material/Modal";
@@ -18,7 +19,8 @@ function AccountForm({ close }: { close: () => void }) {
   const [register, setRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [phone, setPhone] = useState("");
   const [visible, setVisible] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -46,20 +48,21 @@ function AccountForm({ close }: { close: () => void }) {
     setBusy(true);
     setMessage("");
     try {
+      if (register && !validEmail(email)) { setMessage("Enter a complete email address, such as name@example.com."); return; }
       if (register) {
-        const [firstName, ...rest] = name.trim().split(/\s+/);
-        if (!firstName) {
-          setMessage("Enter your name.");
+        if (!validName(firstName) || !validName(lastName)) {
+          setMessage("Enter a first and last name using letters, spaces, apostrophes, periods or hyphens.");
           return;
         }
+        if (!indianMobile(phone)) { setMessage("Enter a valid Indian mobile number, optionally starting with +91."); return; }
         const result = await signup({
           variables: {
             input: {
               emailAddress: email.trim(),
               password,
-              firstName,
-              lastName: rest.join(" "),
-              phoneNumber: phone.trim(),
+              firstName: firstName.trim(),
+              lastName: lastName.trim(),
+              phoneNumber: indianMobile(phone),
               title: "",
             },
           },
@@ -120,14 +123,15 @@ function AccountForm({ close }: { close: () => void }) {
           {register && (
             <>
               <label>
-                Your name
+                First name
                 <input
                   required
-                  autoComplete="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="given-name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </label>
+              <label>Last name<input required autoComplete="family-name" value={lastName} onChange={e => setLastName(e.target.value)} /></label>
               <label>
                 Mobile number
                 <input
@@ -135,7 +139,7 @@ function AccountForm({ close }: { close: () => void }) {
                   required
                   autoComplete="tel-national"
                   inputMode="tel"
-                  pattern="[0-9]{10}"
+                  placeholder="+91 or 10-digit mobile number"
                   title="Enter a 10-digit mobile number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}

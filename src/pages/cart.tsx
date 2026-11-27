@@ -5,7 +5,7 @@ import { Add, Remove } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { formatPrice } from "@/helpers/helper";
 import { ACTIVE_ORDER, ADJUST_ORDER_LINE } from "@/graphql/orderWorkflow";
-import { useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { ActiveOrderFragment, OrderLine } from "@/__generated__/graphql";
 import { useEffect, useState } from "react";
 import { TOGGLE_WISHLIST } from "@/graphql/wishlist";
@@ -131,9 +131,26 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
   );
 };
 
+const APPLY_COUPON = gql`mutation ApplyCoupon($code: String!) {
+  applyCouponCode(couponCode: $code) { __typename ... on ErrorResult { message } }
+}`;
 const Cart = () => {
+  const [code, setCode] = useState("");
+  const [couponMessage, setCouponMessage] = useState("");
+  const [applyCoupon, { loading: applying }] = useMutation(APPLY_COUPON);
+  async function redeem(event: React.FormEvent) {
+    event.preventDefault();
+    if (!code.trim() || applying) return;
+    try {
+      const result = (await applyCoupon({ variables: { code: code.trim() } })).data?.applyCouponCode;
+      if (result?.__typename === "Order") {
+        await refetch(); setCode(""); setCouponMessage("Coupon applied.");
+      } else setCouponMessage(result?.message || "This coupon could not be applied.");
+    } catch { setCouponMessage("Could not confirm the coupon. Please try again."); }
+  }
+
   const router = useRouter();
-  const { loading, error, data } = useQuery(ACTIVE_ORDER);
+  const { loading, error, data, refetch } = useQuery(ACTIVE_ORDER);
   const [activeOrder, setActiveOrder] = useState(
     data?.activeOrderCustom as ActiveOrderFragment
   );
@@ -177,14 +194,15 @@ const Cart = () => {
               <div className="flex flex-col max-xl:self-center">
                 <p className="mb-3 text-2xl font-medium">Coupon and Vouchers</p>
                 <p className="mb-2">Discount Coupon Code:</p>
-                <span>
-                  <input
+                <form onSubmit={redeem}>
+                  <input aria-label="Coupon code" value={code} onChange={e => setCode(e.target.value)}
                     type="text"
                     placeholder="Enter your coupon code here."
                     className="me-3 w-60 rounded-lg border-2 border-primary px-4 py-1 focus:outline-none"
                   />
-                  <button className="font-semibold text-red-500">APPLY</button>
-                </span>
+                  <button disabled={!code.trim() || applying} className="font-semibold text-accent">Apply</button>
+                  {couponMessage && <p role="status">{couponMessage}</p>}
+                </form>
                 <div className="mb-6 mt-4 w-72 space-y-3">
                   <p className="font-semibold">Your Order Summary</p>
                   <div className=" border-[1px] border-gray-500" />
