@@ -1,18 +1,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useQuery } from "@apollo/client";
+import { useCollectionProducts } from "@/hooks/useCollectionProducts";
 import Pagination from "@mui/material/Pagination";
 import Layout from "@/components/layout";
 import ProductsLayout from "@/components/productsLayout";
-import { SortOrder } from "@/__generated__/graphql";
-import { PRODUCTS_BY_COLLECTION } from "@/graphql/products";
-
 const PAGE_SIZE = 24;
-const sorting = {
-  featured: undefined,
-  "price-low": { priceWithTax: SortOrder.Asc },
-  "price-high": { priceWithTax: SortOrder.Desc },
-} as const;
 
 const Products = () => {
   const router = useRouter();
@@ -25,22 +17,8 @@ const Products = () => {
       : 1;
   const currentSort =
     sort === "price-low" || sort === "price-high" ? sort : "featured";
-  const { data, loading, error, refetch } = useQuery(PRODUCTS_BY_COLLECTION, {
-    skip: !router.isReady,
-    variables: {
-      id: filterId || undefined,
-      slug: filterId ? undefined : "all",
-      options: {
-        skip: (currentPage - 1) * PAGE_SIZE,
-        take: PAGE_SIZE,
-        sort: sorting[currentSort],
-      },
-    },
-    notifyOnNetworkStatusChange: true,
-  });
-  const total = Math.ceil(
-    (data?.collection?.productVariants.totalItems ?? 0) / PAGE_SIZE
-  );
+  const { items, loading, error, refetch } = useCollectionProducts(filterId, currentSort, router.isReady);
+  const total = Math.ceil(items.length / PAGE_SIZE);
 
   function navigate(nextFilter: string, nextPage: number, nextSort: string) {
     const query: Record<string, string> = {};
@@ -77,7 +55,7 @@ const Products = () => {
           </label>
         </div>
         <ProductsLayout
-          products={data?.collection?.productVariants.items ?? []}
+          products={items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)}
           filter={filterId}
           onFilter={(id) => navigate(id, 1, currentSort)}
           loading={!router.isReady || loading}

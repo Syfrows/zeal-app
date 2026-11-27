@@ -2,24 +2,17 @@ import Head from "next/head";
 import Link from "next/link";
 import HeroBanner from "@/components/heroBanner";
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useCollectionProducts } from "@/hooks/useCollectionProducts";
 import AboutUs from "@/components/aboutUs";
 import Categories from "@/components/categories";
 import Layout from "@/components/layout";
 import ProductsLayout from "@/components/productsLayout";
 import NewArrival from "@/components/newArrival";
-import { PRODUCTS_BY_COLLECTION } from "@/graphql/products";
+
 
 export default function Home() {
   const [filter, setFilter] = useState("");
-  const { data, loading, error, refetch } = useQuery(PRODUCTS_BY_COLLECTION, {
-    variables: {
-      id: filter || undefined,
-      slug: filter ? undefined : "all",
-      options: { take: 6 },
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+  const { items, loading, error, refetch } = useCollectionProducts(filter);
 
   return (
     <Layout flush>
@@ -51,7 +44,7 @@ export default function Home() {
             </Link>
           </div>
           <ProductsLayout
-            products={data?.collection?.productVariants.items ?? []}
+            products={items.slice(0, 6)}
             filter={filter}
             onFilter={setFilter}
             loading={loading}

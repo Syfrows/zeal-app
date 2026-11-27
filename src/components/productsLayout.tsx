@@ -23,8 +23,8 @@ type ProductsLayoutProps = {
 
 function ProductCard({ item }: { item: Item }) {
   const image =
-    item.featuredAsset?.preview ||
     item.product.featuredAsset?.preview ||
+    item.featuredAsset?.preview ||
     placeHolder;
   const rating = item.product.customFields?.reviewRating || 0;
   const mrp = item.customFields?.MRP || 0;
@@ -50,7 +50,6 @@ function ProductCard({ item }: { item: Item }) {
         </div>
         <div className="zeal-card-body">
           <h3>{item.product.name}</h3>
-          {item.name !== item.product.name && <p>{item.name}</p>}
           <div className="zeal-card-price">
             <strong>{formatPrice(item.priceWithTax)}</strong>
             {mrp > item.priceWithTax && <del>{formatPrice(mrp)}</del>}
