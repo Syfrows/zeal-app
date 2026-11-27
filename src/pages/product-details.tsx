@@ -29,7 +29,7 @@ import { ActiveOrderFragment, ErrorResult } from "@/__generated__/graphql";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import placeHolder from "../assets/catalog-texture.webp";
-import SizeChartModal from "@/components/sizeChartModal";
+import SizeChartModal, { guideType } from "@/components/sizeChartModal";
 import Shimmer from "@/components/Shimmer";
 import CatalogStatus from "@/components/catalogStatus";
 
@@ -44,7 +44,7 @@ const ProductDetails = () => {
   const { isLoggedIn } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [info, setInfo] = useState("");
-  const [moreDescription, setMoreDescription] = useState(false);
+
 
   const { loading, error, data, refetch } = useQuery(PRODUCT_DETAILS, {
     skip: !router.isReady || !productName,
@@ -207,6 +207,10 @@ const ProductDetails = () => {
   const mrp = selectedVariant.customFields?.MRP || 0;
   const isItemOutOfStock = selectedVariant.stockLevel === StockLevel.OutOfStock;
   const disableAddtoCart = addToCartLoading || isItemOutOfStock;
+  const fit = guideType(productName || "", product.collections.map(c => c.name));
+  const detail = productDescriptions[productName || ""];
+  const infoHtml = product.customFields?.Info?.trim();
+  const hasInfo = Boolean(infoHtml?.replace(/<[^>]*>|&nbsp;/g, "").trim()) && infoHtml !== product.description?.trim();
   const rating = product.customFields?.reviewRating || 0;
   return (
     <Layout>
@@ -267,16 +271,12 @@ const ProductDetails = () => {
               <p className="text-xs">{`(${product.customFields?.reviewCount} customer review)`}</p>
             </div>
           )}
-          <p
-            className={moreDescription ? "" : "line-clamp-2"}
-            dangerouslySetInnerHTML={{ __html: product.description }}
-          />
-          <button
-            className="text-start text-accent underline"
-            onClick={() => setMoreDescription(!moreDescription)}
-          >
-            {`View ${!moreDescription ? "more" : "less"} detail`}
-          </button>
+          <div dangerouslySetInnerHTML={{ __html: product.description }} />
+          {(detail || hasInfo) && <details key={productName} className="zeal-product-details">
+            <summary>View more detail</summary>
+            {detail && <p>{detail}</p>}
+            {hasInfo && <div dangerouslySetInnerHTML={{ __html: infoHtml || "" }} />}
+          </details>}
           <div className="flex flex-col rounded-xl border-2 border-gray-200 p-6 max-sm:space-y-4 flex-wrap gap-3 xl:flex-row">
             <div>
               <p className="text-accent">
@@ -314,7 +314,7 @@ const ProductDetails = () => {
               </p>
             </div>
             <button
-              className={`rounded-xl bg-orange-600 px-4 py-3 font-bold text-white ${
+              className={`rounded-xl bg-primary px-4 py-3 font-bold text-white ${
                 disableAddtoCart && "opacity-60"
               }`}
               onClick={onAddToCart}
@@ -352,7 +352,7 @@ const ProductDetails = () => {
                       key={option.id}
                       className={`mb-2 me-4 rounded-xl px-8 py-2 ${
                         option.id === selectedId
-                          ? `bg-orange-600 text-white`
+                          ? `bg-primary text-white`
                           : `border-2 border-gray-500 text-black`
                       }`}
                       onClick={() =>
@@ -366,29 +366,9 @@ const ProductDetails = () => {
               </div>
             );
           })}
-          <div className="space-y-3">
-            {["mens-performance-tshirt","training-polo","long-sleeve-crew-shirt"].includes(productName || "") && <button className="zeal-fit-trigger" onClick={() => setSizeChartModalVisibilty(true)}>
-              <StraightenOutlined /> T-shirt size guide
-            </button>}
-            {/* <input
-              type="text"
-              placeholder="Enter Postal Code"
-              className="flex-1 rounded-lg border-2 border-gray-400 px-4 py-1 focus:outline-none"
-            />
-            <p className="text-gray-500">
-              Delivery: <span className="text-black">in {2} days</span>
-            </p>
-            <p className="text-gray-500">
-              Delivery charges:{" "}
-              <span className="font-bold text-black">{formatPrice(15000)}</span>
-            </p> */}
-          </div>
-          <div>
-            <p className="text-xl font-semibold">Description</p>
-            <div className="my-4 border-t-2 border-gray-300" />
-            {productDescriptions[productName || ""] && <p className="mb-3">{productDescriptions[productName || ""]}</p>}
-            <div dangerouslySetInnerHTML={{ __html: product.customFields?.Info || product.description }} />
-          </div>
+          {fit && <button type="button" className="zeal-fit-trigger" onClick={() => setSizeChartModalVisibilty(true)}>
+            <StraightenOutlined /> Size chart
+          </button>}
           <div className="space-y-4 py-12">
             <div className="flex">
               <p className="w-1/4 text-gray-500">SKU:</p>
@@ -425,7 +405,7 @@ const ProductDetails = () => {
           {info}
         </Alert>
       </Snackbar>
-      <SizeChartModal
+      <SizeChartModal type={fit} name={product.name} sizes={product.optionGroups.find(g => g.name.toLowerCase() === "size")?.options.map(o => o.name)}
         isVisible={isSizeChartModalVisible}
         setVisibility={setSizeChartModalVisibilty}
       />
