@@ -5,10 +5,10 @@ import { Add, Remove } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { formatPrice } from "@/helpers/helper";
 import { ACTIVE_ORDER, ADJUST_ORDER_LINE } from "@/graphql/orderWorkflow";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { ActiveOrderFragment, OrderLine } from "@/__generated__/graphql";
 import { useEffect, useState } from "react";
-import { TOGGLE_WISHLIST } from "@/graphql/wishlist";
+import { GET_WISHLIST, TOGGLE_WISHLIST } from "@/graphql/wishlist";
 import placeHolder from "../assets/catalog-texture.webp";
 
 interface CartItemProps {
@@ -25,26 +25,33 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
     );
   };
   const [adjustOrder, { data, loading }] = useMutation(ADJUST_ORDER_LINE);
+  const client = useApolloClient();
   const [addToWishlist] = useMutation(TOGGLE_WISHLIST);
+  const [moving, setMoving] = useState(false);
+  const [notice, setNotice] = useState("");
 
-  const updateOrder = (quantity: number) => {
-    adjustOrder({
-      variables: {
-        orderLineId: item.id,
-        quantity: quantity,
-      },
-    });
+  const updateOrder = async (quantity: number) => {
+    if (!Number.isSafeInteger(quantity) || quantity < 0) return;
+    try {
+      const result = (await adjustOrder({ variables: { orderLineId: item.id, quantity } })).data?.adjustOrderLine;
+      if (result?.__typename !== "Order") setNotice("The quantity could not be updated. Check stock and try again.");
+    } catch { setNotice("Could not update the bag. Please try again."); }
   };
 
-  const onMoveToWishlist = () => {
-    addToWishlist({
-      variables: { productVariantId: item.productVariant.id },
-      onCompleted: onItemMovedToWishList,
-    });
-  };
-
-  const onItemMovedToWishList = () => {
-    updateOrder(0);
+  const onMoveToWishlist = async () => {
+    if (moving || loading) return;
+    setMoving(true);
+    setNotice("");
+    try {
+      const { data } = await client.query({ query: GET_WISHLIST, fetchPolicy: "no-cache" });
+      const favorites = data?.authenticatedUser?.favorites.items;
+      if (!favorites) throw new Error();
+      if (!favorites.some(f => f.productVariant?.id === item.productVariant.id)) {
+        await addToWishlist({ variables: { productVariantId: item.productVariant.id } });
+      }
+      await updateOrder(0);
+    } catch { setNotice("Could not move this item to your wishlist. Please try again."); }
+    finally { setMoving(false); }
   };
 
   useEffect(() => {
@@ -94,34 +101,35 @@ const CartItem = ({ item, setActiveOrder }: CartItemProps) => {
               Quantity:
               <button
                 className="ms-2"
-                onClick={() => updateOrder(item.quantity - 1)}
+                aria-label="Decrease quantity" disabled={loading || moving || item.quantity <= 1} onClick={() => updateOrder(item.quantity - 1)}
               >
                 <Remove />
               </button>
               <span className="border-2 border-slate-300 px-2 py-1">
                 <input
-                  onChange={(e) => updateOrder(Number(e.currentTarget.value))}
+                  aria-label="Quantity" min={1} disabled={loading || moving} onChange={(e) => { const n = Number(e.currentTarget.value); if (n >= 1) void updateOrder(n); }}
                   value={item.quantity}
                   type="number"
                   className="w-12 text-center [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />{" "}
               </span>
-              <button onClick={() => updateOrder(item.quantity + 1)}>
+              <button aria-label="Increase quantity" disabled={loading || moving} onClick={() => updateOrder(item.quantity + 1)}>
                 <Add />
               </button>
             </p>
           </div>
         </div>
+        {notice && <p role="alert">{notice}</p>}
         <div className="flex space-x-8">
           <button
             className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold"
-            onClick={() => updateOrder(0)}
+            disabled={loading || moving} onClick={() => updateOrder(0)}
           >
             Remove
           </button>
           <button
             className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold"
-            onClick={onMoveToWishlist}
+            disabled={loading || moving} onClick={onMoveToWishlist}
           >
             Move to wishlist
           </button>
