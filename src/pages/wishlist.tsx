@@ -20,8 +20,9 @@ const WishlistItem = ({
   item: Favorite;
   refetch: () => void;
 }) => {
-  const [removeFromWishlist] = useMutation(TOGGLE_WISHLIST);
-  const [addToCart] = useMutation(ADD_ITEM_TO_ORDER);
+  const [message, setMessage] = useState("");
+  const [removeFromWishlist, {loading: removing}] = useMutation(TOGGLE_WISHLIST);
+  const [addToCart, {loading: adding}] = useMutation(ADD_ITEM_TO_ORDER);
   const product = item.productVariant;
 
   const findProductOption = (optionType: string) => {
@@ -35,13 +36,18 @@ const WishlistItem = ({
     removeFromWishlist({
       variables: { productVariantId: product?.id || "" },
       onCompleted: onWishlistItemRemoved,
+      onError: () => setMessage("Could not update your wishlist. Please try again."),
     });
   };
 
   const onAddToCart = () => {
     addToCart({
       variables: { productVariantId: product?.id || "", quantity: 1 },
-      onCompleted: onRemoveWishListItem,
+      onCompleted: result => {
+        if (result.addItemToOrder.__typename === "Order") onRemoveWishListItem();
+        else setMessage("This item could not be added. Check availability and try again.");
+      },
+      onError: () => setMessage("Could not add the item. Please try again."),
     });
   };
 
@@ -77,16 +83,17 @@ const WishlistItem = ({
             {formatPrice(product?.priceWithTax)}
           </span>
         </p>
+        {message && <p role="alert">{message}</p>}
         <div className="flex space-x-8">
           <button
             className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold"
-            onClick={onRemoveWishListItem}
+            disabled={adding || removing} onClick={onRemoveWishListItem}
           >
             Remove
           </button>
           <button
             className="rounded-xl border-2 border-slate-500 px-8 py-2 font-semibold"
-            onClick={onAddToCart}
+            disabled={adding || removing} onClick={onAddToCart}
           >
             Add to Cart
           </button>
