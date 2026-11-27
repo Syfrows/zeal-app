@@ -609,3 +609,7 @@ body {
 .zeal-fit td,.zeal-fit th { padding:.55rem .4rem; border-bottom:1px solid #dce2d7; }
 .zeal-fit thead { background:#edf2e8; }
 .zeal-fit-trigger { color:#394f32; font-weight:600; text-decoration:underline; text-underline-offset:3px; }
+
+.zeal-product-details summary { cursor:pointer; color:#395332; font-weight:600; text-decoration:underline; text-underline-offset:3px; }
+.zeal-product-details[open] > :not(summary) { margin-top:.75rem; }
+.zeal-card .MuiRating-root, main .MuiRating-root { color:#526e49; }
