@@ -17,6 +17,7 @@ type ProductsLayoutProps = {
   loading: boolean;
   unavailable: boolean;
   retry: () => unknown;
+  productTypesOnly?: boolean;
   filter?: string;
   onFilter: (id: string) => void;
 };
@@ -70,14 +71,18 @@ export default function ProductsLayout({
   loading,
   unavailable,
   retry,
+  productTypesOnly = false,
   filter = "",
   onFilter,
 }: ProductsLayoutProps) {
   const { data } = useQuery(COLLECTIONS);
+  const categories = data?.collections.items.filter(item => item.customFields?.Category) ?? [];
+  const typeOrder = ["Shirts", "Shorts", "Jackets", "Pants", "Workout Tops", "Footwear", "Accessories"];
+  const types = categories.filter(item => item.customFields?.OnlyFilter || ["Footwear", "Accessories"].includes(item.name));
+  types.sort((a, b) => typeOrder.indexOf(a.name) - typeOrder.indexOf(b.name));
   const filters = [
     { name: "All", id: "" },
-    ...(data?.collections.items.filter((item) => item.customFields?.Category) ??
-      []),
+    ...(productTypesOnly ? types : categories),
   ];
 
   return (
