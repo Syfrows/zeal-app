@@ -119,13 +119,14 @@ const Product = ({ product, setActiveOrders }: ProductProps) => {
 const OrderConfirmation = () => {
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentError, setPaymentError] = useState("");
   const { data, error, loading: queryLoading } = useQuery(ACTIVE_ORDER);
   const [activeOrders, setActiveOrders] = useState(
     data?.activeOrderCustom as ActiveOrderFragment
   );
   const products = activeOrders?.lines;
   const paymentMethodsData = useQuery(GET_PAYMENT_METHODS);
-  const paymentMethods = paymentMethodsData.data?.eligiblePaymentMethods;
+  const paymentMethods = paymentMethodsData.data?.eligiblePaymentMethods.filter(method => method.isEligible);
   const [transitionOrder] = useMutation(TRANSITION_ORDER);
   const [addPayment] = useMutation(ADD_PAYMENT);
   const [isLoading, setIsLoading] = useState(false);
@@ -155,6 +156,7 @@ const OrderConfirmation = () => {
       onCompleted: () => {
         getShippingMethods({
           onCompleted: (data: GetShippingMethodsQuery) => {
+            if (!data.eligibleShippingMethods.length) { setPaymentError("No shipping method is available."); return; }
             setShippingMethods({
               variables: {
                 shippingMethodId: data.eligibleShippingMethods[0].id,
@@ -166,13 +168,18 @@ const OrderConfirmation = () => {
     });
   }, []);
 
+  const paymentFailed = () => { setIsLoading(false); setPaymentError("Payment could not be confirmed. Check your order history before trying again."); };
   const onConfirmOrder = () => {
+    if (isConfirmOrderDisabled) return;
+    setPaymentError("");
+    if (activeOrders?.state === OrderState.ArrangingPayment) { setIsLoading(true); handlePayment(); return; }
     setIsLoading(true);
     transitionOrder({
       variables: {
         state: OrderState.ArrangingPayment,
       },
-      onCompleted: handlePayment,
+      onCompleted: result => result.transitionOrderToState?.__typename === "Order" ? handlePayment() : paymentFailed(),
+      onError: paymentFailed,
     });
   };
 
@@ -193,6 +200,7 @@ const OrderConfirmation = () => {
         },
       },
       onCompleted: onPaymentAdded,
+      onError: paymentFailed,
     });
   };
 
@@ -202,6 +210,7 @@ const OrderConfirmation = () => {
         state: OrderState.AddingItems,
       },
       onCompleted: () => setIsLoading(false),
+      onError: paymentFailed,
     });
   };
 
@@ -210,9 +219,11 @@ const OrderConfirmation = () => {
     amount: activeOrders?.totalWithTax,
     onSucess: onTransitionOrder,
     onClose: onPaymentModalClose,
+    onError: paymentFailed,
   });
 
   const onPaymentAdded = (data: AddPaymentMutation) => {
+    if (data.addPaymentToOrder.__typename !== "Order") { paymentFailed(); return; }
     const order = data.addPaymentToOrder as Order;
     router.push(`/confirmation?orderCode=${order.code}`);
   };
@@ -307,6 +318,7 @@ const OrderConfirmation = () => {
             value={paymentMethod}
             onChange={(event) => setPaymentMethod(event.target.value)}
           >
+            {paymentMethods?.length === 0 && <p role="status">No payment method is available for this order.</p>}
             {paymentMethods?.map((method, index) => (
               <FormControlLabel
                 key={index}
@@ -330,6 +342,7 @@ const OrderConfirmation = () => {
             )}
             CONFIRM ORDER
           </button>
+          {paymentError && <p role="alert">{paymentError}</p>}
           <p className="my-4 text-center font-semibold">
             By placing order you’re agreeing to our
             <Link
