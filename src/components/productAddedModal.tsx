@@ -90,7 +90,7 @@ const ProductAddedModal = ({
                 Go to Cart
               </button>
               <button
-                className="rounded-xl bg-orange-600 px-4 py-3 font-semibold text-white"
+                className="rounded-xl bg-primary px-4 py-3 font-semibold text-white"
                 onClick={() => router.push("/address?order=true")}
               >
                 Proceed to Buy
