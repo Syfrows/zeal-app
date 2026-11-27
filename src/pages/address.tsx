@@ -52,7 +52,7 @@ const AddressDetails = ({
           <p className="line-clamp-1">
             Address :{" "}
             <span className="font-semibold">
-              {address.streetLine1 + " " + address.streetLine2}
+              {[address.streetLine1, address.streetLine2].filter(Boolean).join(" ")}
             </span>
           </p>
           <p>
@@ -75,10 +75,10 @@ const AddressDetails = ({
         </div>
       </div>
       <div className="space-x-4 self-end">
-        <button onClick={() => onEdit(address)}>
+        <button aria-label="Edit address" onClick={() => onEdit(address)}>
           <Edit />
         </button>
-        <button onClick={() => onDelete(address.id)}>
+        <button aria-label="Delete address" onClick={() => onDelete(address.id)}>
           <Delete />
         </button>
       </div>
@@ -194,6 +194,7 @@ const Address = () => {
         <ServiceNotice message="Your addresses are temporarily unavailable." />
       </Layout>
     );
+  if (loading || !data?.authenticatedUser) return <Layout><ServiceNotice message={loading ? "Loading your addresses…" : "Sign in to manage delivery addresses."} /></Layout>;
   return (
     <Layout>
       {shippingError && <p role="alert">{shippingError}</p>}
@@ -231,7 +232,7 @@ const Address = () => {
             ))}
             <div className="mb-6 mr-6 flex h-[268px] w-96 flex-col items-center justify-center rounded-lg bg-gray-200 p-4 max-md:ml-6 md:w-96">
               <button
-                className="text-6xl"
+                aria-label="Add address" className="text-6xl"
                 onClick={() => {
                   setEditAddress(null);
                   setModalVisible(true);
