@@ -44,7 +44,8 @@ export default function Home() {
             </Link>
           </div>
           <ProductsLayout
-            products={items.slice(0, 6)}
+            productTypesOnly
+            products={filter ? items : items.slice(0, 6)}
             filter={filter}
             onFilter={setFilter}
             loading={loading}
