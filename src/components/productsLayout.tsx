@@ -22,6 +22,12 @@ type ProductsLayoutProps = {
   onFilter: (id: string) => void;
 };
 
+const categoryImages: Record<string, string> = {
+  Shirts: "mens-performance-tshirt", Shorts: "mens-training-shorts", Jackets: "mens-track-jacket",
+  Pants: "womens-yoga-leggings", "Workout Tops": "womens-running-tank",
+  Footwear: "footwear-cat", Accessories: "accessories-cat",
+};
+
 function ProductCard({ item }: { item: Item }) {
   const image =
     item.product.featuredAsset?.preview ||
@@ -75,7 +81,7 @@ export default function ProductsLayout({
   filter = "",
   onFilter,
 }: ProductsLayoutProps) {
-  const { data } = useQuery(COLLECTIONS);
+  const { data, loading: categoriesLoading, error: categoriesError, refetch: retryCategories } = useQuery(COLLECTIONS);
   const categories = data?.collections.items.filter(item => item.customFields?.Category) ?? [];
   const typeOrder = ["Shirts", "Shorts", "Jackets", "Pants", "Workout Tops", "Footwear", "Accessories"];
   const types = categories.filter(item => item.customFields?.OnlyFilter || ["Footwear", "Accessories"].includes(item.name));
@@ -105,7 +111,26 @@ export default function ProductsLayout({
           ))}
         </div>
       )}
-      {loading || unavailable || !products.length ? (
+      {productTypesOnly && !filter ? (
+        types.length ? (
+          <div className="zeal-product-grid">
+            {types.map(category => (
+              <button key={category.id} type="button" className="zeal-card text-left"
+                onClick={() => onFilter(category.id)}>
+                <div className="zeal-card-image">
+                  <Image src={category.featuredAsset?.source || (categoryImages[category.name]
+                    ? `/zeal/catalog/${categoryImages[category.name]}.webp` : placeHolder)}
+                    alt="" fill sizes="(max-width: 640px) 50vw, 25vw" />
+                </div>
+                <div className="zeal-card-body"><h3>{category.name}</h3></div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <CatalogStatus loading={categoriesLoading || (!data && !categoriesError)} unavailable={!!categoriesError}
+            retry={retryCategories} empty="No categories found." />
+        )
+      ) : loading || unavailable || !products.length ? (
         <CatalogStatus
           loading={loading}
           unavailable={unavailable}

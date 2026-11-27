@@ -12,7 +12,7 @@ import NewArrival from "@/components/newArrival";
 
 export default function Home() {
   const [filter, setFilter] = useState("");
-  const { items, loading, error, refetch } = useCollectionProducts(filter);
+  const { items, loading, error, refetch } = useCollectionProducts(filter, "featured", Boolean(filter));
 
   return (
     <Layout flush>
@@ -45,7 +45,7 @@ export default function Home() {
           </div>
           <ProductsLayout
             productTypesOnly
-            products={filter ? items : items.slice(0, 6)}
+            products={items}
             filter={filter}
             onFilter={setFilter}
             loading={loading}

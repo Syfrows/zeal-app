@@ -1,3 +1,5 @@
+import RhinoLoader from "./rhinoLoader";
+
 type CatalogStatusProps = {
   loading?: boolean;
   unavailable?: boolean;
@@ -13,6 +15,7 @@ export default function CatalogStatus({
 }: CatalogStatusProps) {
   return (
     <div className="zeal-status" role="status">
+      {loading && <RhinoLoader />}
       <p>
         {loading
           ? "Loading the collection…"

@@ -1,3 +1,4 @@
+import RhinoLoader from "./rhinoLoader";
 import { useEffect, useState } from "react";
 import Router from "next/router";
 
@@ -18,5 +19,5 @@ export default function PageProgress() {
       Router.events.off("routeChangeError", fail);
     };
   }, []);
-  return loading ? <div role="status" className="page-progress"><span className="sr-only">Loading page</span></div> : null;
+  return loading ? <div role="status" className="zeal-route-loader"><RhinoLoader /><span className="sr-only">Loading page</span></div> : null;
 }

@@ -593,3 +593,8 @@ body {
 @media(max-width:640px){.hero-track .zeal-hero-content{min-height:29rem;padding-block:5rem 2rem}.zeal-hero-actions{flex-wrap:wrap}.account-overlay{padding:.5rem}.account-sheet{max-width:100%}.account-body{min-width:0}}
 .recovery-panel{max-width:32rem;margin:clamp(1rem,5vw,4rem) auto;display:grid;gap:1.25rem;padding:clamp(1.2rem,4vw,2rem);border:1px solid #d6dbd4;border-radius:.65rem}
 .recovery-panel h1{font-size:clamp(2.3rem,5vw,3.5rem)}
+
+.zeal-route-loader { position: fixed; inset: 0; z-index: 1600; display: grid; place-items: center; background: rgba(248,248,244,.92); pointer-events: none; }
+.zeal-rhino-loader { width: 8rem; height: auto; object-fit: contain; margin: 0 auto; animation: zeal-rhino-pulse 1.2s ease-in-out infinite alternate; }
+@keyframes zeal-rhino-pulse { to { opacity: .68; transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .zeal-rhino-loader { animation: none; } }
