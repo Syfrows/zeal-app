@@ -12,6 +12,7 @@ export interface CheckoutOptions {
   amount: string;
   onSucess: (metaData: any) => void;
   onClose: () => void;
+  onError: () => void;
 }
 
 const useRazorpayCheckout = (checkout: CheckoutOptions) => {
@@ -26,12 +27,14 @@ const useRazorpayCheckout = (checkout: CheckoutOptions) => {
         vendureOrderId: checkout.orderId,
       },
       onCompleted: payment,
+      onError: checkout.onError,
     });
   };
 
   const payment = (data: GenerateRazorpayOrderIdMutation) => {
     const orderId = (data.generateRazorpayOrderId as RazorpayOrderIdSuccess)
       .razorpayOrderId;
+    if (!Razorpay || !orderId || !process.env.NEXT_PUBLIC_RAZORPAY_ID) { checkout.onError(); return; }
     const options: RazorpayOptions = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_ID || "",
       amount: checkout.amount,
@@ -48,8 +51,7 @@ const useRazorpayCheckout = (checkout: CheckoutOptions) => {
         contact: details?.phoneNumber || "",
       },
     };
-    const rzpay = new Razorpay(options);
-    rzpay.open();
+    try { new Razorpay(options).open(); } catch { checkout.onError(); }
   };
 
   return handlePayment;
