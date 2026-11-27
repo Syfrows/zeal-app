@@ -1,5 +1,8 @@
-import Image from "next/image";
-
 export default function RhinoLoader() {
-  return <Image src="/zeal/loading-rhino.gif" alt="" width={128} height={72} unoptimized className="zeal-rhino-loader" />;
+  return (
+    <picture>
+      <source media="(prefers-reduced-motion: reduce)" srcSet="/zeal/rhino-run.png" />
+      <img className="zeal-rhino-loader" src="/zeal/rhino-run.webp" width={180} height={102} alt="" />
+    </picture>
+  );
 }

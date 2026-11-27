@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
-import { AccountIcon, CartIcon, WishListIcon } from "./icons";
+import { ShoppingBagOutlined, FavoriteBorderRounded, ReceiptLongOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import LogInSignupModal from "./logInSignupModal";
 import { useAuth } from "@/context/AuthContext";
@@ -59,7 +59,7 @@ const NavBar = () => {
               isLoggedIn ? router.push("/cart") : setModalVisibilty(true)
             }
           >
-            <CartIcon width="23" height="19" color="black" />
+            <ShoppingBagOutlined aria-hidden="true" />
           </button>
           <button
             aria-label="Wishlist"
@@ -68,7 +68,7 @@ const NavBar = () => {
             }`}
             onClick={() => router.push("/wishlist")}
           >
-            <WishListIcon width="25" height="19" color="black" />
+            <FavoriteBorderRounded aria-hidden="true" />
           </button>
           <button
             aria-label="My orders"
@@ -79,7 +79,7 @@ const NavBar = () => {
               isLoggedIn ? router.push("/my-orders") : setModalVisibilty(true)
             }
           >
-            <AccountIcon width="20" height="19" color="black" />
+            <ReceiptLongOutlined aria-hidden="true" />
           </button>
           {(<button
               aria-label="Open navigation menu" aria-expanded={openDrawer} aria-controls="store-menu"

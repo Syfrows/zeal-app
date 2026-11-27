@@ -1,3 +1,4 @@
+import { productDescriptions } from "@/helpers/productDescriptions";
 import Layout from "@/components/layout";
 import LogInSignupModal from "@/components/logInSignupModal";
 import ProductAddedModal, { Product } from "@/components/productAddedModal";
@@ -15,7 +16,7 @@ import {
   Add,
   ArrowBackIos,
   ArrowForwardIos,
-  KeyboardArrowDown,
+  StraightenOutlined,
   Remove,
 } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -271,14 +272,14 @@ const ProductDetails = () => {
             dangerouslySetInnerHTML={{ __html: product.description }}
           />
           <button
-            className="text-start text-red-400 underline"
+            className="text-start text-accent underline"
             onClick={() => setMoreDescription(!moreDescription)}
           >
             {`View ${!moreDescription ? "more" : "less"} detail`}
           </button>
           <div className="flex flex-col rounded-xl border-2 border-gray-200 p-6 max-sm:space-y-4 flex-wrap gap-3 xl:flex-row">
             <div>
-              <p className="text-red-400">
+              <p className="text-accent">
                 {discount(mrp, selectedVariant.priceWithTax) > 0
                   ? `${discount(mrp, selectedVariant.priceWithTax)} % off! `
                   : ""}
@@ -366,10 +367,9 @@ const ProductDetails = () => {
             );
           })}
           <div className="space-y-3">
-            <button onClick={() => setSizeChartModalVisibilty(true)}>
-              <span className="text-blue-400">Size Chart </span>{" "}
-              <KeyboardArrowDown />
-            </button>
+            {["mens-performance-tshirt","training-polo","long-sleeve-crew-shirt"].includes(productName || "") && <button className="zeal-fit-trigger" onClick={() => setSizeChartModalVisibilty(true)}>
+              <StraightenOutlined /> T-shirt size guide
+            </button>}
             {/* <input
               type="text"
               placeholder="Enter Postal Code"
@@ -386,11 +386,8 @@ const ProductDetails = () => {
           <div>
             <p className="text-xl font-semibold">Description</p>
             <div className="my-4 border-t-2 border-gray-300" />
-            <p
-              dangerouslySetInnerHTML={{
-                __html: product.customFields?.Info || product.description,
-              }}
-            />
+            {productDescriptions[productName || ""] && <p className="mb-3">{productDescriptions[productName || ""]}</p>}
+            <div dangerouslySetInnerHTML={{ __html: product.customFields?.Info || product.description }} />
           </div>
           <div className="space-y-4 py-12">
             <div className="flex">
