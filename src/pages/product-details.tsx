@@ -286,9 +286,9 @@ const ProductDetails = () => {
                   {formatPrice(selectedVariant.priceWithTax)}
                 </span>
               </p>
-              <p>
-                M.R.P: <span className="line-through">{formatPrice(mrp)}</span>
-              </p>
+              {mrp > selectedVariant.priceWithTax && (
+                <p>M.R.P: <span className="line-through">{formatPrice(mrp)}</span></p>
+              )}
             </div>
             <div>
               <p className="rounded-xl border-gray-500 bg-gray-100 p-5">
